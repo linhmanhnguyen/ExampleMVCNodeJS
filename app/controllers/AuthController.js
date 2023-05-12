@@ -17,7 +17,7 @@ class AuthController {
             res.status(422).send("Email or Password is not correct");
         }
 
-        const token = jwt.sign({ id: user[0].id, role: user[0].role }, process.env.TOKEN_SECRET, { expiresIn: 60 * 60 * 24 });
+        const token = jwt.sign({ id: user[0].id, role: user[0].role_name }, process.env.TOKEN_SECRET, { expiresIn: 60 * 60 * 24 });
         res.header('auth-token', token).send(token);
         return token;
     }
