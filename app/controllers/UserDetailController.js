@@ -1,27 +1,42 @@
 const userDetailModel = require('../models/UserDetailModel');
-
+const { userDetailSchema } = require('../validations/userDetailSchema');
 class UserDetailController {
 
     /**
      * Function Controller: Thêm thông tin người dùng
      */
     static async InsertUserDetail(req, res) {
-        var fullname = req.body.FullName;
-        var dateOfBirth = req.body.DateOfBirth;
-        var gender = req.body.Gender;
-        var citizenIdentification_ID = req.body.CitizenIdentification_ID;
-        var addressDetail = req.body.AddressDetail;
-        var email = req.body.email;
-        var phone = req.body.phone;
-        var Ward_ID = req.body.Ward_ID;
+        try {
 
-        var result = await userDetailModel.InsertUserDetail(fullname, dateOfBirth, gender, citizenIdentification_ID, addressDetail, phone, email, Ward_ID);
-        if (result) {
-            res.status(200).send("Created User Detail successfully");
+            await userDetailSchema.validateAsync(req.body);
+
+            var fullname = req.body.FullName;
+            var dateOfBirth = req.body.DateOfBirth;
+            var gender = req.body.Gender;
+            var citizenIdentification_ID = req.body.CitizenIdentification_ID;
+            var addressDetail = req.body.AddressDetail;
+            var email = req.body.email;
+            var phone = req.body.phone;
+            var Ward_ID = req.body.Ward_ID;
+
+            var CheckUserDetailExistsByCitizenIDOrPhone = await userDetailModel.CheckUserDetailExistsByCitizenIDOrPhone(citizenIdentification_ID, phone);
+            if (CheckUserDetailExistsByCitizenIDOrPhone.length > 0) {
+                res.status(400).send("Citizen Identification ID Or Phone existed");
+            }
+            else {
+                var result = await userDetailModel.InsertUserDetail(fullname, dateOfBirth, gender, citizenIdentification_ID, addressDetail, phone, email, Ward_ID);
+                if (result) {
+                    res.status(200).send("Created User Detail successfully");
+                }
+                else {
+                    res.status(400).send("Create User Detail failed");
+                }
+            }
+
+        } catch (error) {
+            res.status(400).json({ error: error.details });
         }
-        else {
-            res.status(400).send("Create User Detail failed");
-        }
+
     }
 
     /**
@@ -56,24 +71,29 @@ class UserDetailController {
      * Function Controller: Lấy thông tin chi tiết 1 người dùng
      */
     static async UpdateUserDetail(req, res) {
+        try {
+            await userDetailSchema.validateAsync(req.body);
 
-        var fullname = req.body.FullName;
-        var dateOfBirth = req.body.DateOfBirth;
-        var gender = req.body.Gender;
-        var citizenIdentification_ID = req.body.CitizenIdentification_ID;
-        var addressDetail = req.body.AddressDetail;
-        var email = req.body.email;
-        var phone = req.body.phone;
-        var Ward_ID = req.body.Ward_ID;
+            var fullname = req.body.FullName;
+            var dateOfBirth = req.body.DateOfBirth;
+            var gender = req.body.Gender;
+            var citizenIdentification_ID = req.body.CitizenIdentification_ID;
+            var addressDetail = req.body.AddressDetail;
+            var email = req.body.email;
+            var phone = req.body.phone;
+            var Ward_ID = req.body.Ward_ID;
 
-        var id = req.params.id;
+            var id = req.params.id;
 
-        var result = await userDetailModel.UpdateUserDetailByID(fullname, dateOfBirth, gender, citizenIdentification_ID, addressDetail, phone, email, Ward_ID, id);
-        if (result) {
-            res.status(200).send("User Detail updated successfully");
-        }
-        else {
-            res.status(404).send("User detail not found");
+            var result = await userDetailModel.UpdateUserDetailByID(fullname, dateOfBirth, gender, citizenIdentification_ID, addressDetail, phone, email, Ward_ID, id);
+            if (result) {
+                res.status(200).send("User Detail updated successfully");
+            }
+            else {
+                res.status(404).send("User Detail not found");
+            }
+        } catch (error) {
+            res.status(400).json({ error: error.details });
         }
     }
 

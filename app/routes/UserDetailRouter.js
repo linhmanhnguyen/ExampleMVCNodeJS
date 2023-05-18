@@ -1,7 +1,6 @@
 const express = require('express');
 const router = require('express').Router();
 const UserDetailController = require('../controllers/UserDetailController');
-const { authorizeRoles } = require('../middlewares/authorize');
 
 // router.get('/', authorizeRoles('admin'), userController.GetAllUsers);
 // router.post('/', authorizeRoles('admin'), userController.InsertUser);

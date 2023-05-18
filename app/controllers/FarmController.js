@@ -1,57 +1,57 @@
 const farmModel = require('../models/FarmModel')
+const moment = require('moment-timezone');
+const { farmSchema } = require('../validations/farmSchema');
+
+const currentTime = moment().tz('Asia/Ho_Chi_Minh').format('YYYY-MM-DD_HH-mm-ss');
 
 class FarmController {
-
-    /**
-     * Function Controller: Lấy danh sách trang trại trong hệ thống hoặc theo chủ sở hữu
-     */
-    static async GetAllFarms(req, res) {
-        if (req.query.hasOwnProperty('owner_ID')) {
-
-            var owner_ID = req.query.owner_ID;
-
-            var result = await farmModel.GetFarmsByOwnerID(owner_ID);
-            if (result.length > 0) {
-                res.send(result);
-            }
-            else {
-                res.status(404).send("No farms found");
-            }
-        }
-
-        else {
-            var result = await farmModel.GetAllFarms();
-            if (result.length > 0) {
-                res.send(result);
-            }
-            else {
-                res.status(404).send("No farms found");
-            }
-        }
-    }
 
     /**
      * Function Controller: Thêm 1 trang trại vào hệ thống
      */
     static async InsertFarm(req, res) {
-        var farm_name = req.body.farm_name;
-        var address = req.body.address;
-        var date_created = req.body.date_created;
-        var owner_ID = req.body.owner_ID;
+        try {
 
-        var result = await farmModel.InsertFarm(farm_name, address, date_created, owner_ID);
+            await farmSchema.validateAsync(req.body);
 
-        if (result) {
-            res.status(200).send("Created User successfully");
+            var farmName = req.body.FarmName;
+            var createDate = currentTime;
+            var status = req.body.Status;
+            var animalType_ID = req.body.AnimalType_ID;
+            var animalDensity = req.body.AnimalDensity;
+            var ward_ID = req.body.Ward_ID;
+            var addressDetail = req.body.AddressDetail;
+            var lastModified = currentTime;
+
+            var result = await farmModel.InsertFarm(farmName, createDate, status, animalType_ID, animalDensity, ward_ID, addressDetail, lastModified);
+
+            if (result) {
+                res.status(200).send("Created Farm successfully");
+            }
+            else {
+                res.status(400).send("Create Farm failed");
+            }
+        } catch (error) {
+            res.status(400).json({ error: error.details });
+        }
+
+    }
+
+    /**
+     * Function Controller: Lấy toàn bộ danh sách trang trại
+     */
+    static async GetAllFarms(req, res) {
+        var result = await farmModel.GetAllFarms();
+        if (result.length > 0) {
+            res.send(result);
         }
         else {
-            res.status(400).send("Create User failed");
+            res.status(404).send("No farms found");
         }
     }
 
-
     /**
-     * Function Controller: Lấy thông tin trang trại bằng ID của trang trại
+     * Function Controller: Lấy thông tin trang trại bằng ID
      */
     static async GetFarmByID(req, res) {
         var id = req.params.id;
@@ -68,20 +68,31 @@ class FarmController {
     /**
      * Function Controller: Cập nhật thông tin của trang trại
      */
-    static async UpdateFarm(req, res) {
-        var id = req.params.id;
+    static async UpdateFarmByID(req, res) {
+        try {
+            await farmSchema.validateAsync(req.body);
 
-        var farm_name = req.body.farm_name;
-        var address = req.body.address;
-        var date_created = req.body.date_created;
+            var farmName = req.body.FarmName;
+            var status = req.body.Status;
+            var animalType_ID = req.body.AnimalType_ID;
+            var animalDensity = req.body.AnimalDensity;
+            var ward_ID = req.body.Ward_ID;
+            var addressDetail = req.body.AddressDetail;
+            var lastModified = currentTime;
 
-        var result = await farmModel.UpdateFarm(farm_name, address, date_created, id);
-        if (result) {
-            res.status(200).send("Updated Farm successfully");
+            var id = req.params.id;
+            var result = await farmModel.UpdateFarmByID(farmName, status, animalType_ID, animalDensity, ward_ID, addressDetail, lastModified, id);
+
+            if (result) {
+                res.status(200).send("Farm updated successfully");
+            }
+            else {
+                res.status(404).send("Farm not found");
+            }
+        } catch (error) {
+            res.status(400).json({ error: error.details });
         }
-        else {
-            res.status(400).send("Update Farm failed");
-        }
+
     }
 
     /**

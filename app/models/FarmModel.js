@@ -3,77 +3,48 @@ const connection = require('../configs/MySQLConnect');
 class FarmModel {
 
     /**
-     * Function Model: Lấy danh sách tất cả các trang trại trong hệ thống
-     */
-    static async GetAllFarms() {
-        const query = `
-                        SELECT  farms.*,
-                                users.fullname
-                        FROM farms 
-                        JOIN users ON farms.owner_ID = users.ID`;
-
-        const params = [];
-
-        const result = await connection.query(query, params);
-        return result;
-    }
-
-    /**
-     * Function Model: Lấy danh sách tất cả các trang trại của 1 chủ sở hữu
-     */
-    static async GetFarmsByOwnerID(owner_ID) {
-        const query = `
-                        SELECT  farms.*,
-                                users.fullname
-                        FROM farms 
-                        JOIN users ON farms.owner_ID = users.ID
-                        WHERE farms.owner_ID = ?`;
-
-        const params = [owner_ID];
-
-        const result = await connection.query(query, params);
-        return result;
-    }
-
-    /**
      * Function Model: Thêm 1 trang trại vào hệ thống
      */
-    static async InsertFarm(farm_name, address, date_created, owner_ID) {
+    static async InsertFarm(FarmName, CreateDate, Status, AnimalType_ID, AnimalDensity, Ward_ID, AddressDetail, LastModified) {
         const query = `
-        INSERT INTO farms (farm_name, address, date_created, owner_ID) 
-        VALUES (?, ?, ?, ?)`;
-        const params = [farm_name, address, date_created, owner_ID];
+        INSERT INTO farms (FarmName, CreateDate, Status, AnimalType_ID, AnimalDensity, Ward_ID, AddressDetail, LastModified) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
+        const params = [FarmName, CreateDate, Status, AnimalType_ID, AnimalDensity, Ward_ID, AddressDetail, LastModified];
 
         const result = await connection.query(query, params);
         return result;
     }
 
     /**
-     * Function Model: Lấy thông tin trang trại bằng ID
+     * Function Model: Lấy toàn bộ danh sách trang trại trong hệ thống
      */
-    static async GetFarmByID(ID) {
-        const query = `
-                        SELECT  farms.*,
-                                users.fullname
-                        FROM farms 
-                        JOIN users ON farms.owner_ID = users.ID
-                        WHERE farms.ID =?`;
-        const params = [ID];
-
+    static async GetAllFarms() {
+        const query = `SELECT * FROM farms`;
+        const params = [];
         const result = await connection.query(query, params);
         return result;
     }
 
     /**
-     * Function Model: Cập nhật thông tin trang trại
+     * Function Model: Lấy 1 thông tin của trang trại bằng ID
      */
-    static async UpdateFarm(farm_name, address, date_created, ID) {
+    static async GetFarmByID(id) {
+        const query = `SELECT * FROM farms WHERE id = ?`;
+        const params = [id];
+        const result = await connection.query(query, params);
+        return result;
+    }
+
+    /**
+     * Function Model: Cập nhật thông tin của trang trại
+     */
+    static async UpdateFarmByID(FarmName, Status, AnimalType_ID, AnimalDensity, Ward_ID, AddressDetail, LastModified, id) {
         const query = `
                         UPDATE farms 
-                        SET farm_name = ?, address = ?, date_created = ?
-                        WHERE ID = ?`;
-        const params = [farm_name, address, date_created, ID];
+                        SET FarmName = ?, Status = ?, AnimalType_ID = ?, AnimalDensity = ?, Ward_ID = ?, AddressDetail = ?, LastModified = ?
+                        WHERE id = ?`;
 
+        const params = [FarmName, Status, AnimalType_ID, AnimalDensity, Ward_ID, AddressDetail, LastModified, id];
         const result = await connection.query(query, params);
         return result;
     }
