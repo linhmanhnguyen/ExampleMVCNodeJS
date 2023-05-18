@@ -120,8 +120,7 @@ class UserAccountController {
 
 // Hàm tạo refresh token
 function generateRefreshToken(username) {
-    // Logic để tạo refresh token theo yêu cầu của bạn
-    // Ví dụ: sử dụng JWT và chuỗi ngẫu nhiên
+
     const refreshToken = jwt.sign({ username }, 'refresh_token_secret', { expiresIn: '30d' });
     return refreshToken;
 }
