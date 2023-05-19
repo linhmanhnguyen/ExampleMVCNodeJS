@@ -13,12 +13,12 @@ class UserAccountController {
         try {
             await userAccountSchema.validateAsync(req.body);
 
-            var username = req.body.Username;
-            var password = req.body.Password;
+            var username = req.body.username;
+            var password = req.body.password;
             var createDate = currentTime;
-            var userDetail_ID = req.body.UserDetail_ID;
-            var farm_ID = req.body.Farm_ID;
-            var status = req.body.Status;
+            var userDetail_ID = req.body.userDetail_ID;
+            var farm_ID = req.body.farm_ID;
+            var status = req.body.status;
             var refreshtoken = generateRefreshToken(username);
 
             var searchUserAccount = await UserAccountModel.SearchUserAccountByUsername(username);
@@ -29,7 +29,7 @@ class UserAccountController {
                 var result = await userAccountModel.InsertUserAccount(username, password, createDate, status, userDetail_ID, refreshtoken, farm_ID)
                 if (result) {
                     var userAccount_ID = result.insertId;
-                    var role_ID = req.body.Role_ID;
+                    var role_ID = req.body.role_ID;
 
                     var result2 = await userAccountModel.InsertRoleForUserAccount(userAccount_ID, role_ID, createDate, status);
                     if (result2) {
@@ -87,8 +87,8 @@ class UserAccountController {
 
             var id = req.params.id;
 
-            var password = req.body.Password;
-            var status = req.body.Status;
+            var password = req.body.password;
+            var status = req.body.status;
 
             var result = await userAccountModel.UpdateUserAccountById(password, status, id);
             if (result) {
@@ -121,7 +121,7 @@ class UserAccountController {
 // Hàm tạo refresh token
 function generateRefreshToken(username) {
 
-    const refreshToken = jwt.sign({ username }, 'refresh_token_secret', { expiresIn: '30d' });
+    const refreshToken = jwt.sign({ username }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '30d' });
     return refreshToken;
 }
 

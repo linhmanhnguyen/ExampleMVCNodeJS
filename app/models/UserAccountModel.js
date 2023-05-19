@@ -84,7 +84,13 @@ class UserAccountModel {
      * Function Model: Tìm tài khoản bằng username
      */
     static async SearchUserAccountByUsername(username) {
-        const query = `SELECT Username, CreateDate, Status FROM useraccounts WHERE Username = ?`;
+        const query = ` SELECT useraccounts.id, useraccounts.Username, useraccounts.Password, 
+                        user_roles.Role_ID, roles.RoleName, useraccounts.Status 
+                        FROM useraccounts 
+                        JOIN user_roles ON useraccounts.id = user_roles.UserAccount_ID 
+                        JOIN roles ON roles.id = user_roles.Role_ID 
+                        WHERE useraccounts.Username = ?`;
+
         const params = [username];
         const result = await connection.query(query, params);
         return result;

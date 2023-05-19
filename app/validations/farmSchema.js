@@ -1,12 +1,12 @@
 const Joi = require('joi');
 
 const farmSchema = Joi.object({
-    FarmName: Joi.string().required(),
-    Status: Joi.boolean().required(),
-    AnimalType_ID: Joi.number().integer().required(),
-    AnimalDensity: Joi.number().required(),
-    Ward_ID: Joi.number().integer().required(),
-    AddressDetail: Joi.string().required(),
+    farmName: Joi.string().required(),
+    status: Joi.boolean().required(),
+    animalType_ID: Joi.number().integer().required(),
+    animalDensity: Joi.number().required(),
+    ward_ID: Joi.number().integer().required(),
+    addressDetail: Joi.string().required(),
 });
 
 module.exports = {

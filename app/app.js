@@ -1,6 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
+
+const authRouter = require('./routes/AuthRouter');
 const userRouter = require('./routes/UserDetailRouter');
 const userAccountRouter = require('./routes/UserAccountRouter');
 const animalTypeRouter = require('./routes/AnimalTypeRouter');
@@ -13,6 +15,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Khởi tạo Database và tài khoản Admin
 createDatabaseAndAdmin();
 
+// ROUTES
+app.use('/', authRouter);
 app.use('/users', userRouter);
 app.use('/accounts', userAccountRouter);
 app.use('/animal-types', animalTypeRouter);

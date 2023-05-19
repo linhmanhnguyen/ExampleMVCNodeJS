@@ -10,7 +10,7 @@ class AnimalTypeController {
 
             await animalTypeSchema.validateAsync(req.body);
 
-            var typeName = req.body.TypeName;
+            var typeName = req.body.typeName;
 
             var result = await animalTypeModel.InsertAnimalType(typeName);
             if (result) {
@@ -63,7 +63,7 @@ class AnimalTypeController {
 
             var id = req.params.id;
 
-            var typeName = req.body.TypeName;
+            var typeName = req.body.typeName;
             var result = await animalTypeModel.UpdateAnimalTypeById(typeName, id);
             if (result) {
                 res.status(200).send("Animal Type updated successfully");

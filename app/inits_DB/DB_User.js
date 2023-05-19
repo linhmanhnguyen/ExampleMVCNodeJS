@@ -26,10 +26,10 @@ class DB_User {
             DateOfBirth DATE NOT NULL,
             Gender VARCHAR(255) NOT NULL,
             CitizenIdentification_ID VARCHAR(255) NOT NULL,
+            Ward_ID int,
             AddressDetail TEXT NOT NULL,
             Email VARCHAR(255) NOT NULL,
-            Phone VARCHAR(255) NOT NULL,
-            Ward_ID int
+            Phone VARCHAR(255) NOT NULL
         );
     `;
         await connection.query(query);

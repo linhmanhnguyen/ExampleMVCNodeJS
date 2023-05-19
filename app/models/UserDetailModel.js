@@ -6,12 +6,12 @@ class UserDetailModel {
     /**
      * Function Model: Thêm 1 thông tin chi tiết người dùng
      */
-    static async InsertUserDetail(FullName, DateOfBirth, Gender, CitizenIdentification_ID, AddressDetail, Email, PhoneNumber, Ward_ID) {
+    static async InsertUserDetail(FullName, DateOfBirth, Gender, CitizenIdentification_ID, Ward_ID, AddressDetail, Email, PhoneNumber) {
 
         const query = `
-                        INSERT INTO userdetails (FullName, DateOfBirth, Gender, CitizenIdentification_ID, AddressDetail, email, phone, Ward_ID) 
+                        INSERT INTO userdetails (FullName, DateOfBirth, Gender, CitizenIdentification_ID, Ward_ID, AddressDetail, email, phone) 
                         VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
-        const params = [FullName, DateOfBirth, Gender, CitizenIdentification_ID, AddressDetail, Email, PhoneNumber, Ward_ID];
+        const params = [FullName, DateOfBirth, Gender, CitizenIdentification_ID, Ward_ID, AddressDetail, Email, PhoneNumber];
 
         const result = await connection.query(query, params);
         return result;

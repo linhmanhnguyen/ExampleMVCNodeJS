@@ -14,13 +14,13 @@ class FarmController {
 
             await farmSchema.validateAsync(req.body);
 
-            var farmName = req.body.FarmName;
+            var farmName = req.body.farmName;
             var createDate = currentTime;
-            var status = req.body.Status;
-            var animalType_ID = req.body.AnimalType_ID;
-            var animalDensity = req.body.AnimalDensity;
-            var ward_ID = req.body.Ward_ID;
-            var addressDetail = req.body.AddressDetail;
+            var status = req.body.status;
+            var animalType_ID = req.body.animalType_ID;
+            var animalDensity = req.body.animalDensity;
+            var ward_ID = req.body.ward_ID;
+            var addressDetail = req.body.addressDetail;
             var lastModified = currentTime;
 
             var result = await farmModel.InsertFarm(farmName, createDate, status, animalType_ID, animalDensity, ward_ID, addressDetail, lastModified);
@@ -72,12 +72,12 @@ class FarmController {
         try {
             await farmSchema.validateAsync(req.body);
 
-            var farmName = req.body.FarmName;
-            var status = req.body.Status;
-            var animalType_ID = req.body.AnimalType_ID;
-            var animalDensity = req.body.AnimalDensity;
-            var ward_ID = req.body.Ward_ID;
-            var addressDetail = req.body.AddressDetail;
+            var farmName = req.body.farmName;
+            var status = req.body.status;
+            var animalType_ID = req.body.animalType_ID;
+            var animalDensity = req.body.animalDensity;
+            var ward_ID = req.body.ward_ID;
+            var addressDetail = req.body.addressDetail;
             var lastModified = currentTime;
 
             var id = req.params.id;

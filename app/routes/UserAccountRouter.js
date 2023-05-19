@@ -1,11 +1,13 @@
 const express = require('express');
 const router = require('express').Router();
 const UserAccountController = require('../controllers/UserAccountController');
+const { authenticateToken } = require('../middlewares/authMiddleware');
+const { authorize } = require('../middlewares/authorizeMiddleware');
 
-router.post('/', UserAccountController.InsertUserAccount);
-router.get('/', UserAccountController.GetAllUserAccounts);
-router.get('/:id', UserAccountController.GetUserAccountByID);
-router.put('/:id', UserAccountController.UpdateUserAccountByID);
-router.delete('/:id', UserAccountController.DeleteUserAccountByID);
+router.post('/', authenticateToken, authorize('admin'), UserAccountController.InsertUserAccount);
+router.get('/', authenticateToken, authorize('admin'), UserAccountController.GetAllUserAccounts);
+router.get('/:id', authenticateToken, authorize('admin'), UserAccountController.GetUserAccountByID);
+router.put('/:id', authenticateToken, authorize('admin'), UserAccountController.UpdateUserAccountByID);
+router.delete('/:id', authenticateToken, authorize('admin'), UserAccountController.DeleteUserAccountByID);
 
 module.exports = router;

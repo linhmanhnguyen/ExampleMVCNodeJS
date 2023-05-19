@@ -10,21 +10,22 @@ class UserDetailController {
 
             await userDetailSchema.validateAsync(req.body);
 
-            var fullname = req.body.FullName;
-            var dateOfBirth = req.body.DateOfBirth;
-            var gender = req.body.Gender;
-            var citizenIdentification_ID = req.body.CitizenIdentification_ID;
-            var addressDetail = req.body.AddressDetail;
+            var fullname = req.body.fullName;
+            var dateOfBirth = req.body.dateOfBirth;
+            var gender = req.body.gender;
+            var citizenIdentification_ID = req.body.citizenIdentification_ID;
+            var Ward_ID = req.body.ward_ID;
+            var addressDetail = req.body.addressDetail;
             var email = req.body.email;
             var phone = req.body.phone;
-            var Ward_ID = req.body.Ward_ID;
+
 
             var CheckUserDetailExistsByCitizenIDOrPhone = await userDetailModel.CheckUserDetailExistsByCitizenIDOrPhone(citizenIdentification_ID, phone);
             if (CheckUserDetailExistsByCitizenIDOrPhone.length > 0) {
                 res.status(400).send("Citizen Identification ID Or Phone existed");
             }
             else {
-                var result = await userDetailModel.InsertUserDetail(fullname, dateOfBirth, gender, citizenIdentification_ID, addressDetail, phone, email, Ward_ID);
+                var result = await userDetailModel.InsertUserDetail(fullname, dateOfBirth, gender, citizenIdentification_ID, Ward_ID, addressDetail, phone, email,);
                 if (result) {
                     res.status(200).send("Created User Detail successfully");
                 }
@@ -74,14 +75,14 @@ class UserDetailController {
         try {
             await userDetailSchema.validateAsync(req.body);
 
-            var fullname = req.body.FullName;
-            var dateOfBirth = req.body.DateOfBirth;
-            var gender = req.body.Gender;
-            var citizenIdentification_ID = req.body.CitizenIdentification_ID;
-            var addressDetail = req.body.AddressDetail;
+            var fullname = req.body.fullName;
+            var dateOfBirth = req.body.dateOfBirth;
+            var gender = req.body.gender;
+            var citizenIdentification_ID = req.body.citizenIdentification_ID;
+            var addressDetail = req.body.addressDetail;
             var email = req.body.email;
             var phone = req.body.phone;
-            var Ward_ID = req.body.Ward_ID;
+            var Ward_ID = req.body.ward_ID;
 
             var id = req.params.id;
 

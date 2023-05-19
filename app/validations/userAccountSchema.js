@@ -2,17 +2,17 @@ const Joi = require('joi');
 
 // Định nghĩa schema cho UserAccount
 const userAccountSchema = Joi.object({
-    Username: Joi.string().required(),
-    Password: Joi.string().required(),
-    UserDetail_ID: Joi.number().integer().required(),
-    Farm_ID: Joi.number().integer().required(),
-    Status: Joi.boolean().required(),
-    Role_ID: Joi.number().integer().required(),
+    username: Joi.string().required(),
+    password: Joi.string().required(),
+    userDetail_ID: Joi.number().integer().required(),
+    farm_ID: Joi.number().integer().required(),
+    status: Joi.boolean().required(),
+    role_ID: Joi.number().integer().required(),
 });
 
 const updateUserAccountSchema = Joi.object({
-    Password: Joi.string().required(),
-    Status: Joi.boolean().required()
+    password: Joi.string().required(),
+    status: Joi.boolean().required()
 });
 
 module.exports = {
