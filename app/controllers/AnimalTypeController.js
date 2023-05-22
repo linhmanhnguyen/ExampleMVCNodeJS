@@ -14,13 +14,21 @@ class AnimalTypeController {
 
             var result = await animalTypeModel.InsertAnimalType(typeName);
             if (result) {
-                res.status(200).send("Created Animal Type successfully");
+                res.status(200).json(
+                    {
+                        "isSuccess": true,
+                        "message": `Create Animal Type Successfully`
+                    }
+                );
             }
-            else {
-                res.status(400).send("Create Animal Type failed");
-            }
+
         } catch (error) {
-            res.status(400).json({ error: error.details });
+            res.status(400).json(
+                {
+                    "isSuccess": false,
+                    "message": `An error has occurred, please try again.`,
+                }
+            );
         }
 
     }
@@ -31,10 +39,21 @@ class AnimalTypeController {
     static async GetAllAnimalTypes(req, res) {
         var result = await animalTypeModel.GetAnimalTypes();
         if (result.length > 0) {
-            res.send(result);
+            res.json(
+                {
+                    "isSuccess": true,
+                    "message": `Get All Animal Types Successfully`,
+                    "data": result
+                }
+            );
         }
         else {
-            res.status(404).send("No animal types found");
+            res.status(404).json(
+                {
+                    "isSuccess": false,
+                    "message": `No records found at the moment.`,
+                }
+            );
         }
     }
 
@@ -46,10 +65,21 @@ class AnimalTypeController {
 
         var result = await animalTypeModel.GetAnimalTypesById(id);
         if (result.length > 0) {
-            res.send(result);
+            res.json(
+                {
+                    "isSuccess": true,
+                    "message": `Get Animal Type By ID Successfully`,
+                    "data": result
+                }
+            );
         }
         else {
-            res.status(404).send("No animal types found");
+            res.status(404).json(
+                {
+                    "isSuccess": false,
+                    "message": `No records found at the moment.`,
+                }
+            );
         }
     }
 
@@ -58,7 +88,6 @@ class AnimalTypeController {
      */
     static async UpdateAnimalTypeByID(req, res) {
         try {
-
             await animalTypeSchema.validateAsync(req.body);
 
             var id = req.params.id;
@@ -66,31 +95,49 @@ class AnimalTypeController {
             var typeName = req.body.typeName;
             var result = await animalTypeModel.UpdateAnimalTypeById(typeName, id);
             if (result) {
-                res.status(200).send("Animal Type updated successfully");
+                res.status(200).json(
+                    {
+                        "isSuccess": true,
+                        "message": `Animal Type Updated Successfully`
+                    }
+                );
             }
-            else {
-                res.status(404).send("Animal Type not found");
-            }
+
         } catch (error) {
-            res.status(400).json({ error: error.details });
+            res.status(400).json(
+                {
+                    "isSuccess": false,
+                    "message": `An error has occurred, please try again.`,
+                }
+            );
         }
-
-
     }
 
     /**
      * Function Controller: Xóa thông tin loại động vật
      */
     static async DeleteAnimalTypeByID(req, res) {
-        var id = req.params.id;
+        try {
+            var id = req.params.id;
 
-        var result = await animalTypeModel.DeleteAnimalTypeByID(id);
-        if (result) {
-            res.status(200).send("Animal Type deleted successfully");
+            var result = await animalTypeModel.DeleteAnimalTypeByID(id);
+            if (result) {
+                res.status(200).json(
+                    {
+                        "isSuccess": true,
+                        "message": `Animal Type deleted successfully`,
+                    }
+                );
+            }
+        } catch (error) {
+            res.status(400).json(
+                {
+                    "isSuccess": false,
+                    "message": `An error has occurred, please try again.`,
+                }
+            );
         }
-        else {
-            res.status(404).send("Animal Type not found");
-        }
+
     }
 }
 

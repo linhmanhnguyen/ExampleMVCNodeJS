@@ -23,7 +23,12 @@ class UserAccountController {
 
             var searchUserAccount = await UserAccountModel.SearchUserAccountByUsername(username);
             if (searchUserAccount.length > 0) {
-                res.status(400).send("Username existed");
+                res.status(400).json(
+                    {
+                        "isSuccess": false,
+                        "message": `Username existed`,
+                    }
+                );
             }
             else {
                 var result = await userAccountModel.InsertUserAccount(username, password, createDate, status, userDetail_ID, refreshtoken, farm_ID)
@@ -31,22 +36,41 @@ class UserAccountController {
                     var userAccount_ID = result.insertId;
                     var role_ID = req.body.role_ID;
 
-                    var result2 = await userAccountModel.InsertRoleForUserAccount(userAccount_ID, role_ID, createDate, status);
-                    if (result2) {
-                        res.status(200).send("Created User Account successfully");
+                    var resultInsertRole = await userAccountModel.InsertRoleForUserAccount(userAccount_ID, role_ID, createDate, status);
+                    if (resultInsertRole) {
+                        res.status(200).json(
+                            {
+                                "isSuccess": true,
+                                "message": `Create User Account Successfully`
+                            }
+                        );
                     }
                     else {
-                        res.status(400).send("Create User Account failed");
+                        res.status(400).json(
+                            {
+                                "isSuccess": false,
+                                "message": `An error has occurred, please try again.`,
+                            }
+                        );
                     }
                 }
                 else {
-                    res.status(400).send("Create User Account failed");
+                    res.status(400).json(
+                        {
+                            "isSuccess": false,
+                            "message": `An error has occurred, please try again.`,
+                        }
+                    );
                 }
             }
 
-
         } catch (error) {
-            res.status(400).json({ error: error.details });
+            res.status(400).json(
+                {
+                    "isSuccess": false,
+                    "message": `An error has occurred, please try again.`,
+                }
+            );
         }
     }
 
@@ -56,10 +80,21 @@ class UserAccountController {
     static async GetAllUserAccounts(req, res) {
         var result = await userAccountModel.GetAllUserAccounts();
         if (result.length > 0) {
-            res.send(result);
+            res.json(
+                {
+                    "isSuccess": true,
+                    "message": `Get All User Accounts Successfully`,
+                    "data": result
+                }
+            );
         }
         else {
-            res.status(404).send("No user accounts found");
+            res.status(404).json(
+                {
+                    "isSuccess": false,
+                    "message": `No records found at the moment.`,
+                }
+            );
         }
     }
 
@@ -71,10 +106,21 @@ class UserAccountController {
 
         var result = await userAccountModel.GetUserAccountByID(id);
         if (result.length > 0) {
-            res.send(result);
+            res.json(
+                {
+                    "isSuccess": true,
+                    "message": `Get User Account By ID Successfully`,
+                    "data": result
+                }
+            );
         }
         else {
-            res.status(404).send("No user account found");
+            res.status(404).json(
+                {
+                    "isSuccess": false,
+                    "message": `No records found at the moment.`,
+                }
+            );
         }
     }
 
@@ -92,13 +138,20 @@ class UserAccountController {
 
             var result = await userAccountModel.UpdateUserAccountById(password, status, id);
             if (result) {
-                res.status(200).send("User Account updated successfully");
-            }
-            else {
-                res.status(400).send("User Account updated failed");
+                res.status(200).json(
+                    {
+                        "isSuccess": true,
+                        "message": `Updated User Account Successfully`
+                    }
+                );
             }
         } catch (error) {
-            res.status(400).json({ error: error.details });
+            res.status(400).json(
+                {
+                    "isSuccess": false,
+                    "message": `An error has occurred, please try again.`,
+                }
+            );
         }
     }
 
@@ -106,14 +159,26 @@ class UserAccountController {
      * Function Controller: Xóa tài khoản bằng ID tài khoản
      */
     static async DeleteUserAccountByID(req, res) {
-        var id = req.params.id;
+        try {
+            var id = req.params.id;
 
-        var result = await userAccountModel.DeleteUserAccountByID(id);
-        if (result) {
-            res.status(200).send("User Account deleted successfully");
-        }
-        else {
-            res.status(404).send("User Account not found");
+            var result = await userAccountModel.DeleteUserAccountByID(id);
+            if (result) {
+                res.status(200).send("User Account deleted successfully");
+                res.status(200).json(
+                    {
+                        "isSuccess": true,
+                        "message": `Deleted User Account successfully`,
+                    }
+                );
+            }
+        } catch (error) {
+            res.status(400).json(
+                {
+                    "isSuccess": false,
+                    "message": `An error has occurred, please try again.`,
+                }
+            );
         }
     }
 }

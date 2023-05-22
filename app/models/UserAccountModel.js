@@ -18,7 +18,6 @@ class UserAccountModel {
 
         const result = await connection.query(query, params);
         return result;
-
     }
 
     /**

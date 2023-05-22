@@ -22,20 +22,32 @@ class UserDetailController {
 
             var CheckUserDetailExistsByCitizenIDOrPhone = await userDetailModel.CheckUserDetailExistsByCitizenIDOrPhone(citizenIdentification_ID, phone);
             if (CheckUserDetailExistsByCitizenIDOrPhone.length > 0) {
-                res.status(400).send("Citizen Identification ID Or Phone existed");
+                res.status(400).json(
+                    {
+                        "isSuccess": false,
+                        "message": `Citizen Identification ID Or Phone existed`,
+                    }
+                );
             }
             else {
                 var result = await userDetailModel.InsertUserDetail(fullname, dateOfBirth, gender, citizenIdentification_ID, Ward_ID, addressDetail, phone, email,);
                 if (result) {
-                    res.status(200).send("Created User Detail successfully");
-                }
-                else {
-                    res.status(400).send("Create User Detail failed");
+                    res.status(200).json(
+                        {
+                            "isSuccess": true,
+                            "message": `Created User Detail successfully`
+                        }
+                    );
                 }
             }
 
         } catch (error) {
-            res.status(400).json({ error: error.details });
+            res.status(400).json(
+                {
+                    "isSuccess": false,
+                    "message": `An error has occurred, please try again.`,
+                }
+            );
         }
 
     }
@@ -46,10 +58,21 @@ class UserDetailController {
     static async GetAllUserDetails(req, res) {
         var result = await userDetailModel.GetAllUserDetails();
         if (result.length > 0) {
-            res.send(result);
+            res.json(
+                {
+                    "isSuccess": true,
+                    "message": `Get All User Details Successfully`,
+                    "data": result
+                }
+            );
         }
         else {
-            res.status(404).send("No users found");
+            res.status(404).json(
+                {
+                    "isSuccess": false,
+                    "message": `No records found at the moment.`,
+                }
+            );
         }
     }
 
@@ -61,10 +84,21 @@ class UserDetailController {
 
         var result = await userDetailModel.GetUserDetailsByID(id);
         if (result.length > 0) {
-            res.send(result);
+            res.json(
+                {
+                    "isSuccess": true,
+                    "message": `Get User Detail By ID Successfully`,
+                    "data": result
+                }
+            );
         }
         else {
-            res.status(404).send("No user detail found");
+            res.status(404).json(
+                {
+                    "isSuccess": false,
+                    "message": `No records found at the moment.`,
+                }
+            );
         }
     }
 
@@ -88,13 +122,20 @@ class UserDetailController {
 
             var result = await userDetailModel.UpdateUserDetailByID(fullname, dateOfBirth, gender, citizenIdentification_ID, addressDetail, phone, email, Ward_ID, id);
             if (result) {
-                res.status(200).send("User Detail updated successfully");
-            }
-            else {
-                res.status(404).send("User Detail not found");
+                res.status(200).json(
+                    {
+                        "isSuccess": true,
+                        "message": `User Detail Updated Successfully`
+                    }
+                );
             }
         } catch (error) {
-            res.status(400).json({ error: error.details });
+            res.status(400).json(
+                {
+                    "isSuccess": false,
+                    "message": `An error has occurred, please try again.`,
+                }
+            );
         }
     }
 
@@ -103,14 +144,25 @@ class UserDetailController {
      * Function Controller: Xóa thông tin chi tiết 1 người dùng
      */
     static async DeleteUserDetail(req, res) {
-        var id = req.params.id;
+        try {
+            var id = req.params.id;
 
-        var result = await userDetailModel.DeleteUserDetailByID(id);
-        if (result) {
-            res.status(204).send("User detail deleted successfully");
-        }
-        else {
-            res.status(404).send("User detail not found");
+            var result = await userDetailModel.DeleteUserDetailByID(id);
+            if (result) {
+                res.status(200).json(
+                    {
+                        "isSuccess": true,
+                        "message": `User detail deleted successfully`,
+                    }
+                );
+            }
+        } catch (error) {
+            res.status(400).json(
+                {
+                    "isSuccess": false,
+                    "message": `An error has occurred, please try again.`,
+                }
+            );
         }
     }
 

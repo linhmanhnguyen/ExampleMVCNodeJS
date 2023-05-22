@@ -26,13 +26,20 @@ class FarmController {
             var result = await farmModel.InsertFarm(farmName, createDate, status, animalType_ID, animalDensity, ward_ID, addressDetail, lastModified);
 
             if (result) {
-                res.status(200).send("Created Farm successfully");
-            }
-            else {
-                res.status(400).send("Create Farm failed");
+                res.status(200).json(
+                    {
+                        "isSuccess": true,
+                        "message": `Created Farm successfully`
+                    }
+                );
             }
         } catch (error) {
-            res.status(400).json({ error: error.details });
+            res.status(400).json(
+                {
+                    "isSuccess": false,
+                    "message": `An error has occurred, please try again.`,
+                }
+            );
         }
 
     }
@@ -43,10 +50,21 @@ class FarmController {
     static async GetAllFarms(req, res) {
         var result = await farmModel.GetAllFarms();
         if (result.length > 0) {
-            res.send(result);
+            res.json(
+                {
+                    "isSuccess": true,
+                    "message": `Get All Animal Types Successfully`,
+                    "data": result
+                }
+            );
         }
         else {
-            res.status(404).send("No farms found");
+            res.status(404).json(
+                {
+                    "isSuccess": false,
+                    "message": `No records found at the moment.`,
+                }
+            );
         }
     }
 
@@ -58,10 +76,21 @@ class FarmController {
 
         var result = await farmModel.GetFarmByID(id);
         if (result.length > 0) {
-            res.send(result);
+            res.json(
+                {
+                    "isSuccess": true,
+                    "message": `Get All Animal Types Successfully`,
+                    "data": result
+                }
+            );
         }
         else {
-            res.status(404).send("No farm found");
+            res.status(404).json(
+                {
+                    "isSuccess": false,
+                    "message": `No records found at the moment.`,
+                }
+            );
         }
     }
 
@@ -84,13 +113,20 @@ class FarmController {
             var result = await farmModel.UpdateFarmByID(farmName, status, animalType_ID, animalDensity, ward_ID, addressDetail, lastModified, id);
 
             if (result) {
-                res.status(200).send("Farm updated successfully");
-            }
-            else {
-                res.status(404).send("Farm not found");
+                res.status(200).json(
+                    {
+                        "isSuccess": true,
+                        "message": `Farm Updated Successfully`
+                    }
+                );
             }
         } catch (error) {
-            res.status(400).json({ error: error.details });
+            res.status(400).json(
+                {
+                    "isSuccess": false,
+                    "message": `An error has occurred, please try again.`,
+                }
+            );
         }
 
     }
@@ -99,16 +135,26 @@ class FarmController {
      * Function Controller: Xóa trang trại
      */
     static async DeleteFarm(req, res) {
-        var id = req.params.id;
+        try {
+            var id = req.params.id;
 
-        var result = await farmModel.DeleteFarm(id);
-        if (result) {
-            res.status(200).send("Deleted Farm successfully");
+            var result = await farmModel.DeleteFarm(id);
+            if (result) {
+                res.status(200).json(
+                    {
+                        "isSuccess": true,
+                        "message": `Deleted Farm successfully`,
+                    }
+                );
+            }
+        } catch (error) {
+            res.status(400).json(
+                {
+                    "isSuccess": false,
+                    "message": `An error has occurred, please try again.`,
+                }
+            );
         }
-        else {
-            res.status(400).send("Delete Farm failed");
-        }
-
     }
 
 }

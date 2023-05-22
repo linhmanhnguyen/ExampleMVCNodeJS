@@ -13,22 +13,36 @@ class AuthController {
         if (user.length > 0) {
             const checkPassword = await bcrypt.compare(password, user[0].Password);
             if (!checkPassword) {
-                res.status(422).send("Password is not correct");
+                res.status(422).json(
+                    {
+                        "isSuccess": false,
+                        "message": `Password is not correct`,
+                    }
+                );
             }
             else {
-                // res.status(200).send(user);
                 if (user[0].Status == true) {
 
                     const token = generateAccessToken(user[0].id, user[0].RoleName);
                     res.send(token);
                 }
                 else {
-                    res.status(422).send("Account is not attivated");
+                    res.status(422).json(
+                        {
+                            "isSuccess": false,
+                            "message": `Account is not attivated`,
+                        }
+                    );
                 }
             }
         }
         else {
-            res.status(404).send("Username not found");
+            res.status(404).json(
+                {
+                    "isSuccess": false,
+                    "message": `No records found at the moment.`,
+                }
+            );
         }
 
     }
