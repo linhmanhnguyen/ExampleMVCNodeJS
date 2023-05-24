@@ -9,7 +9,7 @@ class UserDetailModel {
     static async InsertUserDetail(FullName, DateOfBirth, Gender, CitizenIdentification_ID, Ward_ID, AddressDetail, Email, PhoneNumber) {
 
         const query = `
-                        INSERT INTO userdetails (FullName, DateOfBirth, Gender, CitizenIdentification_ID, Ward_ID, AddressDetail, email, phone) 
+                        INSERT INTO userdetails (FullName, DateOfBirth, Gender, CitizenIdentification_ID, Ward_ID, AddressDetail, Email, Phone) 
                         VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
         const params = [FullName, DateOfBirth, Gender, CitizenIdentification_ID, Ward_ID, AddressDetail, Email, PhoneNumber];
 
@@ -37,7 +37,7 @@ class UserDetailModel {
         const query = `
                         SELECT *
                         FROM userdetails
-                        WHERE id = ?`;
+                        WHERE ID = ?`;
         const params = [id];
 
         const result = await connection.query(query, params);
@@ -50,8 +50,8 @@ class UserDetailModel {
     static async UpdateUserDetailByID(FullName, DateOfBirth, Gender, CitizenIdentification_ID, Ward_ID, AddressDetail, Email, PhoneNumber, id) {
         const query = `
                         UPDATE userdetails 
-                        SET FullName = ?, DateOfBirth = ?, Gender = ?, CitizenIdentification_ID = ?, Ward_ID = ?, AddressDetail = ?, email = ?, phone = ?
-                        WHERE id = ?`;
+                        SET FullName = ?, DateOfBirth = ?, Gender = ?, CitizenIdentification_ID = ?, Ward_ID = ?, AddressDetail = ?, Email = ?, Phone = ?
+                        WHERE ID = ?`;
 
         const params = [FullName, DateOfBirth, Gender, CitizenIdentification_ID, Ward_ID, AddressDetail, Email, PhoneNumber, id];
 
@@ -63,7 +63,7 @@ class UserDetailModel {
      * Function Model: Xóa thông tin cá nhân của người dùng
      */
     static async DeleteUserDetailByID(id) {
-        const query = `DELETE FROM userdetails WHERE id = ?`;
+        const query = `DELETE FROM userdetails WHERE ID = ?`;
         const params = [id];
 
         const result = await connection.query(query, params);
@@ -77,7 +77,7 @@ class UserDetailModel {
         const query = ` SELECT *
                         FROM userdetails
                         WHERE CitizenIdentification_ID = ?
-                        OR phone = ?;`;
+                        OR Phone = ?;`;
 
         const params = [CitizenIdentification_ID, phone];
         const result = await connection.query(query, params);

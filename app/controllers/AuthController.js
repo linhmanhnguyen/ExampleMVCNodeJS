@@ -51,8 +51,8 @@ class AuthController {
 /**
  * Function: Tạo ngẫu nhiên Access Token
  */
-function generateAccessToken(id, role) {
-    return jwt.sign({ id, role }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '120m' });
+function generateAccessToken(useraccount_id, role) {
+    return jwt.sign({ useraccount_id, role }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '120m' });
 }
 
 module.exports = AuthController;

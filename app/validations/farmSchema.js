@@ -5,7 +5,7 @@ const farmSchema = Joi.object({
     status: Joi.boolean().required(),
     animalType_ID: Joi.number().integer().required(),
     animalDensity: Joi.number().required(),
-    ward_ID: Joi.number().integer().required(),
+    ward_ID: Joi.number().integer().positive().required(),
     addressDetail: Joi.string().required(),
 });
 

@@ -1,23 +1,27 @@
-const animalTypeModel = require('../models/AnimalTypeModel');
-const { animalTypeSchema } = require('../validations/animalTypeSchema');
+const animalModel = require('../models/AnimalModel');
+const { animalSchema } = require('../validations/animalSchema');
 
-class AnimalTypeController {
+class AnimalController {
     /**
      * Function Controller: Thêm 1 loại động vật
      */
-    static async InsertAnimalType(req, res) {
+    static async InsertAnimal(req, res) {
         try {
+            await animalSchema.validateAsync(req.body);
 
-            await animalTypeSchema.validateAsync(req.body);
+            var cage_ID = req.params.cage_id;
 
-            var typeName = req.body.typeName;
+            var gender_Animal = req.body.gender_Animal;
+            var weight = req.body.weight;
+            var entry_Date = req.body.entry_Date;
+            var status = req.body.status;
 
-            var result = await animalTypeModel.InsertAnimalType(typeName);
+            var result = await animalModel.InsertAnimal(cage_ID, gender_Animal, weight, entry_Date, status);
             if (result) {
                 res.status(200).json(
                     {
                         "isSuccess": true,
-                        "message": `Create Animal Type Successfully`
+                        "message": `Create Animal Successfully`
                     }
                 );
             }
@@ -30,14 +34,16 @@ class AnimalTypeController {
                 }
             );
         }
-
     }
 
     /**
-     * Function Controller: Lấy toàn bộ danh sách loại động vật
+     * Function Controller: Lấy tất cả thông tin động vật trong 1 chuồng
      */
-    static async GetAllAnimalTypes(req, res) {
-        var result = await animalTypeModel.GetAnimalTypes();
+    static async GetAllAnimalsInCage(req, res) {
+
+        var cage_ID = req.params.cage_id;
+
+        var result = await animalModel.GetAllAnimalsInCage(cage_ID);
         if (result.length > 0) {
             res.json(
                 {
@@ -58,17 +64,18 @@ class AnimalTypeController {
     }
 
     /**
-     * Function Controller: Lấy 1 thông tin loại động vật bằng ID
+     * Function Controller: Lấy 1 thông tin loại động vật chuồng
      */
-    static async GetAnimalTypesByID(req, res) {
-        var id = req.params.id;
+    static async GetAnimalByID(req, res) {
+        var cage_id = req.params.cage_id;
+        var animal_id = req.params.animal_id;
 
-        var result = await animalTypeModel.GetAnimalTypesById(id);
+        var result = await animalModel.GetAnimalByID(animal_id, cage_id);
         if (result.length > 0) {
             res.json(
                 {
                     "isSuccess": true,
-                    "message": `Get Animal Type By ID Successfully`,
+                    "message": `Get Animal By ID Successfully`,
                     "data": result
                 }
             );
@@ -84,21 +91,26 @@ class AnimalTypeController {
     }
 
     /**
-     * Function Controller: Cập nhật thông tin loại động vật
+     * Function Controller: Cập nhật thông tin động vật
      */
-    static async UpdateAnimalTypeByID(req, res) {
+    static async UpdateAnimalByID(req, res) {
         try {
-            await animalTypeSchema.validateAsync(req.body);
+            await animalSchema.validateAsync(req.body);
 
-            var id = req.params.id;
+            var cage_id = req.params.cage_id;
+            var animal_id = req.params.animal_id;
 
-            var typeName = req.body.typeName;
-            var result = await animalTypeModel.UpdateAnimalTypeById(typeName, id);
+            var gender_Animal = req.body.gender_Animal;
+            var weight = req.body.weight;
+            var entry_Date = req.body.entry_Date;
+            var status = req.body.status;
+
+            var result = await animalModel.UpdateAnimalByID(gender_Animal, weight, entry_Date, status, animal_id, cage_id);
             if (result) {
                 res.status(200).json(
                     {
                         "isSuccess": true,
-                        "message": `Animal Type Updated Successfully`
+                        "message": `Updated Animal Successfully`
                     }
                 );
             }
@@ -107,24 +119,26 @@ class AnimalTypeController {
                 {
                     "isSuccess": false,
                     "message": `An error has occurred, please try again.`,
+                    "error": error
                 }
             );
         }
     }
 
     /**
-     * Function Controller: Xóa thông tin loại động vật
+     * Function Controller: Xóa thông tin động vật
      */
-    static async DeleteAnimalTypeByID(req, res) {
+    static async DeleteAnimalByID(req, res) {
         try {
-            var id = req.params.id;
+            var cage_id = req.params.cage_id;
+            var animal_id = req.params.animal_id;
 
-            var result = await animalTypeModel.DeleteAnimalTypeByID(id);
+            var result = await animalModel.DeleteAnimalByID(animal_id, cage_id);
             if (result) {
                 res.status(200).json(
                     {
                         "isSuccess": true,
-                        "message": `Animal Type deleted successfully`,
+                        "message": `Deleted animal successfully`,
                     }
                 );
             }
@@ -140,4 +154,4 @@ class AnimalTypeController {
 
 }
 
-module.exports = AnimalTypeController;
+module.exports = AnimalController;

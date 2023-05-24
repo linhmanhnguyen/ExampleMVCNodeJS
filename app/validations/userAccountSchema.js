@@ -4,15 +4,14 @@ const Joi = require('joi');
 const userAccountSchema = Joi.object({
     username: Joi.string().required(),
     password: Joi.string().required(),
-    userDetail_ID: Joi.number().integer().required(),
-    farm_ID: Joi.number().integer().required(),
+    userDetail_ID: Joi.number().integer().positive().required(),
+    farm_ID: Joi.number().integer().positive(),
     status: Joi.boolean().required(),
-    role_ID: Joi.number().integer().required(),
+    role_ID: Joi.number().integer().positive().required(),
 });
 
 const updateUserAccountSchema = Joi.object({
     password: Joi.string().required(),
-    status: Joi.boolean().required()
 });
 
 module.exports = {

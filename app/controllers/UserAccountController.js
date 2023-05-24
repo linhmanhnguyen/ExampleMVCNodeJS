@@ -20,6 +20,7 @@ class UserAccountController {
             var farm_ID = req.body.farm_ID;
             var status = req.body.status;
             var refreshtoken = generateRefreshToken(username);
+            var role_ID = req.body.role_ID;
 
             var searchUserAccount = await UserAccountModel.SearchUserAccountByUsername(username);
             if (searchUserAccount.length > 0) {
@@ -31,12 +32,11 @@ class UserAccountController {
                 );
             }
             else {
-                var result = await userAccountModel.InsertUserAccount(username, password, createDate, status, userDetail_ID, refreshtoken, farm_ID)
+                var result = await userAccountModel.InsertUserAccount(username, password, createDate, userDetail_ID, refreshtoken, farm_ID)
                 if (result) {
                     var userAccount_ID = result.insertId;
-                    var role_ID = req.body.role_ID;
 
-                    var resultInsertRole = await userAccountModel.InsertRoleForUserAccount(userAccount_ID, role_ID, createDate, status);
+                    var resultInsertRole = await userAccountModel.InsertRoleForUserAccount(userAccount_ID, role_ID, farm_ID, createDate, status);
                     if (resultInsertRole) {
                         res.status(200).json(
                             {
@@ -71,6 +71,8 @@ class UserAccountController {
                     "message": `An error has occurred, please try again.`,
                 }
             );
+
+            console.log(error);
         }
     }
 
@@ -134,9 +136,8 @@ class UserAccountController {
             var id = req.params.id;
 
             var password = req.body.password;
-            var status = req.body.status;
 
-            var result = await userAccountModel.UpdateUserAccountById(password, status, id);
+            var result = await userAccountModel.UpdateUserAccountById(password, id);
             if (result) {
                 res.status(200).json(
                     {

@@ -1,7 +1,7 @@
 const userDetailModel = require('../models/UserDetailModel');
 const { userDetailSchema } = require('../validations/userDetailSchema');
-class UserDetailController {
 
+class UserDetailController {
     /**
      * Function Controller: Thêm thông tin người dùng
      */

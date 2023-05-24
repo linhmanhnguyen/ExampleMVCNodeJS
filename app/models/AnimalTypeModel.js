@@ -30,7 +30,7 @@ class AnimalTypeModel {
      * Function Model: Lấy 1 loại động vật bằng ID
      */
     static async GetAnimalTypesById(id) {
-        const query = `SELECT * FROM animaltypes WHERE id = ?`;
+        const query = `SELECT * FROM animaltypes WHERE ID = ?`;
         const params = [id];
 
         const result = await connection.query(query, params);
@@ -44,7 +44,7 @@ class AnimalTypeModel {
         const query = `
                         UPDATE animaltypes 
                         SET TypeName = ?
-                        WHERE id = ?`;
+                        WHERE ID = ?`;
         const params = [TypeName, id];
 
         const result = await connection.query(query, params);
@@ -55,7 +55,7 @@ class AnimalTypeModel {
      * Function Model: Xóa 1 loại động vật
      */
     static async DeleteAnimalTypeByID(id) {
-        const query = `DELETE FROM animaltypes WHERE id = ?`;
+        const query = `DELETE FROM animaltypes WHERE ID = ?`;
         const params = [id];
 
         const result = await connection.query(query, params);
