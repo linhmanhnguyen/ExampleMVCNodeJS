@@ -70,11 +70,23 @@ class UserAccountModel {
     /**
      * Function Model: Gán tài khoản vừa được tạo với role ID
      */
-    static async InsertRoleForUserAccount(UserAccount_ID, Role_ID, Farm_ID, CreateDate, Status) {
+    static async InsertRoleForUserAccount(UserAccount_ID, Role_ID, CreateDate, Status) {
         const query = `
-                        INSERT INTO user_farms (UserAccount_ID, Role_ID, Farm_ID, CreateDate, Status) 
-                        VALUES (?, ?, ?, ?, ?)`;
-        const params = [UserAccount_ID, Role_ID, Farm_ID, CreateDate, Status];
+                        INSERT INTO user_roles (UserAccount_ID, Role_ID, CreateDate, Status) 
+                        VALUES (?, ?, ?, ?)`;
+        const params = [UserAccount_ID, Role_ID, CreateDate, Status];
+        const result = await connection.query(query, params);
+        return result;
+    }
+
+    /**
+     * Function Model: Gán tài khoản vào trang trại
+     */
+    static async InsertUserAccountToFarm(UserAccount_ID, Farm_ID, CreateDate, Status) {
+        const query = `
+                        INSERT INTO user_farms (UserAccount_ID, Farm_ID, CreateDate, Status) 
+                        VALUES (?, ?, ?, ?)`;
+        const params = [UserAccount_ID, Farm_ID, CreateDate, Status];
         const result = await connection.query(query, params);
         return result;
     }
@@ -84,10 +96,10 @@ class UserAccountModel {
      */
     static async SearchUserAccountByUsername(username) {
         const query = ` SELECT useraccounts.id, useraccounts.Username, useraccounts.Password, 
-                        user_farms.Role_ID, roles.RoleName, user_farms.Status 
+                        user_roles.Role_ID, roles.RoleName, user_roles.Status 
                         FROM useraccounts 
-                        JOIN user_farms ON useraccounts.id = user_farms.UserAccount_ID 
-                        JOIN roles ON roles.id = user_farms.Role_ID 
+                        JOIN user_roles ON useraccounts.id = user_roles.UserAccount_ID 
+                        JOIN roles ON roles.id = user_roles.Role_ID 
                         WHERE useraccounts.Username = ?`;
 
         const params = [username];

@@ -17,7 +17,6 @@ class UserAccountController {
             var password = req.body.password;
             var createDate = currentTime;
             var userDetail_ID = req.body.userDetail_ID;
-            var farm_ID = req.body.farm_ID;
             var status = req.body.status;
             var refreshtoken = generateRefreshToken(username);
             var role_ID = req.body.role_ID;
@@ -32,11 +31,11 @@ class UserAccountController {
                 );
             }
             else {
-                var result = await userAccountModel.InsertUserAccount(username, password, createDate, userDetail_ID, refreshtoken, farm_ID)
+                var result = await userAccountModel.InsertUserAccount(username, password, createDate, userDetail_ID, refreshtoken)
                 if (result) {
                     var userAccount_ID = result.insertId;
 
-                    var resultInsertRole = await userAccountModel.InsertRoleForUserAccount(userAccount_ID, role_ID, farm_ID, createDate, status);
+                    var resultInsertRole = await userAccountModel.InsertRoleForUserAccount(userAccount_ID, role_ID, createDate, status);
                     if (resultInsertRole) {
                         res.status(200).json(
                             {

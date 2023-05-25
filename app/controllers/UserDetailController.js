@@ -17,15 +17,14 @@ class UserDetailController {
             var Ward_ID = req.body.ward_ID;
             var addressDetail = req.body.addressDetail;
             var email = req.body.email;
-            var phone = req.body.phone;
-
+            var phone = req.body.phoneNumber;
 
             var CheckUserDetailExistsByCitizenIDOrPhone = await userDetailModel.CheckUserDetailExistsByCitizenIDOrPhone(citizenIdentification_ID, phone);
             if (CheckUserDetailExistsByCitizenIDOrPhone.length > 0) {
                 res.status(400).json(
                     {
                         "isSuccess": false,
-                        "message": `Citizen Identification ID Or Phone existed`,
+                        "message": `Citizen Identification ID or Phone existed`,
                     }
                 );
             }
@@ -42,6 +41,7 @@ class UserDetailController {
             }
 
         } catch (error) {
+            console.log(error);
             res.status(400).json(
                 {
                     "isSuccess": false,
@@ -49,7 +49,6 @@ class UserDetailController {
                 }
             );
         }
-
     }
 
     /**
@@ -113,14 +112,15 @@ class UserDetailController {
             var dateOfBirth = req.body.dateOfBirth;
             var gender = req.body.gender;
             var citizenIdentification_ID = req.body.citizenIdentification_ID;
+            var Ward_ID = req.body.ward_ID;
             var addressDetail = req.body.addressDetail;
             var email = req.body.email;
-            var phone = req.body.phone;
-            var Ward_ID = req.body.ward_ID;
+            var phoneNumber = req.body.phoneNumber;
+
 
             var id = req.params.id;
 
-            var result = await userDetailModel.UpdateUserDetailByID(fullname, dateOfBirth, gender, citizenIdentification_ID, addressDetail, phone, email, Ward_ID, id);
+            var result = await userDetailModel.UpdateUserDetailByID(fullname, dateOfBirth, gender, citizenIdentification_ID, Ward_ID, addressDetail, phoneNumber, email, id);
             if (result) {
                 res.status(200).json(
                     {
@@ -130,6 +130,8 @@ class UserDetailController {
                 );
             }
         } catch (error) {
+            console.log(error);
+
             res.status(400).json(
                 {
                     "isSuccess": false,

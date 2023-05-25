@@ -1,4 +1,5 @@
 const farmModel = require('../models/FarmModel')
+const userAccountModel = require('../models/UserAccountModel')
 const moment = require('moment-timezone');
 const { farmSchema } = require('../validations/farmSchema');
 
@@ -26,6 +27,12 @@ class FarmController {
             var result = await farmModel.InsertFarm(farmName, createDate, status, animalType_ID, animalDensity, ward_ID, addressDetail, lastModified);
 
             if (result) {
+                const farm_ID = result.insertId;
+                const user_ID = req.user.useraccount_id;
+
+                // Dựa theo tài khoản đang thực hiện, gán thông tin tài khoản đó vào trong farm vừa tạo
+                await userAccountModel.InsertUserAccountToFarm(user_ID, farm_ID, createDate, status);
+
                 res.status(200).json(
                     {
                         "isSuccess": true,
@@ -34,6 +41,7 @@ class FarmController {
                 );
             }
         } catch (error) {
+
             res.status(400).json(
                 {
                     "isSuccess": false,

@@ -9,7 +9,7 @@ class UserDetailModel {
     static async InsertUserDetail(FullName, DateOfBirth, Gender, CitizenIdentification_ID, Ward_ID, AddressDetail, Email, PhoneNumber) {
 
         const query = `
-                        INSERT INTO userdetails (FullName, DateOfBirth, Gender, CitizenIdentification_ID, Ward_ID, AddressDetail, Email, Phone) 
+                        INSERT INTO userdetails (FullName, DateOfBirth, Gender, CitizenIdentification_ID, Ward_ID, AddressDetail, Email, PhoneNumber) 
                         VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
         const params = [FullName, DateOfBirth, Gender, CitizenIdentification_ID, Ward_ID, AddressDetail, Email, PhoneNumber];
 
@@ -50,7 +50,7 @@ class UserDetailModel {
     static async UpdateUserDetailByID(FullName, DateOfBirth, Gender, CitizenIdentification_ID, Ward_ID, AddressDetail, Email, PhoneNumber, id) {
         const query = `
                         UPDATE userdetails 
-                        SET FullName = ?, DateOfBirth = ?, Gender = ?, CitizenIdentification_ID = ?, Ward_ID = ?, AddressDetail = ?, Email = ?, Phone = ?
+                        SET FullName = ?, DateOfBirth = ?, Gender = ?, CitizenIdentification_ID = ?, Ward_ID = ?, AddressDetail = ?, Email = ?, PhoneNumber = ?
                         WHERE ID = ?`;
 
         const params = [FullName, DateOfBirth, Gender, CitizenIdentification_ID, Ward_ID, AddressDetail, Email, PhoneNumber, id];
@@ -77,7 +77,7 @@ class UserDetailModel {
         const query = ` SELECT *
                         FROM userdetails
                         WHERE CitizenIdentification_ID = ?
-                        OR Phone = ?;`;
+                        OR PhoneNumber = ?;`;
 
         const params = [CitizenIdentification_ID, phone];
         const result = await connection.query(query, params);

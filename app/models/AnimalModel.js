@@ -4,11 +4,11 @@ class AnimalModel {
     /**
      * Function Model: Thêm thông tin một con vật vào trong chuồng
      */
-    static async InsertAnimal(Cage_ID, Gender_Animal, Weight, Entry_Date, Status) {
+    static async InsertAnimal(Cage_ID, Type, Gender_Animal, Weight, Entry_Date, Status) {
         const query = `
-      INSERT INTO animals (Cage_ID, Gender_Animal, Weight, Entry_Date, Status)
-      VALUES (?, ?, ?, ?, ?)`;
-        const params = [Cage_ID, Gender_Animal, Weight, Entry_Date, Status];
+      INSERT INTO animals (Cage_ID, Type, Gender_Animal, Weight, Entry_Date, Status)
+      VALUES (?, ?, ?, ?, ?, ?)`;
+        const params = [Cage_ID, Type, Gender_Animal, Weight, Entry_Date, Status];
 
         const result = await connection.query(query, params);
         return result;
@@ -38,13 +38,13 @@ class AnimalModel {
     /**
      * Function Model: Cập nhật thông tin của một con vật
      */
-    static async UpdateAnimalByID(Gender_Animal, Weight, Entry_Date, Status, Animal_ID, Cage_ID) {
+    static async UpdateAnimalByID(Type, Gender_Animal, Weight, Entry_Date, Animal_ID, Cage_ID) {
         const query = `
                         UPDATE animals 
-                        SET Gender_Animal = ?, Weight = ?, Entry_Date = ?, Status = ?
+                        SET Type = ?, Gender_Animal = ?, Weight = ?, Entry_Date = ?
                         WHERE ID = ? AND Cage_ID = ?`;
 
-        const params = [Gender_Animal, Weight, Entry_Date, Status, Animal_ID, Cage_ID];
+        const params = [Type, Gender_Animal, Weight, Entry_Date, Animal_ID, Cage_ID];
 
         const result = await connection.query(query, params);
         return result;
@@ -56,6 +56,21 @@ class AnimalModel {
     static async DeleteAnimalByID(Animal_ID, Cage_ID) {
         const query = `DELETE FROM animals WHERE ID = ? AND Cage_ID = ?`;
         const params = [Animal_ID, Cage_ID];
+
+        const result = await connection.query(query, params);
+        return result;
+    }
+
+    /**
+     * Function Model: Chuyển chuồng cho 1 động vật 
+     */
+    static async TransferCageForAnimal(TransferCage_ID, Animal_ID) {
+        const query = `
+                        UPDATE animals 
+                        SET Cage_ID = ?
+                        WHERE ID = ?`;
+
+        const params = [TransferCage_ID, Animal_ID];
 
         const result = await connection.query(query, params);
         return result;
