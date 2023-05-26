@@ -28,9 +28,9 @@ class AnimalModel {
     /**
      * Function Model: Lấy thông tin chi tiết của một con vật trong một chuồng
      */
-    static async GetAnimalByID(Animal_ID, Cage_ID) {
-        const query = `SELECT * FROM animals WHERE ID = ? AND Cage_ID = ?`;
-        const params = [Animal_ID, Cage_ID];
+    static async GetAnimalByID(Animal_ID) {
+        const query = `SELECT * FROM animals WHERE ID = ?`;
+        const params = [Animal_ID];
         const result = await connection.query(query, params);
         return result;
     }
@@ -38,13 +38,13 @@ class AnimalModel {
     /**
      * Function Model: Cập nhật thông tin của một con vật
      */
-    static async UpdateAnimalByID(Type, Gender_Animal, Weight, Entry_Date, Animal_ID, Cage_ID) {
+    static async UpdateAnimalByID(Type, Gender_Animal, Weight, Entry_Date, Animal_ID) {
         const query = `
                         UPDATE animals 
                         SET Type = ?, Gender_Animal = ?, Weight = ?, Entry_Date = ?
-                        WHERE ID = ? AND Cage_ID = ?`;
+                        WHERE ID = ?`;
 
-        const params = [Type, Gender_Animal, Weight, Entry_Date, Animal_ID, Cage_ID];
+        const params = [Type, Gender_Animal, Weight, Entry_Date, Animal_ID];
 
         const result = await connection.query(query, params);
         return result;
@@ -53,9 +53,9 @@ class AnimalModel {
     /**
      * Function Model: Xóa thông tin của một con vật trong chuồng
      */
-    static async DeleteAnimalByID(Animal_ID, Cage_ID) {
-        const query = `DELETE FROM animals WHERE ID = ? AND Cage_ID = ?`;
-        const params = [Animal_ID, Cage_ID];
+    static async DeleteAnimalByID(Animal_ID) {
+        const query = `DELETE FROM animals WHERE ID = ?`;
+        const params = [Animal_ID];
 
         const result = await connection.query(query, params);
         return result;
@@ -71,6 +71,21 @@ class AnimalModel {
                         WHERE ID = ?`;
 
         const params = [TransferCage_ID, Animal_ID];
+
+        const result = await connection.query(query, params);
+        return result;
+    }
+
+    /**
+     * Function Model: Cập nhật trạng thái của 1 động vật
+     */
+    static async UpdateStatusOfAnimal(Status, Animal_ID) {
+        const query = `
+                        UPDATE animals 
+                        SET Status = ?
+                        WHERE ID = ?`;
+
+        const params = [Status, Animal_ID];
 
         const result = await connection.query(query, params);
         return result;

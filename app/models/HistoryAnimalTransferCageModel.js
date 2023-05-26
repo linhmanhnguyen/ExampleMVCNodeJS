@@ -45,6 +45,17 @@ class HistoryAnimalTransferCageModel {
         const result = await connection.query(query, params);
         return result;
     }
+
+    /**
+     *Function Model: Xóa tất cả lịch sử chuyển chuồng của 1 động vật
+     */
+    static async DeleteHistoriesOfAnimal(Animal_ID) {
+        const query = 'DELETE FROM history_animal_transfer_cage WHERE Animal_ID = ?';
+        const params = [Animal_ID];
+        const result = await connection.query(query, params);
+        return result;
+    }
+
 }
 
 module.exports = HistoryAnimalTransferCageModel;

@@ -20,13 +20,5 @@ router.delete('/:id/cages/:cage_id', authenticateToken, authorize(['admin']), ca
 
 router.post('/:id/cages/:cage_id/animals', authenticateToken, authorize(['admin']), animalController.InsertAnimal);
 router.get('/:id/cages/:cage_id/animals', authenticateToken, authorize(['admin']), animalController.GetAllAnimalsInCage);
-router.get('/:id/cages/:cage_id/animals/:animal_id', authenticateToken, authorize(['admin']), animalController.GetAnimalByID);
-router.put('/:id/cages/:cage_id/animals/:animal_id', authenticateToken, authorize(['admin']), animalController.UpdateAnimalByID);
-router.delete('/:id/cages/:cage_id/animals/:animal_id', authenticateToken, authorize(['admin']), animalController.DeleteAnimalByID);
-
-router.post('/:id/cages/:cage_id/animals/:animal_id/transfer-cage', authenticateToken, authorize(['admin']), animalController.TrasnferCage);
-router.get('/:id/cages/:cage_id/animals/:animal_id/transfer-cage', authenticateToken, authorize(['admin']), animalController.GetHistoiesTransferCageOfAnimal);
-router.get('/:id/cages/:cage_id/animals/:animal_id/transfer-cage/:history_id', authenticateToken, authorize(['admin']), animalController.GetHistoryTransferCageOfAnimal);
-router.delete('/:id/cages/:cage_id/animals/:animal_id/transfer-cage/:history_id', authenticateToken, authorize(['admin']), animalController.DeleteHistoryTransferCageOfAnimal);
 
 module.exports = router;
