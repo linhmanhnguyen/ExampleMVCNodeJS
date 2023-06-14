@@ -34,7 +34,8 @@ class UserDetailController {
                     res.status(200).json(
                         {
                             "isSuccess": true,
-                            "message": `Created User Detail successfully`
+                            "message": `Created User Detail successfully`,
+                            "data": result.insertId
                         }
                     );
                 }

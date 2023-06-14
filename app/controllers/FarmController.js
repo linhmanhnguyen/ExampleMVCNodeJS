@@ -36,7 +36,8 @@ class FarmController {
                 res.status(200).json(
                     {
                         "isSuccess": true,
-                        "message": `Created Farm successfully`
+                        "message": `Created Farm successfully`,
+                        "data": farm_ID
                     }
                 );
             }

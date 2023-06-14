@@ -9,7 +9,7 @@ class UserDetailModel {
     static async InsertUserDetail(FullName, DateOfBirth, Gender, CitizenIdentification_ID, Ward_ID, AddressDetail, Email, PhoneNumber) {
 
         const query = `
-                        INSERT INTO userdetails (FullName, DateOfBirth, Gender, CitizenIdentification_ID, Ward_ID, AddressDetail, Email, PhoneNumber) 
+                        INSERT INTO UserDetails (FullName, DateOfBirth, Gender, CitizenIdentification_ID, Ward_ID, AddressDetail, Email, PhoneNumber) 
                         VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
         const params = [FullName, DateOfBirth, Gender, CitizenIdentification_ID, Ward_ID, AddressDetail, Email, PhoneNumber];
 
@@ -23,7 +23,7 @@ class UserDetailModel {
     static async GetAllUserDetails() {
         const query = `
                         SELECT *
-                        FROM userdetails` ;
+                        FROM UserDetails` ;
         const params = [];
 
         const result = await connection.query(query, params);
@@ -36,7 +36,7 @@ class UserDetailModel {
     static async GetUserDetailsByID(id) {
         const query = `
                         SELECT *
-                        FROM userdetails
+                        FROM UserDetails
                         WHERE ID = ?`;
         const params = [id];
 
@@ -49,7 +49,7 @@ class UserDetailModel {
      */
     static async UpdateUserDetailByID(FullName, DateOfBirth, Gender, CitizenIdentification_ID, Ward_ID, AddressDetail, Email, PhoneNumber, id) {
         const query = `
-                        UPDATE userdetails 
+                        UPDATE UserDetails 
                         SET FullName = ?, DateOfBirth = ?, Gender = ?, CitizenIdentification_ID = ?, Ward_ID = ?, AddressDetail = ?, Email = ?, PhoneNumber = ?
                         WHERE ID = ?`;
 
@@ -63,7 +63,7 @@ class UserDetailModel {
      * Function Model: Xóa thông tin cá nhân của người dùng
      */
     static async DeleteUserDetailByID(id) {
-        const query = `DELETE FROM userdetails WHERE ID = ?`;
+        const query = `DELETE FROM UserDetails WHERE ID = ?`;
         const params = [id];
 
         const result = await connection.query(query, params);
@@ -75,7 +75,7 @@ class UserDetailModel {
      */
     static async CheckUserDetailExistsByCitizenIDOrPhone(CitizenIdentification_ID, phone) {
         const query = ` SELECT *
-                        FROM userdetails
+                        FROM UserDetails
                         WHERE CitizenIdentification_ID = ?
                         OR PhoneNumber = ?;`;
 

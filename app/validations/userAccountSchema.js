@@ -9,10 +9,15 @@ const userAccountSchema = Joi.object({
     role_ID: Joi.number().integer().positive().required(),
 });
 
+const registerAccountSchema = Joi.object({
+    username: Joi.string().required(),
+    password: Joi.string().required(),
+});
+
 const updateUserAccountSchema = Joi.object({
     password: Joi.string().required(),
 });
 
 module.exports = {
-    userAccountSchema, updateUserAccountSchema
+    userAccountSchema, updateUserAccountSchema, registerAccountSchema
 };

@@ -6,7 +6,7 @@ class AnimalModel {
      */
     static async InsertAnimal(Cage_ID, Type, Gender_Animal, Weight, Entry_Date, Status) {
         const query = `
-      INSERT INTO animals (Cage_ID, Type, Gender_Animal, Weight, Entry_Date, Status)
+      INSERT INTO Animals (Cage_ID, Type, Gender_Animal, Weight, Entry_Date, Status)
       VALUES (?, ?, ?, ?, ?, ?)`;
         const params = [Cage_ID, Type, Gender_Animal, Weight, Entry_Date, Status];
 
@@ -18,7 +18,7 @@ class AnimalModel {
      * Function Model: Lấy tất cả thông tin con vật trong một chuồng
      */
     static async GetAllAnimalsInCage(Cage_ID) {
-        const query = `SELECT * FROM animals WHERE Cage_ID = ?`;
+        const query = `SELECT * FROM Animals WHERE Cage_ID = ?`;
         const params = [Cage_ID];
 
         const result = await connection.query(query, params);
@@ -29,7 +29,7 @@ class AnimalModel {
      * Function Model: Lấy thông tin chi tiết của một con vật trong một chuồng
      */
     static async GetAnimalByID(Animal_ID) {
-        const query = `SELECT * FROM animals WHERE ID = ?`;
+        const query = `SELECT * FROM Animals WHERE ID = ?`;
         const params = [Animal_ID];
         const result = await connection.query(query, params);
         return result;
@@ -40,7 +40,7 @@ class AnimalModel {
      */
     static async UpdateAnimalByID(Type, Gender_Animal, Weight, Entry_Date, Animal_ID) {
         const query = `
-                        UPDATE animals 
+                        UPDATE Animals 
                         SET Type = ?, Gender_Animal = ?, Weight = ?, Entry_Date = ?
                         WHERE ID = ?`;
 
@@ -54,7 +54,7 @@ class AnimalModel {
      * Function Model: Xóa thông tin của một con vật trong chuồng
      */
     static async DeleteAnimalByID(Animal_ID) {
-        const query = `DELETE FROM animals WHERE ID = ?`;
+        const query = `DELETE FROM Animals WHERE ID = ?`;
         const params = [Animal_ID];
 
         const result = await connection.query(query, params);
@@ -66,7 +66,7 @@ class AnimalModel {
      */
     static async TransferCageForAnimal(TransferCage_ID, Animal_ID) {
         const query = `
-                        UPDATE animals 
+                        UPDATE Animals 
                         SET Cage_ID = ?
                         WHERE ID = ?`;
 
@@ -81,7 +81,7 @@ class AnimalModel {
      */
     static async UpdateStatusOfAnimal(Status, Animal_ID) {
         const query = `
-                        UPDATE animals 
+                        UPDATE Animals 
                         SET Status = ?
                         WHERE ID = ?`;
 

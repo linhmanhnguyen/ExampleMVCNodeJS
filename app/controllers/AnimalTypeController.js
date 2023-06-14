@@ -17,7 +17,8 @@ class AnimalTypeController {
                 res.status(200).json(
                     {
                         "isSuccess": true,
-                        "message": `Create Animal Type Successfully`
+                        "message": `Create Animal Type Successfully`,
+                        "data": result.insertId
                     }
                 );
             }

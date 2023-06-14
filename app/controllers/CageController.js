@@ -22,7 +22,8 @@ class CageController {
                 res.status(200).json(
                     {
                         "isSuccess": true,
-                        "message": `Created Cage Successfully`
+                        "message": `Created Cage Successfully`,
+                        "data": result.insertId
                     }
                 );
             }

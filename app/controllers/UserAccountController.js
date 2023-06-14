@@ -40,7 +40,8 @@ class UserAccountController {
                         res.status(200).json(
                             {
                                 "isSuccess": true,
-                                "message": `Create User Account Successfully`
+                                "message": `Create User Account Successfully`,
+                                "data": userAccount_ID
                             }
                         );
                     }

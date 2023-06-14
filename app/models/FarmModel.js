@@ -7,7 +7,7 @@ class FarmModel {
      */
     static async InsertFarm(FarmName, CreationDate, Status, AnimalType_ID, AnimalDensity, Ward_ID, AddressDetail, LastModified) {
         const query = `
-        INSERT INTO farms (FarmName, CreationDate, Status, AnimalType_ID, AnimalDensity, Ward_ID, AddressDetail, LastModified) 
+        INSERT INTO Farms (FarmName, CreationDate, Status, AnimalType_ID, AnimalDensity, Ward_ID, AddressDetail, LastModified) 
         VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
         const params = [FarmName, CreationDate, Status, AnimalType_ID, AnimalDensity, Ward_ID, AddressDetail, LastModified];
 
@@ -19,7 +19,7 @@ class FarmModel {
      * Function Model: Lấy toàn bộ danh sách trang trại trong hệ thống
      */
     static async GetAllFarms() {
-        const query = `SELECT * FROM farms`;
+        const query = `SELECT * FROM Farms`;
         const params = [];
         const result = await connection.query(query, params);
         return result;
@@ -29,7 +29,7 @@ class FarmModel {
      * Function Model: Lấy 1 thông tin của trang trại bằng ID
      */
     static async GetFarmByID(id) {
-        const query = `SELECT * FROM farms WHERE ID = ?`;
+        const query = `SELECT * FROM Farms WHERE ID = ?`;
         const params = [id];
         const result = await connection.query(query, params);
         return result;
@@ -40,7 +40,7 @@ class FarmModel {
      */
     static async UpdateFarmByID(FarmName, Status, AnimalType_ID, AnimalDensity, Ward_ID, AddressDetail, LastModified, id) {
         const query = `
-                        UPDATE farms 
+                        UPDATE Farms 
                         SET FarmName = ?, Status = ?, AnimalType_ID = ?, AnimalDensity = ?, Ward_ID = ?, AddressDetail = ?, LastModified = ?
                         WHERE ID = ?`;
 
@@ -54,7 +54,7 @@ class FarmModel {
      */
     static async DeleteFarm(ID) {
         const query = `
-                        DELETE FROM farms 
+                        DELETE FROM Farms 
                         WHERE ID = ?`;
         const params = [ID];
 

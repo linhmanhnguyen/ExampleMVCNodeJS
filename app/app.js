@@ -8,6 +8,8 @@ const userAccountRouter = require('./routes/UserAccountRouter');
 const animalTypeRouter = require('./routes/AnimalTypeRouter');
 const farmRouter = require('./routes/FarmRouter');
 const animalRouter = require('./routes/AnimalRouter');
+const roleRouter = require('./routes/RoleRouter');
+const addressRouter = require('./routes/AddressRouter');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -19,6 +21,8 @@ app.use('/accounts', userAccountRouter);
 app.use('/animal-types', animalTypeRouter);
 app.use('/farms', farmRouter);
 app.use('/animals', animalRouter);
+app.use('/roles', roleRouter);
+app.use('/address', addressRouter);
 
 app.listen(3000, () => {
     console.log('Server is running at port 3000');
