@@ -104,6 +104,41 @@ class AddressController {
         }
     }
 
+    /**
+ * Function Controller: Lấy địa chỉ cụ thể bằng Ward ID
+ */
+    static async GetAddressDetailsByWardID(req, res) {
+        try {
+            var wards_id = req.params.id;
+
+            var result = await AddressModel.GetAddressByWardID(wards_id);
+            if (result.length > 0) {
+                res.status(200).json(
+                    {
+                        "isSuccess": true,
+                        "message": "Get address detail successfully.",
+                        "data": result,
+                    }
+                );
+            }
+            else {
+                res.status(404).json(
+                    {
+                        "isSuccess": false,
+                        "message": `No records found at the moment.`,
+                    }
+                );
+            }
+        } catch (error) {
+            res.status(400).json(
+                {
+                    "isSuccess": false,
+                    "message": `An error has occurred, please try again.`,
+                }
+            );
+        }
+    }
+
 }
 
 module.exports = AddressController;

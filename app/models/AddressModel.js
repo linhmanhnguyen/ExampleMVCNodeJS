@@ -30,6 +30,18 @@ class AddressModel {
         const result = await connection.query(query, params);
         return result;
     }
+
+    static async GetAddressByWardID(wards_id) {
+        const query = `Select wards.wards_id, wards.name as ward_name, 
+                        province.province_id, province.name as province_name, 
+                        district.district_id, district.name as district_name 
+                        from wards  join district on wards.district_id = district.district_id
+                                    join province on district.province_id = province.province_id
+                                    where wards.wards_id = ?`;
+        const params = [wards_id];
+        const result = await connection.query(query, params);
+        return result;
+    }
 }
 
 module.exports = AddressModel;

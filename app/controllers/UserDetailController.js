@@ -121,7 +121,7 @@ class UserDetailController {
 
             var id = req.params.id;
 
-            var result = await userDetailModel.UpdateUserDetailByID(fullname, dateOfBirth, gender, citizenIdentification_ID, Ward_ID, addressDetail, phoneNumber, email, id);
+            var result = await userDetailModel.UpdateUserDetailByID(fullname, dateOfBirth, gender, citizenIdentification_ID, Ward_ID, addressDetail, email, phoneNumber, id);
             if (result) {
                 res.status(200).json(
                     {
