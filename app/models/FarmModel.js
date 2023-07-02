@@ -18,9 +18,12 @@ class FarmModel {
     /**
      * Function Model: Lấy toàn bộ danh sách trang trại trong hệ thống
      */
-    static async GetAllFarms() {
-        const query = `SELECT * FROM Farms`;
-        const params = [];
+    static async GetAllFarms(UserAccount_ID) {
+        const query = `Select Farms.* From User_Farms 
+                    join Farms on User_Farms.Farm_ID = Farms.ID 
+                    where User_Farms.UserAccount_ID = ?
+                    `;
+        const params = [UserAccount_ID];
         const result = await connection.query(query, params);
         return result;
     }

@@ -57,7 +57,10 @@ class FarmController {
      * Function Controller: Lấy toàn bộ danh sách trang trại
      */
     static async GetAllFarms(req, res) {
-        var result = await farmModel.GetAllFarms();
+
+        var useraccount_id = req.user.useraccount_id;
+
+        var result = await farmModel.GetAllFarms(useraccount_id);
         if (result.length > 0) {
             res.json(
                 {
@@ -88,7 +91,7 @@ class FarmController {
             res.json(
                 {
                     "isSuccess": true,
-                    "message": `Get All Animal Types Successfully`,
+                    "message": `Get Farm Successfully`,
                     "data": result
                 }
             );

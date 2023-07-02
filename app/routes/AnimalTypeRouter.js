@@ -5,7 +5,7 @@ const { authenticateToken } = require('../middlewares/authMiddleware');
 const { authorize } = require('../middlewares/authorizeMiddleware');
 
 router.post('/', authenticateToken, authorize(['admin']), AnimalTypeController.InsertAnimalType);
-router.get('/', authenticateToken, authorize(['admin']), AnimalTypeController.GetAllAnimalTypes);
+router.get('/', AnimalTypeController.GetAllAnimalTypes);
 router.get('/:id', authenticateToken, authorize(['admin']), AnimalTypeController.GetAnimalTypesByID);
 router.put('/:id', authenticateToken, authorize(['admin']), AnimalTypeController.UpdateAnimalTypeByID);
 router.delete('/:id', authenticateToken, authorize(['admin']), AnimalTypeController.DeleteAnimalTypeByID);
