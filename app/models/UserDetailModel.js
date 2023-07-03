@@ -4,6 +4,20 @@ const bcrypt = require('bcrypt');
 class UserDetailModel {
 
     /**
+     * Function Model: Thêm 1 thông tin chi tiết người dùng khi đăng ký
+     */
+    static async InsertUserDetailWhenRegister(FullName, PhoneNumber) {
+
+        const query = `
+                        INSERT INTO UserDetails (FullName, PhoneNumber) 
+                        VALUES (?, ?)`;
+        const params = [FullName, PhoneNumber];
+
+        const result = await connection.query(query, params);
+        return result;
+    }
+
+    /**
      * Function Model: Thêm 1 thông tin chi tiết người dùng
      */
     static async InsertUserDetail(FullName, DateOfBirth, Gender, CitizenIdentification_ID, Ward_ID, AddressDetail, Email, PhoneNumber) {

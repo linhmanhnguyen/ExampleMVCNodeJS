@@ -5,6 +5,7 @@ const UserAccountModel = require('../models/UserAccountModel');
 const UserDetailModel = require('../models/UserDetailModel');
 const moment = require('moment-timezone');
 const { registerAccountSchema } = require('../validations/userAccountSchema');
+const RoleModel = require('../models/RoleModel');
 const currentTime = moment().tz('Asia/Ho_Chi_Minh').format('YYYY-MM-DD_HH-mm-ss');
 
 class AuthController {
@@ -61,16 +62,16 @@ class AuthController {
         try {
             await registerAccountSchema.validateAsync(req.body);
 
-            var username = req.body.username;
+            var username = req.body.username; // Phone Number
             var password = req.body.password;
+            var ownerFullName = req.body.fullname;
+
             var createDate = currentTime;
 
             var status = true;
             var refreshtoken = generateAccessToken(username);
-            var role_ID = 2; // Chủ sở hữu
 
-            var resultAddInfo = await UserDetailModel.InsertUserDetail();
-            var userDetail_ID = resultAddInfo.insertId;
+            var role_ID = 2; // Chủ sở hữu
 
             var searchUserAccount = await UserAccountModel.SearchUserAccountByUsername(username);
             if (searchUserAccount.length > 0) {
@@ -82,17 +83,28 @@ class AuthController {
                 );
             }
             else {
+                var resultAddInfo = await UserDetailModel.InsertUserDetailWhenRegister(ownerFullName, username);
+                var userDetail_ID = resultAddInfo.insertId;
+
                 var result = await UserAccountModel.InsertUserAccount(username, password, createDate, userDetail_ID, refreshtoken)
                 if (result) {
+
                     var userAccount_ID = result.insertId;
 
                     var resultInsertRole = await UserAccountModel.InsertRoleForUserAccount(userAccount_ID, role_ID, createDate, status);
                     if (resultInsertRole) {
+
+
+
+                        var role = await RoleModel.GetRoleByID(role_ID);
+
+                        var accesstoken = generateAccessToken(userAccount_ID, userDetail_ID, role[0].RoleName);
+
                         res.status(200).json(
                             {
                                 "isSuccess": true,
                                 "message": `Register Successfully`,
-                                "data": userAccount_ID
+                                "data": accesstoken
                             }
                         );
                     }
