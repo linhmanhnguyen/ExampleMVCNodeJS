@@ -7,7 +7,7 @@ class HistoryAnimalTransferCageModel {
     static async CreateHistory(Animal_ID, OriginalCage_ID, TransferCage_ID, Employee_ID, Content, Date_Action) {
 
         const query = `
-                            INSERT INTO History_Animal_Transfer_Cage (Animal_ID, OriginalCage_ID, TransferCage_ID, Employee_ID, Content, Date_Action)
+                            INSERT INTO history_animal_transfer_cage (animal_id, originalCage_id, transferCage_id, employee_id, content, dateAction)
                             VALUES (?, ?, ?, ?, ?, ?)
                         `;
 
@@ -20,7 +20,7 @@ class HistoryAnimalTransferCageModel {
      * Function Model: Lấy các lịch sử bằng ID của động vật 
      */
     static async GetHistoryByAnimalID(Animal_ID) {
-        const query = 'SELECT * FROM History_Animal_Transfer_Cage WHERE Animal_ID = ?';
+        const query = 'SELECT * FROM history_animal_transfer_cage WHERE animal_id = ?';
         const params = [Animal_ID];
         const result = await connection.query(query, params);
         return result;
@@ -30,7 +30,7 @@ class HistoryAnimalTransferCageModel {
      * Function Model: Lấy 1 lịch sử chuyển chuồng bằng ID của lịch sử 
      */
     static async GetHistoryByID(History_ID, Animal_ID) {
-        const query = 'SELECT * FROM History_Animal_Transfer_Cage WHERE ID = ? AND Animal_ID = ?';
+        const query = 'SELECT * FROM history_animal_transfer_cage WHERE id = ? AND animal_id = ?';
         const params = [History_ID, Animal_ID];
         const result = await connection.query(query, params);
         return result;
@@ -40,7 +40,7 @@ class HistoryAnimalTransferCageModel {
      *Function Model: Xóa 1 lịch sử chuyển chuồng
      */
     static async DeleteHistoryByID(History_ID, Animal_ID) {
-        const query = 'DELETE FROM History_Animal_Transfer_Cage WHERE ID = ? AND Animal_ID = ?';
+        const query = 'DELETE FROM history_animal_transfer_cage WHERE id = ? AND animal_id = ?';
         const params = [History_ID, Animal_ID];
         const result = await connection.query(query, params);
         return result;
@@ -50,7 +50,7 @@ class HistoryAnimalTransferCageModel {
      *Function Model: Xóa tất cả lịch sử chuyển chuồng của 1 động vật
      */
     static async DeleteHistoriesOfAnimal(Animal_ID) {
-        const query = 'DELETE FROM History_Animal_Transfer_Cage WHERE Animal_ID = ?';
+        const query = 'DELETE FROM history_animal_transfer_cage WHERE animal_id = ?';
         const params = [Animal_ID];
         const result = await connection.query(query, params);
         return result;

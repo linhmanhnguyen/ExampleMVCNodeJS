@@ -6,7 +6,7 @@ class SupplierModel {
      */
     static async InsertSupplier(name, phone, ward_ID, addressDetail) {
         const query = `
-                        INSERT INTO Suppliers (Name, Phone, Ward_ID, AddressDetail)
+                        INSERT INTO suppliers (name, phone, ward_id, addressDetail)
                         VALUES (?, ?, ?, ?)
                     `;
 
@@ -21,7 +21,7 @@ class SupplierModel {
      * Function Model: Lấy thông tin chi tiết của 1 người cung cấp
      */
     static async GetSupplierByID(id) {
-        const query = `SELECT * FROM Suppliers WHERE ID = ?`;
+        const query = `SELECT * FROM suppliers WHERE id = ?`;
         const params = [id];
 
         const result = await connection.query(query, params);
@@ -35,9 +35,9 @@ class SupplierModel {
     static async UpdateSupplier(name, phone, ward_ID, addressDetail, id) {
 
         const query = `
-                        UPDATE Suppliers
-                        SET Name = ?, Phone = ?, Ward_ID = ?, AddressDetail = ?
-                        WHERE ID = ?
+                        UPDATE suppliers
+                        SET name = ?, phone = ?, ward_id = ?, addressDetail = ?
+                        WHERE id = ?
                     `;
 
         const params = [name, phone, ward_ID, addressDetail, id];
@@ -50,7 +50,7 @@ class SupplierModel {
      * Function Model: Xóa thông tin người cung cấp
      */
     static async DeleteSupplier(id) {
-        const query = `DELETE FROM Suppliers WHERE ID = ?`;
+        const query = `DELETE FROM suppliers WHERE id = ?`;
         const params = [id];
 
         const result = await connection.query(query, params);

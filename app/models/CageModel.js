@@ -6,7 +6,7 @@ class CageModel {
      */
     static async InsertCage(CageName, Farm_ID, Location, Manager_ID) {
         const query = `
-        INSERT INTO Cages (CageName, Farm_ID, Location, Manager_ID) 
+        INSERT INTO cages (cageName, farm_id, location, manager_id) 
         VALUES (?, ?, ?, ?)`;
         const params = [CageName, Farm_ID, Location, Manager_ID];
 
@@ -18,7 +18,7 @@ class CageModel {
      * Function Model: Lấy tất cả thông tin hiện có trong 1 trang trại
      */
     static async GetAllCagesInFarm(Farm_ID) {
-        const query = `SELECT * FROM Cages WHERE Farm_ID = ?`;
+        const query = `SELECT * FROM cages WHERE farm_id = ?`;
         const params = [Farm_ID];
         const result = await connection.query(query, params);
         return result;
@@ -28,7 +28,7 @@ class CageModel {
      * Function Model: Lấy thông tin chi tiết của 1 chuồng nuôi trong 1 trang trại
      */
     static async GetCageByID(Cage_ID, Farm_ID) {
-        const query = `SELECT * FROM Cages WHERE ID = ? AND Farm_ID = ?`;
+        const query = `SELECT * FROM Cages WHERE id = ? AND farm_id = ?`;
         const params = [Cage_ID, Farm_ID];
         const result = await connection.query(query, params);
         return result;
@@ -39,9 +39,9 @@ class CageModel {
      */
     static async UpdateCageByID(CageName, Location, Manager_ID, Cage_ID, Farm_ID) {
         const query = `
-                        UPDATE Cages 
-                        SET CageName = ?, Location = ?, Manager_ID = ?
-                        WHERE ID = ?  AND Farm_ID = ?`;
+                        UPDATE cages 
+                        SET cageName = ?, location = ?, manager_id = ?
+                        WHERE id = ?  AND farm_id = ?`;
 
         const params = [CageName, Location, Manager_ID, Cage_ID, Farm_ID];
         const result = await connection.query(query, params);
@@ -52,7 +52,7 @@ class CageModel {
      * Function Model: Xóa thông tin của 1 chuồng nuôi trong trang trại
      */
     static async DeleteCageByID(Cage_ID, Farm_ID) {
-        const query = `DELETE FROM Cages WHERE ID = ? AND Farm_ID = ?`;
+        const query = `DELETE FROM cages WHERE id = ? AND farm_id = ?`;
         const params = [Cage_ID, Farm_ID];
         const result = await connection.query(query, params);
         return result;

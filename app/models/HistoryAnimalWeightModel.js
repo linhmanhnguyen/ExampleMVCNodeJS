@@ -7,7 +7,7 @@ class HistoryAnimalWeightModel {
     static async InsertHistory(Type_Action, Animal_ID, Employee_ID, Weight, Content, Date_Action) {
 
         const query = `
-                        INSERT INTO History_Animal_Weight (Type_Action, Animal_ID, Employee_ID, Weight, Content, Date_Action)
+                        INSERT INTO history_animal_weight (typeAction, animal_id, employee_id, weight, content, dateAction)
                         VALUES (?, ?, ?, ?, ?, ?)
                     `;
 
@@ -21,7 +21,7 @@ class HistoryAnimalWeightModel {
      * Function Model: Lấy tất cả lịch sử cân của 1 động vật
      */
     static async GetHistoriesOfAnimal(Animal_ID) {
-        const query = 'SELECT * FROM History_Animal_Weight WHERE Animal_ID = ?';
+        const query = 'SELECT * FROM history_animal_weight WHERE animal_id = ?';
         const params = [Animal_ID];
         const result = await connection.query(query, params);
         return result;
@@ -31,7 +31,7 @@ class HistoryAnimalWeightModel {
      * Function Model: Lấy 1 lịch sử cân của 1 động vật
      */
     static async GetHistoryOfAnimal(History_ID, Animal_ID) {
-        const query = 'SELECT * FROM History_Animal_Weight WHERE ID = ? AND Animal_ID = ?';
+        const query = 'SELECT * FROM history_animal_weight WHERE id = ? AND animal_id = ?';
         const params = [History_ID, Animal_ID];
         const result = await connection.query(query, params);
         return result;
@@ -42,7 +42,7 @@ class HistoryAnimalWeightModel {
      * Function Model: Xóa 1 lịch sử cân của 1 động vật
      */
     static async DeleteHistoryOfAnimal(History_ID, Animal_ID) {
-        const query = 'DELETE FROM History_Animal_Weight WHERE ID = ? AND Animal_ID = ?';
+        const query = 'DELETE FROM history_animal_weight WHERE id = ? AND animal_id = ?';
         const params = [History_ID, Animal_ID];
         const result = await connection.query(query, params);
         return result;
@@ -52,7 +52,7 @@ class HistoryAnimalWeightModel {
      * Function Model: Xóa toàn bộ lịch sử cân của 1 động vật
      */
     static async DeleteHistoriesOfAnimal(Animal_ID) {
-        const query = 'DELETE FROM History_Animal_Weight WHERE Animal_ID =?';
+        const query = 'DELETE FROM history_animal_weight WHERE animal_id =?';
         const params = [Animal_ID];
         const result = await connection.query(query, params);
         return result;
