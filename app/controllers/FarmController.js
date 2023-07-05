@@ -16,11 +16,11 @@ class FarmController {
             await farmSchema.validateAsync(req.body);
 
             const farmName = req.body.farmName;
-            const status = req.body.status;
             const animalType_ID = req.body.animalType_ID;
             const animalDensity = req.body.animalDensity;
             const ward_ID = req.body.ward_ID;
             const addressDetail = req.body.addressDetail;
+            const status = true;
 
             const lastModified = currentTime;
             const createDate = currentTime;
