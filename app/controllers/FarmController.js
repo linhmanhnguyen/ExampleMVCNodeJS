@@ -15,16 +15,16 @@ class FarmController {
 
             await farmSchema.validateAsync(req.body);
 
-            var farmName = req.body.farmName;
-            var status = req.body.status;
-            var animalType_ID = req.body.animalType_ID;
-            var animalDensity = req.body.animalDensity;
-            var ward_ID = req.body.ward_ID;
-            var addressDetail = req.body.addressDetail;
+            const farmName = req.body.farmName;
+            const status = req.body.status;
+            const animalType_ID = req.body.animalType_ID;
+            const animalDensity = req.body.animalDensity;
+            const ward_ID = req.body.ward_ID;
+            const addressDetail = req.body.addressDetail;
 
-            var lastModified = currentTime;
-            var createDate = currentTime;
-            var result = await farmModel.InsertFarm(farmName, createDate, status, animalType_ID, animalDensity, ward_ID, addressDetail, lastModified);
+            const lastModified = currentTime;
+            const createDate = currentTime;
+            const result = await farmModel.InsertFarm(farmName, createDate, status, animalType_ID, animalDensity, ward_ID, addressDetail, lastModified);
 
             if (result) {
                 const farm_ID = result.insertId;
