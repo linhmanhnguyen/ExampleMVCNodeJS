@@ -3,6 +3,39 @@ const cageModel = require('../models/CageModel');
 const { cageSchema } = require('../validations/cageSchema');
 
 class CageController {
+
+    /**
+     * Function Controller: Thêm nhiều chuồng vào trong 1 trang trại
+     */
+    static async InsertMultipleCages(req, res) {
+        try {
+            const farm_ID = req.params.id;
+            const numberOfCages = req.body.numberOfCages;
+
+            for (let index = 0; index < numberOfCages; index++) {
+                var cageName = `Cage ${index + 1}`;
+                var location = index;
+
+                await cageModel.InsertCage(cageName, farm_ID, location);
+            }
+
+            res.status(200).json(
+                {
+                    "isSuccess": true,
+                    "message": `Created ${numberOfCages} Cages Successfully`,
+                }
+            );
+
+        } catch (error) {
+            res.status(400).json(
+                {
+                    "isSuccess": false,
+                    "message": `An error has occurred, please try again.`,
+                }
+            );
+        }
+    }
+
     /**
      * Function Controller: Thêm chuồng nuôi vào trong 1 trang trại
      */

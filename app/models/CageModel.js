@@ -58,6 +58,7 @@ class CageModel {
         return result;
     }
 
+
 }
 
 module.exports = CageModel;
