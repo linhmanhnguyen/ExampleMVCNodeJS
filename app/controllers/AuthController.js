@@ -62,80 +62,37 @@ class AuthController {
         try {
             await registerAccountSchema.validateAsync(req.body);
 
-            var username = req.body.username; // Phone Number
-            var password = req.body.password;
-            var ownerFullName = req.body.fullname;
+            const { username, password, fullname } = req.body;
+            const createDate = currentTime;
+            const status = true;
+            const refreshtoken = generateAccessToken(username);
+            const role_ID = 2; // Chủ sở hữu
 
-            var createDate = currentTime;
-
-            var status = true;
-            var refreshtoken = generateAccessToken(username);
-
-            var role_ID = 2; // Chủ sở hữu
-
-            var searchUserAccount = await UserAccountModel.SearchUserAccountByUsername(username);
+            const searchUserAccount = await UserAccountModel.SearchUserAccountByUsername(username);
             if (searchUserAccount.length > 0) {
-                res.status(400).json(
-                    {
-                        "isSuccess": false,
-                        "message": `Username existed`,
-                    }
-                );
-            }
-            else {
-                var resultAddInfo = await UserDetailModel.InsertUserDetailWhenRegister(ownerFullName, username);
-                var userDetail_ID = resultAddInfo.insertId;
-
-                var result = await UserAccountModel.InsertUserAccount(username, password, createDate, userDetail_ID, refreshtoken)
-                if (result) {
-
-                    var userAccount_ID = result.insertId;
-
-                    var resultInsertRole = await UserAccountModel.InsertRoleForUserAccount(userAccount_ID, role_ID, createDate, status);
-                    if (resultInsertRole) {
-
-
-
-                        var role = await RoleModel.GetRoleByID(role_ID);
-
-                        var accesstoken = generateAccessToken(userAccount_ID, userDetail_ID, role[0].RoleName);
-
-                        res.status(200).json(
-                            {
-                                "isSuccess": true,
-                                "message": `Register Successfully`,
-                                "data": accesstoken
-                            }
-                        );
-                    }
-                    else {
-                        res.status(400).json(
-                            {
-                                "isSuccess": false,
-                                "message": `An error has occurred, please try again.`,
-                            }
-                        );
-                    }
-                }
-                else {
-                    res.status(400).json(
-                        {
-                            "isSuccess": false,
-                            "message": `An error has occurred, please try again.`,
-                        }
-                    );
-                }
-            }
-
-        } catch (error) {
-            res.status(400).json(
-                {
+                return res.status(400).json({
                     "isSuccess": false,
-                    "message": `An error has occurred, please try again.`,
-                }
-            );
+                    "message": "Username already exists",
+                });
+            }
 
+            const { insertId: userDetail_ID } = await UserDetailModel.InsertUserDetailWhenRegister(fullname, username);
+            const { insertId: userAccount_ID } = await UserAccountModel.InsertUserAccount(username, password, createDate, userDetail_ID, refreshtoken);
+            await UserAccountModel.InsertRoleForUserAccount(userAccount_ID, role_ID, createDate, status);
+            const role = await RoleModel.GetRoleByID(role_ID);
+            const accesstoken = generateAccessToken(userAccount_ID, userDetail_ID, role[0].RoleName);
+
+            res.status(200).json({
+                "isSuccess": true,
+                "message": "Register Successfully",
+                "data": accesstoken
+            });
+        } catch (error) {
             console.log(error);
+            res.status(400).json({
+                "isSuccess": false,
+                "message": "An error has occurred, please try again.",
+            });
         }
     }
 }
