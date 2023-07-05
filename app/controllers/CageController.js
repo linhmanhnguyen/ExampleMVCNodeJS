@@ -14,7 +14,7 @@ class CageController {
 
             for (let index = 0; index < numberOfCages; index++) {
                 var cageName = `Cage ${index + 1}`;
-                var location = index;
+                var location = index + 1;
 
                 await cageModel.InsertCage(cageName, farm_ID, location);
             }
