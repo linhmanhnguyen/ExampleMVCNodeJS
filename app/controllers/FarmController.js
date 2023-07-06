@@ -177,9 +177,9 @@ class FarmController {
 
             const accounts = req.body.accounts;
 
-            for (let index = 0; index < accounts.length; index++) {
-                console.log(accounts[index].fullName);
-            }
+            // for (let index = 0; index < accounts.length; index++) {
+            //     console.log(accounts[index].fullName);
+            // }
 
             res.status(200).json(
                 {
