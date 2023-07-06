@@ -16,7 +16,7 @@ class AuthController {
         const user = await UserAccountModel.SearchUserAccountByUsername(username);
 
         if (user.length > 0) {
-            const checkPassword = await bcrypt.compare(password, user[0].Password);
+            const checkPassword = await bcrypt.compare(password, user[0].password);
             if (!checkPassword) {
                 res.status(422).json(
                     {
