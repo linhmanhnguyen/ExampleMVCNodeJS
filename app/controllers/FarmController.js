@@ -176,6 +176,7 @@ class FarmController {
             const farm_id = req.params.id;
 
             const users = req.body.users;
+            console.log(typeof (users));
 
             for (let index = 0; index < users.length; index++) {
                 console.log(users[index].fullName);
