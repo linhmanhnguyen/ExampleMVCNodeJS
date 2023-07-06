@@ -176,18 +176,17 @@ class FarmController {
             const farm_id = req.params.id;
 
             var users = req.body.users;
-            console.log(typeof (users));
             users = JSON.parse(users);
-            console.log(typeof (users));
 
             for (let index = 0; index < users.length; index++) {
+
                 console.log(users[index].fullName);
             }
 
             res.status(200).json(
                 {
                     "isSuccess": true,
-                    "message": `Insert Multiple User To Farm Successfully`,
+                    "message": `Insert ${users.length} users To Farm Successfully`,
                     "data": users
                 }
             )
