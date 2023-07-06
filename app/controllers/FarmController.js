@@ -190,7 +190,7 @@ class FarmController {
             )
 
         } catch (error) {
-            print(error);
+            console.log(error);
             res.status(400).json(
                 {
                     "isSuccess": false,
