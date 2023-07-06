@@ -168,6 +168,32 @@ class FarmController {
         }
     }
 
+    /**
+     * Function Controller: Thêm nhân viên hoặc quản lý vào trang trại
+     */
+    static InsertMultipleUserToFarm(req, res) {
+        try {
+            var farm_id = req.params.id;
+
+            var list_users = req.body.users;
+            res.status(200).json(
+                {
+                    "isSuccess": true,
+                    "message": `Insert Multiple User To Farm Successfully`,
+                    "data": list_users
+                }
+            )
+
+
+        } catch (error) {
+            res.status(400).json(
+                {
+                    "isSuccess": false,
+                    "message": `An error has occurred, please try again.`,
+                }
+            );
+        }
+    }
 }
 
 module.exports = FarmController;

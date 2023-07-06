@@ -22,4 +22,6 @@ router.delete('/:id/cages/:cage_id', authenticateToken, authorize(['admin', 'own
 router.post('/:id/cages/:cage_id/animals', authenticateToken, authorize(['admin']), animalController.InsertAnimal);
 router.get('/:id/cages/:cage_id/animals', authenticateToken, authorize(['admin']), animalController.GetAllAnimalsInCage);
 
+router.post('/:id/users', authenticateToken, authorize(['admin', 'owner']), farmController.InsertMultipleUserToFarm);
+
 module.exports = router;
