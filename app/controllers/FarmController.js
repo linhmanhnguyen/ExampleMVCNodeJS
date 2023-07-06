@@ -175,17 +175,17 @@ class FarmController {
         try {
             const farm_id = req.params.id;
 
-            const accounts = req.body.accounts;
+            const users = req.body.users;
 
-            // for (let index = 0; index < accounts.length; index++) {
-            //     console.log(accounts[index].fullName);
-            // }
+            for (let index = 0; index < users.length; index++) {
+                console.log(users[index].fullName);
+            }
 
             res.status(200).json(
                 {
                     "isSuccess": true,
                     "message": `Insert Multiple User To Farm Successfully`,
-                    "data": accounts
+                    "data": users
                 }
             )
 
