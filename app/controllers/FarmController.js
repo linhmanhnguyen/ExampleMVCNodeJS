@@ -176,7 +176,11 @@ class FarmController {
             var farm_id = req.params.id;
 
             var list_users = req.body.users;
-            console.log(list_users[0].fullname);
+
+            for (let index = 0; index < list_users.length; index++) {
+                console.log(list_users[index].fullname);
+            }
+
 
             res.status(200).json(
                 {
