@@ -176,6 +176,8 @@ class FarmController {
             var farm_id = req.params.id;
 
             var list_users = req.body.users;
+            console.log(list_users.length);
+
             res.status(200).json(
                 {
                     "isSuccess": true,
