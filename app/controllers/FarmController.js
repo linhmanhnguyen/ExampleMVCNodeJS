@@ -175,7 +175,7 @@ class FarmController {
         try {
             const farm_id = req.params.id;
 
-            const users = req.body.users;
+            var users = req.body.users;
             console.log(typeof (users));
             users = JSON.parse(users);
             console.log(typeof (users));
