@@ -26,9 +26,9 @@ class AuthController {
                 );
             }
             else {
-                if (user[0].Status == true) {
+                if (user[0].status == true) {
 
-                    const token = generateAccessToken(user[0].id, user[0].UserDetail_ID, user[0].RoleName);
+                    const token = generateAccessToken(user[0].id, user[0].userDetail_id, user[0].roleName);
                     res.status(200).json(
                         {
                             "isSuccess": true,
