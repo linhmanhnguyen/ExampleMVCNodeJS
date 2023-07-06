@@ -173,26 +173,24 @@ class FarmController {
      */
     static InsertMultipleUserToFarm(req, res) {
         try {
-            var farm_id = req.params.id;
+            const farm_id = req.params.id;
 
-            var list_users = req.body;
+            const users = req.body.users;
 
-
-            for (let index = 0; index < list_users.length; index++) {
-                console.log(list_users[index].fullname);
+            for (let index = 0; index < users.length; index++) {
+                console.log(users[index].fullName);
             }
-
 
             res.status(200).json(
                 {
                     "isSuccess": true,
                     "message": `Insert Multiple User To Farm Successfully`,
-                    "data": list_users
+                    "data": users
                 }
             )
 
-
         } catch (error) {
+            print(error);
             res.status(400).json(
                 {
                     "isSuccess": false,
