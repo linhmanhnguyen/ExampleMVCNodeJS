@@ -182,6 +182,7 @@ class FarmController {
 
             // property của user: {fullName, phoneNumber, gender, roleId, roleName}
 
+            var numberSuccess = 0;
             for (var user in users) {
                 if (user.hasOwnProperty('fullName') && user.hasOwnProperty('phoneNumber') && user.hasOwnProperty('gender') && user.hasOwnProperty('roleId') && user.hasOwnProperty('roleName')) {
                     const fullName = user.fullName;
@@ -201,13 +202,14 @@ class FarmController {
                     const { insertId: userDetail_ID } = await UserDetailModel.InsertUserDetailWhenSetupFarm(fullName, gender, phoneNumber);
                     // b3: add ID của tài khoản với farm
                     await UserAccountModel.InsertUserAccountToFarm(userAccount_ID, farm_id, createDate, status);
+                    numberSuccess = numberSuccess++;
                 }
             }
 
             res.status(200).json(
                 {
                     "isSuccess": true,
-                    "message": `Insert ${users.length} users To Farm Successfully`,
+                    "message": `Insert ${numberSuccess} users To Farm Successfully`,
                     "data": users
                 }
             )
