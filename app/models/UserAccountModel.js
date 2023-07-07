@@ -115,7 +115,7 @@ class UserAccountModel {
         const query = `SELECT COUNT(username) FROM user_accounts WHERE username = ?`;
         const params = [username];
         const result = await connection.query(query, params);
-        return result;
+        return result[0].count;
     }
 
 }
