@@ -195,11 +195,11 @@ class FarmController {
                     const status = true;
                     const password = "123456789";
 
-                    // b1: thêm tài khoản
+                    // b1: thêm thông tin của người dùng
+                    const { insertId: userDetail_ID } = await UserDetailModel.InsertUserDetailWhenSetupFarm(fullName, gender, phoneNumber);
+                    // b2: thêm tài khoản
                     const { insertId: userAccount_ID } = await UserAccountModel.InsertUserAccount(phoneNumber, password, createDate, userDetail_ID);
                     await UserAccountModel.InsertRoleForUserAccount(userAccount_ID, roleId, createDate, status);
-                    // b2: thêm thông tin của người dùng
-                    const { insertId: userDetail_ID } = await UserDetailModel.InsertUserDetailWhenSetupFarm(fullName, gender, phoneNumber);
                     // b3: add ID của tài khoản với farm
                     await UserAccountModel.InsertUserAccountToFarm(userAccount_ID, farm_id, createDate, status);
                     numberSuccess = numberSuccess++;
