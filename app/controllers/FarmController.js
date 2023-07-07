@@ -202,7 +202,7 @@ class FarmController {
                     await UserAccountModel.InsertRoleForUserAccount(userAccount_ID, roleId, createDate, status);
                     // b3: add ID của tài khoản với farm
                     await UserAccountModel.InsertUserAccountToFarm(userAccount_ID, farm_id, createDate, status);
-                    numberSuccess = numberSuccess++;
+                    numberSuccess = ++numberSuccess;
                 }
             }
 
