@@ -96,13 +96,32 @@ class AuthController {
             });
         }
     }
+
+    static async CheckExistUsername(req, res) {
+        const username = req.body.username;
+        const searchUserAccount = await UserAccountModel.SearchUserAccountByUsername(username);
+        if (searchUserAccount.length > 0) {
+            return res.status(400).json({
+                "isSuccess": false,
+                "message": "Username already exists",
+            });
+        }
+        else {
+            return res.status(200).json({
+                "isSuccess": true,
+                "message": "Username does not exist",
+            });
+        }
+    }
 }
 
 /**
  * Function: Tạo ngẫu nhiên Access Token
  */
 function generateAccessToken(useraccount_id, userdetail_id, role) {
-    return jwt.sign({ useraccount_id, userdetail_id, role }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '120m' });
+    return jwt.sign({ useraccount_id, userdetail_id, role },
+        process.env.ACCESS_TOKEN_SECRET,
+        { expiresIn: '120m' });
 }
 
 module.exports = AuthController;
