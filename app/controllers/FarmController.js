@@ -30,10 +30,10 @@ class FarmController {
 
             if (result) {
                 const farm_ID = result.insertId;
-                const user_ID = req.user.useraccount_id;
+                const userAccount_ID = req.user.userAccount_ID;
 
                 // Dựa theo tài khoản đang thực hiện, gán thông tin tài khoản đó vào trong farm vừa tạo
-                await userAccountModel.InsertUserAccountToFarm(user_ID, farm_ID, createDate, status);
+                await userAccountModel.InsertUserAccountToFarm(userAccount_ID, farm_ID, createDate, status);
 
                 res.status(200).json(
                     {
