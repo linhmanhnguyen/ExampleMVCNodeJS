@@ -2,6 +2,8 @@ const farmModel = require('../models/FarmModel')
 const userAccountModel = require('../models/UserAccountModel')
 const moment = require('moment-timezone');
 const { farmSchema } = require('../validations/farmSchema');
+const UserAccountModel = require('../models/UserAccountModel');
+const UserDetailModel = require('../models/UserDetailModel');
 
 const currentTime = moment().tz('Asia/Ho_Chi_Minh').format('YYYY-MM-DD_HH-mm-ss');
 
@@ -171,16 +173,35 @@ class FarmController {
     /**
      * Function Controller: Thêm nhân viên hoặc quản lý vào trang trại
      */
-    static InsertMultipleUserToFarm(req, res) {
+    static async InsertMultipleUserToFarm(req, res) {
         try {
             const farm_id = req.params.id;
 
             var users = req.body.users;
             users = JSON.parse(users);
 
-            for (let index = 0; index < users.length; index++) {
+            // property của user: {fullName, phoneNumber, gender, roleId, roleName}
 
-                console.log(users[index].fullName);
+            for (var user in users) {
+                if (user.containsKey('fullName') && user.containsKey('phoneNumber') && user.containsKey('gender') && user.containsKey('roleId') && user.containsKey('roleName')) {
+                    const fullName = user.fullName;
+                    const phoneNumber = user.phoneNumber;       // username
+                    const gender = user.gender;
+                    const roleId = user.roleId;
+                    const roleName = user.roleName;
+
+                    const createDate = currentTime;
+                    const status = true;
+                    const password = "123456789";
+
+                    // b1: thêm tài khoản
+                    const { insertId: userAccount_ID } = await UserAccountModel.InsertUserAccount(phoneNumber, password, createDate, userDetail_ID);
+                    await UserAccountModel.InsertRoleForUserAccount(userAccount_ID, roleId, createDate, status);
+                    // b2: thêm thông tin của người dùng
+                    const { insertId: userDetail_ID } = await UserDetailModel.InsertUserDetailWhenSetupFarm(fullName, gender, phoneNumber);
+                    // b3: add ID của tài khoản với farm
+                    await UserAccountModel.InsertUserAccountToFarm(userAccount_ID, farm_id, createDate, status);
+                }
             }
 
             res.status(200).json(

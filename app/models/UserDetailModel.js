@@ -18,6 +18,19 @@ class UserDetailModel {
     }
 
     /**
+     * Function Model: Thêm thông tin nhân viên khi thiết lập trang trại
+     */
+    static async InsertUserDetailWhenSetupFarm(fullName, gender, phoneNumber) {
+        const query = `
+                    INSERT INTO user_details (fullName, gender, phoneNumber)
+                    VALUES (?, ?, ?)`;
+
+        const params = [fullName, gender, phoneNumber];
+        const result = await connection.query(query, params);
+        return result;
+    }
+
+    /**
      * Function Model: Thêm 1 thông tin chi tiết người dùng
      */
     static async InsertUserDetail(FullName, DateOfBirth, Gender, CitizenIdentification_ID, Ward_ID, AddressDetail, Email, PhoneNumber) {

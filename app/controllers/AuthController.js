@@ -6,6 +6,7 @@ const UserDetailModel = require('../models/UserDetailModel');
 const moment = require('moment-timezone');
 const { registerAccountSchema } = require('../validations/userAccountSchema');
 const RoleModel = require('../models/RoleModel');
+const GenerateAccessToken = require('../utils/genarateAccessToken');
 const currentTime = moment().tz('Asia/Ho_Chi_Minh').format('YYYY-MM-DD_HH-mm-ss');
 
 class AuthController {
@@ -80,7 +81,7 @@ class AuthController {
             const { insertId: userAccount_ID } = await UserAccountModel.InsertUserAccount(username, password, createDate, userDetail_ID, refreshtoken);
             await UserAccountModel.InsertRoleForUserAccount(userAccount_ID, role_ID, createDate, status);
             const role = await RoleModel.GetRoleByID(role_ID);
-            const accesstoken = generateAccessToken(userAccount_ID, userDetail_ID, role[0].roleName);
+            const accesstoken = GenerateAccessToken.GenerateAccessTokenForOwner(userAccount_ID, userDetail_ID, role[0].roleName);
 
             res.status(200).json({
                 "isSuccess": true,
