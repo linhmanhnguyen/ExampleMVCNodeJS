@@ -100,7 +100,7 @@ class AuthController {
     }
 
     static async CheckExistUsername(req, res) {
-        const username = req.body.username;
+        const username = req.params.username;
         const checkExistUsername = await UserAccountModel.CheckExistUsername(username);
         if (checkExistUsername.length > 0) {
             return res.status(400).json({
