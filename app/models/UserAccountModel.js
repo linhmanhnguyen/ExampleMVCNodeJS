@@ -112,10 +112,10 @@ class UserAccountModel {
      * Function Model: Tìm tài khoản bằng username
      */
     static async CheckExistUsername(username) {
-        const query = `SELECT COUNT(username) FROM user_accounts WHERE username = ?`;
+        const query = `SELECT username FROM user_accounts WHERE username = ?`;
         const params = [username];
         const result = await connection.query(query, params);
-        return result[0].count;
+        return result;
     }
 
 }

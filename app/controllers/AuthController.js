@@ -70,7 +70,7 @@ class AuthController {
             const role_ID = 2; // Chủ sở hữu
 
             const checkExistUsername = await UserAccountModel.CheckExistUsername(username);
-            if (checkExistUsername > 0) {
+            if (checkExistUsername.length > 0) {
                 return res.status(400).json({
                     "isSuccess": false,
                     "message": "Username already exists",
@@ -101,8 +101,8 @@ class AuthController {
 
     static async CheckExistUsername(req, res) {
         const username = req.body.username;
-        const searchUserAccount = await UserAccountModel.CheckExistUsername(username);
-        if (searchUserAccount > 0) {
+        const checkExistUsername = await UserAccountModel.CheckExistUsername(username);
+        if (checkExistUsername.length > 0) {
             return res.status(400).json({
                 "isSuccess": false,
                 "message": "Username already exists",
