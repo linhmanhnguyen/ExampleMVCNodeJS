@@ -177,19 +177,19 @@ class FarmController {
         try {
             const farm_id = req.params.id;
 
-            var users = req.body.users;
-            users = JSON.parse(users);
+            const users = req.body.users;
+            const list_users = JSON.parse(users);
 
             // property của user: {fullName, phoneNumber, gender, roleId, roleName}
 
             var numberSuccess = 0;
-            for (let index = 0; index < users.length; index++) {
-                if (users[index].hasOwnProperty('fullName') && users[index].hasOwnProperty('phoneNumber') && users[index].hasOwnProperty('gender') && users[index].hasOwnProperty('roleId') && users[index].hasOwnProperty('roleName')) {
-                    const fullName = users[index].fullName;
-                    const phoneNumber = users[index].phoneNumber;       // usersname
-                    const gender = users[index].gender;
-                    const roleId = users[index].roleId;
-                    const roleName = users[index].roleName;
+            for (let index = 0; index < list_users.length; index++) {
+                if (list_users[index].hasOwnProperty('fullName') && list_users[index].hasOwnProperty('phoneNumber') && list_users[index].hasOwnProperty('gender') && list_users[index].hasOwnProperty('role_ID') && list_users[index].hasOwnProperty('roleName')) {
+                    const fullName = list_users[index].fullName;
+                    const phoneNumber = list_users[index].phoneNumber;       // usersname
+                    const gender = list_users[index].gender;
+                    const roleId = list_users[index].role_ID;
+                    const roleName = list_users[index].roleName;
 
                     const createDate = currentTime;
                     const status = true;
