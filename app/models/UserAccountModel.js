@@ -92,7 +92,7 @@ class UserAccountModel {
     }
 
     /**
-     * Function Model: Tìm tài khoản bằng username
+     * Function Model: Tìm tài khoản bằng username ()
      */
     static async SearchUserAccountByUsername(username) {
         const query = ` SELECT user_accounts.id, user_accounts.username, user_accounts.password, user_accounts.userDetail_id,
@@ -103,6 +103,16 @@ class UserAccountModel {
                         JOIN roles ON roles.id = user_roles.role_id 
                         WHERE user_accounts.username = ?`;
 
+        const params = [username];
+        const result = await connection.query(query, params);
+        return result;
+    }
+
+    /**
+     * Function Model: Tìm tài khoản bằng username
+     */
+    static async CheckExistUsername(username) {
+        const query = `SELECT COUNT(username) FROM user_accounts WHERE username = ?`;
         const params = [username];
         const result = await connection.query(query, params);
         return result;

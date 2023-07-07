@@ -69,25 +69,27 @@ class AuthController {
             const refreshtoken = generateAccessToken(username);
             const role_ID = 2; // Chủ sở hữu
 
-            const searchUserAccount = await UserAccountModel.SearchUserAccountByUsername(username);
-            if (searchUserAccount.length > 0) {
+            const checkExistUsername = await UserAccountModel.CheckExistUsername(username);
+            if (checkExistUsername > 0) {
                 return res.status(400).json({
                     "isSuccess": false,
                     "message": "Username already exists",
                 });
             }
+            else {
+                const { insertId: userDetail_ID } = await UserDetailModel.InsertUserDetailWhenRegister(fullname, username);
+                const { insertId: userAccount_ID } = await UserAccountModel.InsertUserAccount(username, password, createDate, userDetail_ID, refreshtoken);
+                await UserAccountModel.InsertRoleForUserAccount(userAccount_ID, role_ID, createDate, status);
+                const role = await RoleModel.GetRoleByID(role_ID);
+                const accesstoken = GenerateAccessToken.GenerateAccessTokenForOwner(userAccount_ID, userDetail_ID, role[0].roleName);
 
-            const { insertId: userDetail_ID } = await UserDetailModel.InsertUserDetailWhenRegister(fullname, username);
-            const { insertId: userAccount_ID } = await UserAccountModel.InsertUserAccount(username, password, createDate, userDetail_ID, refreshtoken);
-            await UserAccountModel.InsertRoleForUserAccount(userAccount_ID, role_ID, createDate, status);
-            const role = await RoleModel.GetRoleByID(role_ID);
-            const accesstoken = GenerateAccessToken.GenerateAccessTokenForOwner(userAccount_ID, userDetail_ID, role[0].roleName);
+                res.status(200).json({
+                    "isSuccess": true,
+                    "message": "Register Successfully",
+                    "data": accesstoken
+                });
+            }
 
-            res.status(200).json({
-                "isSuccess": true,
-                "message": "Register Successfully",
-                "data": accesstoken
-            });
         } catch (error) {
             console.log(error);
             res.status(400).json({
@@ -99,8 +101,8 @@ class AuthController {
 
     static async CheckExistUsername(req, res) {
         const username = req.body.username;
-        const searchUserAccount = await UserAccountModel.SearchUserAccountByUsername(username);
-        if (searchUserAccount.length > 0) {
+        const searchUserAccount = await UserAccountModel.CheckExistUsername(username);
+        if (searchUserAccount > 0) {
             return res.status(400).json({
                 "isSuccess": false,
                 "message": "Username already exists",
