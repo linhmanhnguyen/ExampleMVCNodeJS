@@ -4,5 +4,5 @@ const router = require('express').Router();
 
 router.post('/login', AuthController.Login);
 router.post('/register', AuthController.Register);
-router.get('/checkExistUsername', AuthController.CheckExistUsername);
+router.get('/:username', AuthController.CheckExistUsername);
 module.exports = router;
