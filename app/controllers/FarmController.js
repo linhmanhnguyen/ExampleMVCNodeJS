@@ -183,13 +183,13 @@ class FarmController {
             // property của user: {fullName, phoneNumber, gender, roleId, roleName}
 
             var numberSuccess = 0;
-            for (var user in users) {
-                if (user.hasOwnProperty('fullName') && user.hasOwnProperty('phoneNumber') && user.hasOwnProperty('gender') && user.hasOwnProperty('roleId') && user.hasOwnProperty('roleName')) {
-                    const fullName = user.fullName;
-                    const phoneNumber = user.phoneNumber;       // username
-                    const gender = user.gender;
-                    const roleId = user.roleId;
-                    const roleName = user.roleName;
+            for (let index = 0; index < users.length; index++) {
+                if (users[index].hasOwnProperty('fullName') && users[index].hasOwnProperty('phoneNumber') && users[index].hasOwnProperty('gender') && users[index].hasOwnProperty('roleId') && users[index].hasOwnProperty('roleName')) {
+                    const fullName = users[index].fullName;
+                    const phoneNumber = users[index].phoneNumber;       // usersname
+                    const gender = users[index].gender;
+                    const roleId = users[index].roleId;
+                    const roleName = users[index].roleName;
 
                     const createDate = currentTime;
                     const status = true;
