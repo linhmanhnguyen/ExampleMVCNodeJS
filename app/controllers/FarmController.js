@@ -183,7 +183,7 @@ class FarmController {
             // property của user: {fullName, phoneNumber, gender, roleId, roleName}
 
             for (var user in users) {
-                if (user.containsKey('fullName') && user.containsKey('phoneNumber') && user.containsKey('gender') && user.containsKey('roleId') && user.containsKey('roleName')) {
+                if (user.hasOwnProperty('fullName') && user.hasOwnProperty('phoneNumber') && user.hasOwnProperty('gender') && user.hasOwnProperty('roleId') && user.hasOwnProperty('roleName')) {
                     const fullName = user.fullName;
                     const phoneNumber = user.phoneNumber;       // username
                     const gender = user.gender;
