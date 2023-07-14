@@ -23,6 +23,7 @@ app.use('/farms', farmRouter);
 app.use('/animals', animalRouter);
 app.use('/roles', roleRouter);
 app.use('/address', addressRouter);
+app.use('/weather', weatherRouter);
 
 app.listen(3000, () => {
     console.log('Server is running at port 3000');
