@@ -10,6 +10,7 @@ const farmRouter = require('./routes/FarmRouter');
 const animalRouter = require('./routes/AnimalRouter');
 const roleRouter = require('./routes/RoleRouter');
 const addressRouter = require('./routes/AddressRouter');
+const weatherRouter = require('./routes/WeatherRouter');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
