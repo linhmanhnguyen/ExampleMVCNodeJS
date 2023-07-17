@@ -14,9 +14,20 @@ class WeatherController {
 
         try {
             const weatherData = await GetWeather.GetWeatherData(latitude, longitude);
-            return res.status(200).json(weatherData);
+            res.status(200).json(
+                {
+                    "isSuccess": true,
+                    "message": "Get weather successfully.",
+                    "data": weatherData,
+                }
+            );
         } catch (error) {
-            return res.status(500).json({ message: error.message });
+            res.status(400).json(
+                {
+                    "isSuccess": false,
+                    "message": `An error has occurred, please try again.`,
+                }
+            );
         }
     }
 
