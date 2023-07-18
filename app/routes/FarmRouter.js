@@ -19,7 +19,7 @@ router.get('/:id/cages/:cage_id', authenticateToken, authorize(['admin', 'owner'
 router.put('/:id/cages/:cage_id', authenticateToken, authorize(['admin', 'owner']), cageController.UpdateCageByID);
 router.delete('/:id/cages/:cage_id', authenticateToken, authorize(['admin', 'owner']), cageController.DeleteCageByID);
 
-router.post('/:id/cages/:cage_id/animals', authenticateToken, authorize(['admin']), animalController.InsertAnimal);
+router.post('/:id/cages/:cage_id/animals', authenticateToken, authorize(['admin', 'owner']), animalController.InsertAnimal);
 router.get('/:id/cages/:cage_id/animals', authenticateToken, authorize(['admin']), animalController.GetAllAnimalsInCage);
 
 router.post('/:id/users/create-multiple', authenticateToken, authorize(['admin', 'owner']), farmController.InsertMultipleUserToFarm);
