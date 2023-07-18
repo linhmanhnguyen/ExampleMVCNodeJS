@@ -171,7 +171,7 @@ class AnimalController {
             await historyAnimalTransferCageSchema.validateAsync(req.body);
 
             var animal_id = req.params.id;
-            var Employee_ID = req.user.useraccount_id;
+            var Employee_ID = req.user.userAccount_ID;
 
             var animal = await animalModel.GetAnimalByID(animal_id);
             if (animal.length > 0) {
@@ -329,7 +329,7 @@ class AnimalController {
             await historyAnimalDeathSchema.validateAsync(req.body);
 
             var animal_id = req.params.id;
-            var employee_id = req.user.useraccount_id;
+            var employee_id = req.user.userAccount_ID;
 
             var status = req.body.status;
             var type_Cause = req.body.type_Cause;
@@ -419,7 +419,7 @@ class AnimalController {
             await historyAnimalWeightSchema.validateAsync(req.body);
 
             var animal_id = req.params.id;
-            var employee_id = req.user.useraccount_id;
+            var employee_id = req.user.userAccount_ID;
 
             var weight = req.body.weight;
             var type_action = req.body.typeAction;

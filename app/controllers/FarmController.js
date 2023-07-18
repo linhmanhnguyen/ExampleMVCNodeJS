@@ -60,7 +60,7 @@ class FarmController {
      */
     static async GetAllFarms(req, res) {
 
-        var useraccount_id = req.user.useraccount_id;
+        var useraccount_id = req.user.userAccount_ID;
 
         var result = await farmModel.GetAllFarms(useraccount_id);
         if (result.length > 0) {
