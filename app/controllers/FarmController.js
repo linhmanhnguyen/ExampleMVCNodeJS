@@ -224,6 +224,33 @@ class FarmController {
             );
         }
     }
+
+    // GET: Lấy thông tin tổng quan về động vật trong trang trại như tổng trong tất cả chuồng,
+    //      số lượng động vật đang ốm, bình thường và đã chết
+    static async GetAnimalSummary(req, res) {
+
+        const farm_id = req.params.id;
+
+        var result = await farmModel.GetAnimalSummary(farm_id);
+        if (result.length > 0) {
+            res.json(
+                {
+                    "isSuccess": true,
+                    "message": `Get Animal Sumary Successfully`,
+                    "data": result
+                }
+            );
+        }
+        else {
+            res.status(404).json(
+                {
+                    "isSuccess": false,
+                    "message": `No records found at the moment.`,
+                }
+            );
+        }
+
+    }
 }
 
 module.exports = FarmController;

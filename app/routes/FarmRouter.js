@@ -24,4 +24,6 @@ router.get('/:id/cages/:cage_id/animals', authenticateToken, authorize(['admin']
 
 router.post('/:id/users/create-multiple', authenticateToken, authorize(['admin', 'owner']), farmController.InsertMultipleUserToFarm);
 
+router.get('/:id/animal-summary', authenticateToken, authorize(['admin', 'owner']), farmController.GetAnimalSummary);
+
 module.exports = router;

@@ -65,6 +65,25 @@ class FarmModel {
         return result;
     }
 
+    /**
+     * Function Model: Lấy thông tin tổng quan về động vật trong trang trại (tổng số lượng con vật, tổng con vật đang khỏe, ốm và đã chết)
+     */
+    static async GetAnimalSummary(ID) {
+        const query = `SELECT
+        SUM(CASE WHEN animals.status = 'normal' THEN 1 ELSE 0 END) as healthy_animals,
+        SUM(CASE WHEN animals.status = 'sick' THEN 1 ELSE 0 END) as sick_animals,
+        SUM(CASE WHEN animals.status = 'dead' THEN 1 ELSE 0 END) as dead_animals,
+        COUNT(*) as total_animals
+        FROM animals
+        JOIN cages ON animals.cage_id = cages.id
+        WHERE cages.farm_id = ?;
+        `;
+        const params = [ID];
+
+        const result = await connection.query(query, params);
+        return result;
+    }
+
 }
 
 module.exports = FarmModel;
