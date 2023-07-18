@@ -29,7 +29,7 @@ class AuthController {
             else {
                 if (user[0].status == true) {
 
-                    const token = GenerateAccessToken.GenerateAccessTokenForOwner(user[0].id, user[0].userDetail_id, user[0].roleName);
+                    const token = GenerateAccessToken.GenerateAccessTokenForOwnerWhenLogin(user[0].id, user[0].userDetail_id, user[0].roleName, user[0].farm_id);
                     res.status(200).json(
                         {
                             "isSuccess": true,

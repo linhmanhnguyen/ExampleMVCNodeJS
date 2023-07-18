@@ -95,13 +95,16 @@ class UserAccountModel {
      * Function Model: Tìm tài khoản bằng username ()
      */
     static async SearchUserAccountByUsername(username) {
-        const query = ` SELECT user_accounts.id, user_accounts.username, user_accounts.password, user_accounts.userDetail_id,
+        const query = ` SSELECT user_accounts.id, user_accounts.username, user_accounts.password, user_accounts.userDetail_id,
                         user_roles.role_id, 
-                        roles.roleName, user_roles.status 
+                        roles.roleName, user_roles.status,
+                        user_farms.farm_id
                         FROM user_accounts 
                         JOIN user_roles ON user_accounts.id = user_roles.userAccount_id 
                         JOIN roles ON roles.id = user_roles.role_id 
-                        WHERE user_accounts.username = ?`;
+                        JOIN user_farms ON user_farms.userAccount_id = user_accounts.id
+                        WHERE user_accounts.username = ?;
+                        `;
 
         const params = [username];
         const result = await connection.query(query, params);
