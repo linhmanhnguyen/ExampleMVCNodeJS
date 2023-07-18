@@ -95,7 +95,7 @@ class UserAccountModel {
      * Function Model: Tìm tài khoản bằng username ()
      */
     static async SearchUserAccountByUsername(username) {
-        const query = ` SSELECT user_accounts.id, user_accounts.username, user_accounts.password, user_accounts.userDetail_id,
+        const query = ` SELECT user_accounts.id, user_accounts.username, user_accounts.password, user_accounts.userDetail_id,
                         user_roles.role_id, 
                         roles.roleName, user_roles.status,
                         user_farms.farm_id
