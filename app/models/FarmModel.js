@@ -74,7 +74,7 @@ class FarmModel {
         SUM(CASE WHEN animals.status = 'sick' THEN 1 ELSE 0 END) as sick_animals,
         SUM(CASE WHEN animals.status = 'dead' THEN 1 ELSE 0 END) as dead_animals,
         COUNT(*) as total_animals,
-        animal_types.typeName
+        animal_types.typeName as typeAnimal
         FROM animals
         JOIN cages ON animals.cage_id = cages.id
         JOIN farms ON farms.id = cages.farm_id
