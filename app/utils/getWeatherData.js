@@ -11,7 +11,7 @@ class GetWeather {
             const weatherData = response.data;
 
             // Trích xuất từ thông tin thời tiết từ response.data
-            const description = weatherData.weather[0].description;
+            const description = weatherData.weather[0].main;
             const temperature = Math.trunc(weatherData.main.temp - 273.15);
             const icon = weatherData.weather[0].icon;
             const linkIcon = `https://openweathermap.org/img/wn/${icon}.png`;
