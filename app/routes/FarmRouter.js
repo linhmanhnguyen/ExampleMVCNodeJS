@@ -26,4 +26,8 @@ router.post('/:id/users/create-multiple', authenticateToken, authorize(['admin',
 
 router.get('/:id/animal-summary', authenticateToken, authorize(['admin', 'owner']), farmController.GetAnimalSummary);
 
+router.get('/:id/animals/report-health-status-count', authenticateToken, authorize(['admin', 'owner']), farmController.ReportHealthStatusCount);
+router.get('/:id/animals/report-health-dead-count-time', authenticateToken, authorize(['admin', 'owner']), farmController.ReportDeathCountTime);
+router.get('/:id/animals/report-average-weight-gain', authenticateToken, authorize(['admin', 'owner']), farmController.ReportAverageWeightGain);
+
 module.exports = router;
