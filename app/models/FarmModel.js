@@ -57,7 +57,9 @@ class FarmDBHelper {
         const query = `SELECT * FROM farms WHERE id = ?`;
         const params = [id];
         const result = await connection.query(query, params);
-        const farm = new FarmModel(result[0].id, result[0].farmName);
+
+
+        const farm = new FarmModel(result.id, result.farmName);
 
         return farm;
     }
