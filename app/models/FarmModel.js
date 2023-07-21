@@ -1,5 +1,4 @@
 const connection = require('../configs/MySQLConnect');
-const { connect } = require('../routes/FarmRouter');
 
 class FarmModel {
     constructor(id, farmName, creationDate, status, animalType_id, animalDensity, ward_id, addressDetail, lastModified) {
