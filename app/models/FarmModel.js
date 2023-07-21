@@ -2,7 +2,20 @@ const connection = require('../configs/MySQLConnect');
 const { connect } = require('../routes/FarmRouter');
 
 class FarmModel {
+    constructor(id, farmName, creationDate, status, animalType_id, animalDensity, ward_id, addressDetail, lastModified) {
+        this.id = id;
+        this.farmName = farmName;
+        this.creationDate = creationDate;
+        this.status = status;
+        this.animalType_id = animalType_id;
+        this.animalDensity = animalDensity;
+        this.ward_id = ward_id;
+        this.addressDetail = addressDetail;
+        this.lastModified = lastModified;
+    }
+}
 
+class FarmDBHelper {
     /**
      * Function Model: Thêm 1 trang trại vào hệ thống
      */
@@ -20,13 +33,22 @@ class FarmModel {
      * Function Model: Lấy toàn bộ danh sách trang trại trong hệ thống
      */
     static async GetAllFarms(UserAccount_ID) {
-        const query = `Select farms.* From user_farms 
+        const query = `
+                    Select farms.* 
+                    From user_farms 
                     join farms on user_farms.farm_id = farms.id 
                     where user_farms.userAccount_id = ?
                     `;
         const params = [UserAccount_ID];
         const result = await connection.query(query, params);
-        return result;
+
+        const farms = [];
+
+        for (const row of result) {
+            const farm = new FarmModel(row.id, row.farmName, row.creationDate, row.status.row.animalType_id, row.animalDensity, row.ward_id, row.addressDetail, row.lastModified);
+            farms.push(farm);
+        }
+        return farms;
     }
 
     /**
@@ -137,4 +159,4 @@ class FarmModel {
 
 }
 
-module.exports = FarmModel;
+module.exports = FarmDBHelper;

@@ -1,4 +1,4 @@
-const farmModel = require('../models/FarmModel')
+const FarmDBHelper = require('../models/FarmModel')
 const userAccountModel = require('../models/UserAccountModel')
 const moment = require('moment-timezone');
 const { farmSchema } = require('../validations/farmSchema');
@@ -26,7 +26,7 @@ class FarmController {
 
             const lastModified = currentTime;
             const createDate = currentTime;
-            const result = await farmModel.InsertFarm(farmName, createDate, status, animalType_ID, animalDensity, ward_ID, addressDetail, lastModified);
+            const result = await FarmDBHelper.InsertFarm(farmName, createDate, status, animalType_ID, animalDensity, ward_ID, addressDetail, lastModified);
 
             if (result) {
                 const farm_ID = result.insertId;
@@ -39,7 +39,6 @@ class FarmController {
                     {
                         "isSuccess": true,
                         "message": `Created Farm successfully`,
-                        "data": farm_ID
                     }
                 );
             }
@@ -62,7 +61,7 @@ class FarmController {
 
         var useraccount_id = req.user.userAccount_ID;
 
-        var result = await farmModel.GetAllFarms(useraccount_id);
+        var result = await FarmDBHelper.GetAllFarms(useraccount_id);
         if (result.length > 0) {
             res.json(
                 {
@@ -88,7 +87,7 @@ class FarmController {
     static async GetFarmByID(req, res) {
         var id = req.params.id;
 
-        var result = await farmModel.GetFarmByID(id);
+        var result = await FarmDBHelper.GetFarmByID(id);
         if (result.length > 0) {
             res.json(
                 {
@@ -124,7 +123,7 @@ class FarmController {
             var lastModified = currentTime;
 
             var id = req.params.id;
-            var result = await farmModel.UpdateFarmByID(farmName, status, animalType_ID, animalDensity, ward_ID, addressDetail, lastModified, id);
+            var result = await FarmDBHelper.UpdateFarmByID(farmName, status, animalType_ID, animalDensity, ward_ID, addressDetail, lastModified, id);
 
             if (result) {
                 res.status(200).json(
@@ -151,7 +150,7 @@ class FarmController {
         try {
             var id = req.params.id;
 
-            var result = await farmModel.DeleteFarm(id);
+            var result = await FarmDBHelper.DeleteFarm(id);
             if (result) {
                 res.status(200).json(
                     {
@@ -260,7 +259,7 @@ class FarmController {
         const startdate = req.params.startdate;
         const enddate = req.params.enddate;
 
-        var result = await farmModel.ReportDeathCountTime(startdate, enddate, farm_id);
+        var result = await FarmDBHelper.ReportDeathCountTime(startdate, enddate, farm_id);
         if (result.length > 0) {
             res.json(
                 {
@@ -286,7 +285,7 @@ class FarmController {
     static async ReportHealthStatusCount(req, res) {
         const farm_id = req.params.id;
 
-        var result = await farmModel.ReportHealthStatusCount(farm_id);
+        var result = await FarmDBHelper.ReportHealthStatusCount(farm_id);
         if (result.length > 0) {
             res.json(
                 {
@@ -312,7 +311,7 @@ class FarmController {
     static async ReportAverageWeightGain(req, res) {
         const farm_id = req.params.id;
 
-        var result = await farmModel.RerportAverageWeightGain(farm_id);
+        var result = await FarmDBHelper.RerportAverageWeightGain(farm_id);
         if (result.length > 0) {
             res.json(
                 {
