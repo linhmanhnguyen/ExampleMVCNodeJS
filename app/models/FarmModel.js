@@ -4,7 +4,7 @@ const { connect } = require('../routes/FarmRouter');
 class FarmModel {
     constructor(id, farmName, creationDate, status, animalType_id, animalDensity, ward_id, addressDetail, lastModified) {
         this.id = id;
-        this.farmName = farmName;
+        this.name = farmName;
         this.creationDate = creationDate;
         this.status = status;
         this.animalType_id = animalType_id;
