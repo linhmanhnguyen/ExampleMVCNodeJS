@@ -62,20 +62,20 @@ class FarmController {
         var useraccount_id = req.user.userAccount_ID;
 
         var result = await FarmDBHelper.GetAllFarms(useraccount_id);
-        if (result.length > 0) {
+        if (result == null) {
+            res.status(404).json(
+                {
+                    "isSuccess": false,
+                    "message": `No records found at the moment.`,
+                }
+            );
+        }
+        else {
             res.json(
                 {
                     "isSuccess": true,
                     "message": `Get All Animal Types Successfully`,
                     "data": result
-                }
-            );
-        }
-        else {
-            res.status(404).json(
-                {
-                    "isSuccess": false,
-                    "message": `No records found at the moment.`,
                 }
             );
         }
@@ -86,9 +86,8 @@ class FarmController {
      */
     static async GetFarmByID(req, res) {
         var id = req.params.id;
-
         var result = await FarmDBHelper.GetFarmByID(id);
-        if (result.length > 0) {
+        if (result != null) {
             res.json(
                 {
                     "isSuccess": true,

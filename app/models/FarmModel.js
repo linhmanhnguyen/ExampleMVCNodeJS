@@ -41,6 +41,10 @@ class FarmDBHelper {
         const params = [UserAccount_ID];
         const result = await connection.query(query, params);
 
+        if (result.length === 0) {
+            return null;
+        }
+
         const farms = [];
 
         for (const row of result) {
@@ -58,10 +62,13 @@ class FarmDBHelper {
         const params = [id];
         const result = await connection.query(query, params);
 
+        if (result.length === 0) {
+            return null;
+        }
 
-        const farm = new FarmModel(result.id, result.farmName);
-
+        const farm = new FarmModel(result[0].id, result[0].farmName, result[0].creationDate, result[0].status, result[0].animalType_id, result[0].animalDensity, result[0].ward_id, result[0].addressDetail, result[0].lastModified);
         return farm;
+
     }
 
     /**
