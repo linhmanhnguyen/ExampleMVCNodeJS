@@ -45,7 +45,7 @@ class FarmDBHelper {
         const farms = [];
 
         for (const row of result) {
-            const farm = new FarmModel(row.id, row.farmName, row.creationDate, row.status.row.animalType_id, row.animalDensity, row.ward_id, row.addressDetail, row.lastModified);
+            const farm = new FarmModel(row.id, row.farmName, row.creationDate, row.status, row.animalType_id, row.animalDensity, row.ward_id, row.addressDetail, row.lastModified);
             farms.push(farm);
         }
         return farms;
