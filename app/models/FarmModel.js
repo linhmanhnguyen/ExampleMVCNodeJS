@@ -1,7 +1,7 @@
 class FarmModel {
     constructor(id, farmName, creationDate, status, animalType_id, animalDensity, ward_id, addressDetail, lastModified) {
         this.id = id;
-        this.name = farmName;
+        this.farName = farmName;
         this.creationDate = creationDate;
         this.status = status;
         this.animalType_id = animalType_id;

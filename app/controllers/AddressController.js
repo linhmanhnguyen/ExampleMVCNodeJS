@@ -1,4 +1,4 @@
-const AddressModel = require("../models/AddressModel");
+const AddressRepository = require("../repositories/AddressRepository");
 
 class AddressController {
     /**
@@ -6,7 +6,7 @@ class AddressController {
      */
     static async GetAllProvinces(req, res) {
         try {
-            var result = await AddressModel.GetAllProvinces();
+            var result = await AddressRepository.GetAllProvinces();
             if (result.length > 0) {
                 res.status(200).json(
                     {
@@ -41,7 +41,7 @@ class AddressController {
         try {
             var province_id = req.params.id;
 
-            var result = await AddressModel.GetAllDistrictsByProvince(province_id);
+            var result = await AddressRepository.GetAllDistrictsByProvince(province_id);
             if (result.length > 0) {
                 res.status(200).json(
                     {
@@ -76,7 +76,7 @@ class AddressController {
         try {
             var district_id = req.params.id;
 
-            var result = await AddressModel.GetAllWardsByDistrict(district_id);
+            var result = await AddressRepository.GetAllWardsByDistrict(district_id);
             if (result.length > 0) {
                 res.status(200).json(
                     {
@@ -111,7 +111,7 @@ class AddressController {
         try {
             var wards_id = req.params.id;
 
-            var result = await AddressModel.GetAddressByWardID(wards_id);
+            var result = await AddressRepository.GetAddressByWardID(wards_id);
             if (result.length > 0) {
                 res.status(200).json(
                     {

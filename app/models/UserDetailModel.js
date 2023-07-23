@@ -1,5 +1,4 @@
 const connection = require('../configs/MySQLConnect');
-const bcrypt = require('bcrypt');
 
 class UserDetailModel {
 

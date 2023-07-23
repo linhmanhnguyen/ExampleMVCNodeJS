@@ -1,4 +1,4 @@
-const RoleModel = require("../models/RoleModel");
+const RoleRepository = require("../repositories/RoleRepository");
 
 class RoleController {
     /**
@@ -6,8 +6,8 @@ class RoleController {
      */
     static async GetAllRoles(req, res) {
         try {
-            var result = await RoleModel.GetAllRoles();
-            if (result.length > 0) {
+            var result = await RoleRepository.GetAllRoles();
+            if (result != null) {
                 res.status(200).json(
                     {
                         "isSuccess": true,
