@@ -226,16 +226,16 @@ class FarmController {
     /**
      * Function Controller: Lấy thông tin tổng quan về động vật trong trang trại như tổng trong tất cả chuồng, số lượng động vật đang ốm, bình thường và đã chết
      */
-    static async GetAnimalSummary(req, res) {
+    static async ReportAnimalSummary(req, res) {
 
         const farm_id = req.params.id;
 
-        var result = await FarmRepository.GetAnimalSummary(farm_id);
+        var result = await FarmRepository.ReportAnimalSummary(farm_id);
         if (result.length > 0) {
             res.json(
                 {
                     "isSuccess": true,
-                    "message": `Get Animal Sumary Successfully`,
+                    "message": `Get Report Animal Sumary Successfully`,
                     "data": result
                 }
             );
@@ -250,85 +250,7 @@ class FarmController {
         }
     }
 
-    /**
-     * Function Controller: Báo cáo về số lượng động vật đã chết trong một khoảng thời gian cụ thể tại một trang trại cụ thể
-     */
-    static async ReportDeathCountTime(req, res) {
-        const farm_id = req.params.id;
-        const startdate = req.params.startdate;
-        const enddate = req.params.enddate;
 
-        var result = await FarmRepository.ReportDeathCountTime(startdate, enddate, farm_id);
-        if (result.length > 0) {
-            res.json(
-                {
-                    "isSuccess": true,
-                    "message": `Get Report Death Count Time Successfully`,
-                    "data": result
-                }
-            );
-        }
-        else {
-            res.status(404).json(
-                {
-                    "isSuccess": false,
-                    "message": `No records found at the moment.`,
-                }
-            );
-        }
-    }
-
-    /**
-     * Function Controller: Báo cáo về số lượng động vật theo tình trạng sức khỏe
-     */
-    static async ReportHealthStatusCount(req, res) {
-        const farm_id = req.params.id;
-
-        var result = await FarmRepository.ReportHealthStatusCount(farm_id);
-        if (result.length > 0) {
-            res.json(
-                {
-                    "isSuccess": true,
-                    "message": `Get Report Health Status Count Successfully`,
-                    "data": result
-                }
-            );
-        }
-        else {
-            res.status(404).json(
-                {
-                    "isSuccess": false,
-                    "message": `No records found at the moment.`,
-                }
-            );
-        }
-    }
-
-    /** 
-     * Function Controller: Báo cáo về Tăng trọng trung bình trong một khoảng thời gian
-     */
-    static async ReportAverageWeightGain(req, res) {
-        const farm_id = req.params.id;
-
-        var result = await FarmRepository.RerportAverageWeightGain(farm_id);
-        if (result.length > 0) {
-            res.json(
-                {
-                    "isSuccess": true,
-                    "message": `Get Report Average Weight Gain Successfully`,
-                    "data": result
-                }
-            );
-        }
-        else {
-            res.status(404).json(
-                {
-                    "isSuccess": false,
-                    "message": `No records found at the moment.`,
-                }
-            )
-        }
-    }
 
 }
 

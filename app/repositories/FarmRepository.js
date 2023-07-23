@@ -1,4 +1,5 @@
 const connection = require('../configs/MySQLConnect');
+const AnimalSummaryModel = require('../models/AnimalSummaryModel');
 const FarmModel = require('../models/FarmModel');
 
 class FarmRepository {
@@ -88,7 +89,7 @@ class FarmRepository {
     /**
      * Function Model: Lấy thông tin tổng quan về động vật trong trang trại (tổng số lượng con vật, tổng con vật đang khỏe, ốm và đã chết)
      */
-    static async GetAnimalSummary(ID) {
+    static async ReportAnimalSummary(farm_id) {
         const query = `SELECT
         SUM(CASE WHEN animals.status = 'normal' THEN 1 ELSE 0 END) as healthy_animals,
         SUM(CASE WHEN animals.status = 'sick' THEN 1 ELSE 0 END) as sick_animals,
@@ -101,58 +102,18 @@ class FarmRepository {
         JOIN animal_types ON animal_types.id = farms.animalType_id
         WHERE cages.farm_id = ?;
         `;
-        const params = [ID];
-
-        const result = await connection.query(query, params);
-        return result;
-    }
-
-    static async ReportHealthStatusCount(farm_id) {
-        const query = `
-                        SELECT status, COUNT(*) AS count
-                        FROM animals 
-                        WHERE cage_id IN (
-                            SELECT id FROM cages WHERE farm_id = ?
-                        )
-                        GROUP BY status;
-                `;
         const params = [farm_id];
         const result = await connection.query(query, params);
-        return result;
+
+        if (result.length === 0) {
+            return null;
+        }
+
+        const summary = new AnimalSummaryModel(result[0].healthy_animals, result[0].sick_animals, result[0].dead_animals, result[0].total_animals, result[0].typeName);
+        return summary;
     }
 
-    static async ReportDeathCountTime(startdate, enddate, farm_id) {
-        const query = `
-                    SELECT COUNT(*) AS death_count
-                    FROM history_animal_death 
-                    WHERE dateOccurrence BETWEEN ? AND ?
-                    AND animal_id IN (
-                        SELECT id FROM animals WHERE cage_id IN (
-                            SELECT id FROM cages WHERE farm_id = ?
-                        )
-                    );
-        `;
-        const params = [startdate, enddate, farm_id];
-        const result = await connection.query(query, params);
-        return result;
-    }
 
-    static async RerportAverageWeightGain(farm_id) {
-        const query = `
-        SELECT 
-            a.id AS animal_id, 
-            ((MAX(haw.weight) - MIN(haw.weight)) / DATEDIFF(MAX(haw.dateAction), MIN(haw.dateAction))) AS average_weight_gain
-            FROM history_animal_weight AS haw
-            JOIN animals AS a ON a.id = haw.animal_id
-            JOIN cages AS c ON c.id = a.cage_id
-            JOIN farms AS f ON f.id = c.farm_id
-            WHERE haw.dateAction BETWEEN ? AND ? AND f.id = ?
-            GROUP BY a.id;
-        `;
-        const params = [farm_id];
-        const result = await connection.query(query, params);
-        return result;
-    }
 
 }
 
