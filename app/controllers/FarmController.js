@@ -230,7 +230,7 @@ class FarmController {
 
         const farm_id = req.params.id;
 
-        var result = await farmModel.GetAnimalSummary(farm_id);
+        var result = await FarmRepository.GetAnimalSummary(farm_id);
         if (result.length > 0) {
             res.json(
                 {
