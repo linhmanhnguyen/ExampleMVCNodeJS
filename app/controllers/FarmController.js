@@ -231,7 +231,7 @@ class FarmController {
         const farm_id = req.params.id;
 
         var result = await FarmRepository.ReportAnimalSummary(farm_id);
-        if (result.length > 0) {
+        if (result != null) {
             res.json(
                 {
                     "isSuccess": true,
