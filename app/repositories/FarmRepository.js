@@ -13,7 +13,7 @@ class FarmRepository {
         const params = [FarmName, CreationDate, Status, AnimalType_ID, AnimalDensity, Ward_ID, AddressDetail, LastModified];
 
         const result = await connection.query(query, params);
-        return result;
+        return result.insertId;
     }
 
     /**

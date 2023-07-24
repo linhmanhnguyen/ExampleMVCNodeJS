@@ -32,7 +32,8 @@ class FarmController {
             const result = await FarmRepository.InsertFarm(farmName, createDate, status, animalType_ID, animalDensity, ward_ID, addressDetail, lastModified);
 
             if (result) {
-                const farm_ID = result.insertId;
+                const farm_ID = result;
+                console.log(farm_ID);
                 const userAccount_ID = req.user.userAccount_ID;
 
                 // Dựa theo tài khoản đang thực hiện, gán thông tin tài khoản đó vào trong farm vừa tạo
