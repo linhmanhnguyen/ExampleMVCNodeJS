@@ -24,7 +24,7 @@ class AnimalController {
             var type = req.body.type;
             var gender_Animal = req.body.gender_Animal;
             var weight = req.body.weight;
-            var entry_Date = req.body.entry_Date;
+            var entry_Date = currentTime;
             var status = req.body.status;
 
             var result = await animalModel.InsertAnimal(cage_ID, type, gender_Animal, weight, entry_Date, status);
