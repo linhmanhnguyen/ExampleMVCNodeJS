@@ -8,6 +8,7 @@ const FarmRepository = require('../repositories/FarmRepository');
 const HistoryCageEntryModel = require('../models/HistoryCageEntryModel');
 const { insertEntryCage } = require('../validations/historyEntryCage');
 const CageModel = require('../models/CageModel');
+const AnimalRepository = require('../repositories/AnimalRepository');
 
 const currentTime = moment().tz('Asia/Ho_Chi_Minh').format('YYYY-MM-DD_HH-mm-ss');
 
@@ -270,6 +271,18 @@ class FarmController {
 
             var result = await HistoryCageEntryModel.InsertHistory(user_id, farm_id, typeAnimal_id, animalQuantity, weightOfAnimal, unitPrice, dateAction, supplier_id);
             if (result) {
+                var resultTotalCages = await CageModel.GetAllCagesInFarm(farm_id);
+                var totalCages = resultTotalCages.length;
+
+                for (let index = 0; index < totalCages; index++) {
+                    const countAnimalsInCage = animalQuantity / array[index];
+                    const cage_id = resultTotalCages[index].id;
+
+                    for (let i = 0; i < countAnimalsInCage; i++) {
+                        await AnimalRepository.InsertAnimal(cage_id, "test", "male", weightOfAnimal, dateAction, "normal");
+                    }
+                }
+
                 res.status(200).json(
                     {
                         "isSuccess": true,
@@ -291,24 +304,24 @@ class FarmController {
     static async ReportEntryCage(req, res) {
         const farm_id = req.params.id;
 
-        const result = await CageModel.GetTotalCages(farm_id);
-        if (result) {
-            res.status(200).json(
-                {
-                    "isSuccess": true,
-                    "message": `Test`,
-                    "data": result[0].totalCages
-                }
-            )
-        }
-        else {
-            res.status(400).json(
-                {
-                    "isSuccess": false,
-                    "message": `An error has occurred, please try again.`,
-                }
-            );
-        }
+
+        // if (result) {
+        //     res.status(200).json(
+        //         {
+        //             "isSuccess": true,
+        //             "message": `Test`,
+        //             "data": 
+        //         }
+        //     )
+        // }
+        // else {
+        //     res.status(400).json(
+        //         {
+        //             "isSuccess": false,
+        //             "message": `An error has occurred, please try again.`,
+        //         }
+        //     );
+        // }
 
     }
 
