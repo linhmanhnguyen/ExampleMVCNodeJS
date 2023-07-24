@@ -65,7 +65,7 @@ class AuthController {
             const { username, password, fullname } = req.body;
             const createDate = currentTime;
             const status = true;
-            const refreshtoken = generateAccessToken(username);
+            const refreshtoken = "";
             const role_ID = 2; // Chủ sở hữu
 
             const checkExistUsername = await UserAccountModel.CheckExistUsername(username);
