@@ -5,6 +5,8 @@ const { farmSchema } = require('../validations/farmSchema');
 const UserAccountModel = require('../models/UserAccountModel');
 const UserDetailModel = require('../models/UserDetailModel');
 const FarmRepository = require('../repositories/FarmRepository');
+const HistoryCageEntryModel = require('../models/HistoryCageEntryModel');
+const { insertEntryCage } = require('../validations/historyEntryCage');
 
 const currentTime = moment().tz('Asia/Ho_Chi_Minh').format('YYYY-MM-DD_HH-mm-ss');
 
@@ -248,6 +250,45 @@ class FarmController {
                 }
             );
         }
+    }
+
+    static async InsertHistoryEntryCage(req, res) {
+        var farm_id = req.params.id;
+        var user_id = req.user.userAccount_ID;
+
+        var typeAnimal_id = req.body.typeAnimal_id;
+        var animalQuantity = req.body.animalQuantity;
+        var weightOfAnimal = req.body.weightOfAnimal;
+        var unitPrice = req.body.unitPrice;
+        var dateAction = currentTime;
+        var supplier_id = req.body.supplier_id;
+
+        try {
+            await insertEntryCage.validateAsync(req.body);
+
+            var result = await HistoryCageEntryModel.InsertHistory(user_id, farm_id, typeAnimal_id, animalQuantity, weightOfAnimal, unitPrice, dateAction, supplier_id);
+            if (result) {
+                res.status(200).json(
+                    {
+                        "isSuccess": true,
+                        "message": `Inserted history entry cage successfully.`,
+                    }
+                )
+            }
+        } catch (error) {
+            res.status(400).json(
+                {
+                    "isSuccess": false,
+                    "message": `An error has occurred, please try again.`,
+                }
+            );
+        }
+    }
+
+    static async ReportEntryCage(req, res) {
+        const farm_id = req.params.id;
+
+
     }
 
 
