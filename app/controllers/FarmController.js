@@ -297,7 +297,7 @@ class FarmController {
                 {
                     "isSuccess": true,
                     "message": `Test`,
-                    "data": result.totalCages
+                    "data": result[0].totalCages
                 }
             )
         }
