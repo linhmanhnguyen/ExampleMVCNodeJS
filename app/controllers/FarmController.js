@@ -275,7 +275,7 @@ class FarmController {
                 var totalCages = resultTotalCages.length;
 
                 for (let index = 0; index < totalCages; index++) {
-                    const countAnimalsInCage = animalQuantity / array[index];
+                    const countAnimalsInCage = animalQuantity / totalCages;
                     const cage_id = resultTotalCages[index].id;
 
                     for (let i = 0; i < countAnimalsInCage; i++) {
