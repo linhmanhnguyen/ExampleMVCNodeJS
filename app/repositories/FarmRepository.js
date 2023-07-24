@@ -91,18 +91,18 @@ class FarmRepository {
      */
     static async ReportAnimalSummary(farm_id) {
         const query = `SELECT
-        SUM(CASE WHEN animals.status = 'normal' THEN 1 ELSE 0 END) as healthy_animals,
-        SUM(CASE WHEN animals.status = 'sick' THEN 1 ELSE 0 END) as sick_animals,
-        SUM(CASE WHEN animals.status = 'dead' THEN 1 ELSE 0 END) as dead_animals,
-        COUNT(*) as total_animals
-    FROM
-        animals
-    JOIN
-        cages ON animals.cage_id = cages.id
-    JOIN
-        farms ON farms.id = cages.farm_id
-    WHERE
-        farms.id = ?;
+        COALESCE(SUM(CASE WHEN animals.status = 'normal' THEN 1 ELSE 0 END), 0) as healthy_animals,
+        COALESCE(SUM(CASE WHEN animals.status = 'sick' THEN 1 ELSE 0 END), 0) as sick_animals,
+        COALESCE(SUM(CASE WHEN animals.status = 'dead' THEN 1 ELSE 0 END), 0) as dead_animals,
+        COALESCE(COUNT(animals.id), 0) as total_animals
+        FROM
+            animals
+        JOIN
+            cages ON animals.cage_id = cages.id
+        JOIN
+            farms ON farms.id = cages.farm_id
+        WHERE
+            farms.id = ?;
         `;
         const params = [farm_id];
         const result = await connection.query(query, params);
