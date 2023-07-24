@@ -94,7 +94,7 @@ class FarmRepository {
         SUM(CASE WHEN animals.status = 'normal' THEN 1 ELSE 0 END) as healthy_animals,
         SUM(CASE WHEN animals.status = 'sick' THEN 1 ELSE 0 END) as sick_animals,
         SUM(CASE WHEN animals.status = 'dead' THEN 1 ELSE 0 END) as dead_animals,
-        COUNT(*) as total_animals,
+        COUNT(*) as total_animals
     FROM
         animals
     JOIN
