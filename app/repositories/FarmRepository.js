@@ -96,11 +96,16 @@ class FarmRepository {
         SUM(CASE WHEN animals.status = 'dead' THEN 1 ELSE 0 END) as dead_animals,
         COUNT(*) as total_animals,
         animal_types.typeName as typeAnimal
-        FROM animals
-        JOIN cages ON animals.cage_id = cages.id
-        JOIN farms ON farms.id = cages.farm_id
-        JOIN animal_types ON animal_types.id = farms.animalType_id
-        WHERE cages.farm_id = ?;
+    FROM
+        animals
+    JOIN
+        cages ON animals.cage_id = cages.id
+    JOIN
+        farms ON farms.id = cages.farm_id
+    JOIN
+        animal_types ON animal_types.id = farms.animalType_id
+    WHERE
+        farms.id = ?;
         `;
         const params = [farm_id];
         const result = await connection.query(query, params);
