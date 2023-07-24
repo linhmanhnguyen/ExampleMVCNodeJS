@@ -7,6 +7,7 @@ const UserDetailModel = require('../models/UserDetailModel');
 const FarmRepository = require('../repositories/FarmRepository');
 const HistoryCageEntryModel = require('../models/HistoryCageEntryModel');
 const { insertEntryCage } = require('../validations/historyEntryCage');
+const CageModel = require('../models/CageModel');
 
 const currentTime = moment().tz('Asia/Ho_Chi_Minh').format('YYYY-MM-DD_HH-mm-ss');
 
@@ -290,6 +291,24 @@ class FarmController {
     static async ReportEntryCage(req, res) {
         const farm_id = req.params.id;
 
+        const result = await CageModel.GetTotalCages(farm_id);
+        if (result) {
+            res.status(200).json(
+                {
+                    "isSuccess": true,
+                    "message": `Test`,
+                    "data": result.totalCages
+                }
+            )
+        }
+        else {
+            res.status(400).json(
+                {
+                    "isSuccess": false,
+                    "message": `An error has occurred, please try again.`,
+                }
+            );
+        }
 
     }
 

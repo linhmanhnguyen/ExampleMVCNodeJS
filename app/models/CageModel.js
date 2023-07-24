@@ -58,6 +58,13 @@ class CageModel {
         return result;
     }
 
+    static async GetTotalCages(Farm_ID) {
+        const query = `SELECT COUNT(*) as totalCages FROM cages WHERE farm_id = ?;`;
+        const params = [Farm_ID];
+        const result = await connection.query(query, params);
+        return result;
+    }
+
 
 }
 
