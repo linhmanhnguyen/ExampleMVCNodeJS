@@ -80,7 +80,7 @@ class AuthController {
                 const { insertId: userAccount_ID } = await UserAccountModel.InsertUserAccount(username, password, createDate, userDetail_ID, refreshtoken);
                 await UserAccountModel.InsertRoleForUserAccount(userAccount_ID, role_ID, createDate, status);
                 const role = await RoleRepository.GetRoleByID(role_ID);
-                const accesstoken = GenerateAccessToken.GenerateAccessTokenForOwner(userAccount_ID, userDetail_ID, role[0].roleName);
+                const accesstoken = GenerateAccessToken.GenerateAccessTokenForOwner(userAccount_ID, userDetail_ID, role.roleName);
 
                 res.status(200).json({
                     "isSuccess": true,

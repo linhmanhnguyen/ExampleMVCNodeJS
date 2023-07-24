@@ -28,7 +28,7 @@ class RoleRepository {
      * Function Model: Lấy role bằng id của role
      */
     static async GetRoleByID(id) {
-        const query = `SELECT * FROM roles WHERE id =?`;
+        const query = `SELECT * FROM roles WHERE id = ?`;
         const params = [id];
         const result = await connection.query(query, params);
 
