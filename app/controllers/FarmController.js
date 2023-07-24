@@ -33,7 +33,6 @@ class FarmController {
 
             if (result) {
                 const farm_ID = result;
-                console.log(farm_ID);
                 const userAccount_ID = req.user.userAccount_ID;
 
                 // Dựa theo tài khoản đang thực hiện, gán thông tin tài khoản đó vào trong farm vừa tạo
@@ -43,6 +42,7 @@ class FarmController {
                     {
                         "isSuccess": true,
                         "message": `Created Farm successfully`,
+                        "data": farm_ID
                     }
                 );
             }
