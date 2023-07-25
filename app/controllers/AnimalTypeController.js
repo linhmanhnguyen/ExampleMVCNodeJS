@@ -38,7 +38,7 @@ class AnimalTypeController {
      */
     static async GetAllAnimalTypes(req, res) {
         var result = await animalTypeRepository.GetAnimalTypes();
-        if (result.length > 0) {
+        if (result != null) {
             res.json(
                 {
                     "isSuccess": true,

@@ -1,4 +1,5 @@
 const connection = require('../configs/MySQLConnect');
+const AnimalTypeModel = require('../models/AnimalTypeModel');
 
 class AnimalTypeRepository {
 
@@ -23,7 +24,19 @@ class AnimalTypeRepository {
         const params = [];
 
         const result = await connection.query(query, params);
-        return result;
+
+        if (result.length === 0) {
+            return null;
+        }
+
+        const animalTypes = [];
+
+        for (const row of result) {
+            const animalType = new AnimalTypeModel(row.id, row.typeName, row.imgPath);
+            animalTypes.push(animalType);
+        }
+
+        return animalTypes;
     }
 
     /**
