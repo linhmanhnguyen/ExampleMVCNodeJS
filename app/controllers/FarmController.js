@@ -314,7 +314,7 @@ class FarmController {
                 }
             }
             else {
-                var result = await HistoryCageEntryModel.InsertHistory(user_id, farm_id, typeAnimal_id, animalQuantity, weightOfAnimal, unitPrice, dateAction, supplier_id, event.id);
+                var result = await HistoryCageEntryModel.InsertHistory(user_id, farm_id, typeAnimal_id, animalQuantity, weightOfAnimal, unitPrice, dateAction, supplier_id, events[0].id);
                 if (result) {
                     // Nếu chèn thành công, tiến hành chia số lượng động vật đang có vào các chuồng
                     // Bước này nhằm giả định động vật được phân bố đều vào số chuồng có sẵn
