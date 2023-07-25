@@ -137,7 +137,6 @@ class AnimalTypeController {
     //         );
     //     }
     // }
-
 }
 
 module.exports = AnimalTypeController;

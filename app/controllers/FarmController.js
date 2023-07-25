@@ -9,6 +9,7 @@ const HistoryCageEntryModel = require('../models/HistoryCageEntryModel');
 const { insertEntryCage } = require('../validations/historyEntryCage');
 const CageModel = require('../models/CageModel');
 const AnimalRepository = require('../repositories/AnimalRepository');
+const EventRepository = require('../repositories/EventRepository');
 
 const currentTime = moment().tz('Asia/Ho_Chi_Minh').format('YYYY-MM-DD_HH-mm-ss');
 
@@ -255,10 +256,15 @@ class FarmController {
         }
     }
 
+    /**
+     * Function Controller:  Thêm một lịch sử nhập chuồng 
+     */
     static async InsertHistoryEntryCage(req, res) {
+        // Trích xuất farm_id và user_id từ đối tượng yêu cầu (req)
         var farm_id = req.params.id;
         var user_id = req.user.userAccount_ID;
 
+        // Trích xuất các thông tin về động vật từ đối tượng yêu cầu (req.body)
         var typeAnimal_id = req.body.typeAnimal_id;
         var animalQuantity = req.body.animalQuantity;
         var weightOfAnimal = req.body.weightOfAnimal;
@@ -267,39 +273,82 @@ class FarmController {
         var supplier_id = req.body.supplier_id;
 
         try {
+            // Kiểm tra và xác thực dữ liệu trong đối tượng yêu cầu bằng cách sử dụng một schema (insertEntryCage.validateAsync)
             await insertEntryCage.validateAsync(req.body);
 
-            var result = await HistoryCageEntryModel.InsertHistory(user_id, farm_id, typeAnimal_id, animalQuantity, weightOfAnimal, unitPrice, dateAction, supplier_id);
-            if (result) {
-                var resultTotalCages = await CageModel.GetAllCagesInFarm(farm_id);
-                var totalCages = resultTotalCages.length;
+            // Kiểm tra xem đã có sự kiện liên quan đến việc nhập chuồng chưa
+            const event = await EventRepository.getEventByFarm(farm_id);
 
-                for (let index = 0; index < totalCages; index++) {
-                    const countAnimalsInCage = animalQuantity / totalCages;
-                    const cage_id = resultTotalCages[index].id;
+            if (!EventRepository.isEventActive(event)) {
+                // Nếu chưa có sự kiện hoặc sự kiện chưa kích hoạt, tạo một sự kiện mới với thời gian bắt đầu và kết thúc
 
-                    for (let i = 0; i < countAnimalsInCage; i++) {
-                        await AnimalRepository.InsertAnimal(cage_id, "test", "male", weightOfAnimal, dateAction, "normal");
+                const start_date = currentTime;
+                const end_date = null;
+                const newEventId = await EventRepository.CreateEvent(start_date, end_date, 1, farm_id);
+                if (newEventId) {
+                    // Gọi hàm InsertHistory từ model HistoryCageEntryModel để chèn thông tin lịch sử vào database
+                    var result = await HistoryCageEntryModel.InsertHistory(user_id, farm_id, typeAnimal_id, animalQuantity, weightOfAnimal, unitPrice, dateAction, supplier_id, newEventId.insertId);
+                    if (result) {
+                        // Nếu chèn thành công, tiến hành chia số lượng động vật đang có vào các chuồng
+                        // Bước này nhằm giả định động vật được phân bố đều vào số chuồng có sẵn
+                        var resultTotalCages = await CageModel.GetAllCagesInFarm(farm_id);
+                        var totalCages = resultTotalCages.length;
+
+                        for (let index = 0; index < totalCages; index++) {
+                            // Tính số lượng động vật trong mỗi chuồng (countAnimalsInCage) dựa trên tổng số động vật và số chuồng
+                            const countAnimalsInCage = animalQuantity / totalCages;
+                            const cage_id = resultTotalCages[index].id;
+
+                            // Chèn từng con vật vào mỗi chuồng
+                            for (let i = 0; i < countAnimalsInCage; i++) {
+                                await AnimalRepository.InsertAnimal(cage_id, "test", "male", weightOfAnimal, dateAction, "normal");
+                            }
+                        }
+
+                        // Trả về phản hồi thành công nếu mọi thứ đều thành công
+                        res.status(200).json({
+                            "isSuccess": true,
+                            "message": `Inserted history entry cage successfully.`,
+                        });
                     }
                 }
+            }
+            else {
+                var result = await HistoryCageEntryModel.InsertHistory(user_id, farm_id, typeAnimal_id, animalQuantity, weightOfAnimal, unitPrice, dateAction, supplier_id, event.id);
+                if (result) {
+                    // Nếu chèn thành công, tiến hành chia số lượng động vật đang có vào các chuồng
+                    // Bước này nhằm giả định động vật được phân bố đều vào số chuồng có sẵn
+                    var resultTotalCages = await CageModel.GetAllCagesInFarm(farm_id);
+                    var totalCages = resultTotalCages.length;
 
-                res.status(200).json(
-                    {
+                    for (let index = 0; index < totalCages; index++) {
+                        // Tính số lượng động vật trong mỗi chuồng (countAnimalsInCage) dựa trên tổng số động vật và số chuồng
+                        const countAnimalsInCage = animalQuantity / totalCages;
+                        const cage_id = resultTotalCages[index].id;
+
+                        // Chèn từng con vật vào mỗi chuồng
+                        for (let i = 0; i < countAnimalsInCage; i++) {
+                            await AnimalRepository.InsertAnimal(cage_id, "test", "male", weightOfAnimal, dateAction, "normal");
+                        }
+                    }
+
+                    // Trả về phản hồi thành công nếu mọi thứ đều thành công
+                    res.status(200).json({
                         "isSuccess": true,
                         "message": `Inserted history entry cage successfully.`,
-                    }
-                )
+                    });
+                }
             }
         } catch (error) {
-            console.log(error);
-            res.status(400).json(
-                {
-                    "isSuccess": false,
-                    "message": `An error has occurred, please try again.`,
-                }
-            );
+            // Nếu có lỗi xảy ra, ghi log và trả về phản hồi lỗi
+            // console.log(error);
+            res.status(400).json({
+                "isSuccess": false,
+                "message": `An error has occurred, please try again.`,
+            });
         }
     }
+
 
     static async ReportEntryCage(req, res) {
         const farm_id = req.params.id;
