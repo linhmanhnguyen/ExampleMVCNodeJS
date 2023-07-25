@@ -341,7 +341,7 @@ class FarmController {
             }
         } catch (error) {
             // Nếu có lỗi xảy ra, ghi log và trả về phản hồi lỗi
-            // console.log(error);
+            console.log(error);
             res.status(400).json({
                 "isSuccess": false,
                 "message": `An error has occurred, please try again.`,
