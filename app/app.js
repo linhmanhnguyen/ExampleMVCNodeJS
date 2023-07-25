@@ -5,6 +5,7 @@ const app = express();
 const authRouter = require('./routes/AuthRouter');
 const userRouter = require('./routes/UserDetailRouter');
 const userAccountRouter = require('./routes/UserAccountRouter');
+const animalTypeRouter = require('./routes/AnimalTypeRouter');
 const farmRouter = require('./routes/FarmRouter');
 const animalRouter = require('./routes/AnimalRouter');
 const addressRouter = require('./routes/AddressRouter');
@@ -15,6 +16,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // ROUTES
 app.use('/', authRouter);
+app.use('/animal-types', animalTypeRouter);
 app.use('/users', userRouter);
 app.use('/accounts', userAccountRouter);
 app.use('/farms', farmRouter);

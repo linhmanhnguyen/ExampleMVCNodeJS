@@ -304,24 +304,25 @@ class FarmController {
     static async ReportEntryCage(req, res) {
         const farm_id = req.params.id;
 
+        const result = await FarmRepository.ReportEntryCage(farm_id);
 
-        // if (result) {
-        //     res.status(200).json(
-        //         {
-        //             "isSuccess": true,
-        //             "message": `Test`,
-        //             "data": 
-        //         }
-        //     )
-        // }
-        // else {
-        //     res.status(400).json(
-        //         {
-        //             "isSuccess": false,
-        //             "message": `An error has occurred, please try again.`,
-        //         }
-        //     );
-        // }
+        if (result) {
+            res.status(200).json(
+                {
+                    "isSuccess": true,
+                    "message": `Test`,
+
+                }
+            )
+        }
+        else {
+            res.status(400).json(
+                {
+                    "isSuccess": false,
+                    "message": `An error has occurred, please try again.`,
+                }
+            );
+        }
 
     }
 

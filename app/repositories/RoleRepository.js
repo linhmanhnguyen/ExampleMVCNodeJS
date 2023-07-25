@@ -3,7 +3,7 @@ const RoleModel = require('../models/RoleModel');
 
 class RoleRepository {
     /**
-     * Function Model: Lấy tất cả roles đang có trong db
+     * Function Repository: Lấy tất cả roles đang có trong db
      */
     static async GetAllRoles() {
         const query = `SELECT * FROM roles`;
@@ -25,7 +25,7 @@ class RoleRepository {
     }
 
     /**
-     * Function Model: Lấy role bằng id của role
+     * Function Repository: Lấy role bằng id của role
      */
     static async GetRoleByID(id) {
         const query = `SELECT * FROM roles WHERE id = ?`;

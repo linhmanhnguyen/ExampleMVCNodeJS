@@ -87,7 +87,7 @@ class FarmRepository {
     }
 
     /**
-     * Function Model: Lấy thông tin tổng quan về động vật trong trang trại (tổng số lượng con vật, tổng con vật đang khỏe, ốm và đã chết)
+     * Function Repository: Lấy thông tin tổng quan về động vật trong trang trại (tổng số lượng con vật, tổng con vật đang khỏe, ốm và đã chết)
      */
     static async ReportAnimalSummary(farm_id) {
         const query = `SELECT
@@ -114,6 +114,37 @@ class FarmRepository {
         const summary = new AnimalSummaryModel(result[0].healthy_animals, result[0].sick_animals, result[0].dead_animals, result[0].total_animals, result[0].typeAnimal);
         return summary;
     }
+
+    /**
+     * Function Repository: Lấy thông tin báo cáo nhập chuồng dựa trên 1 khoảng thời gian
+     */
+    static async ReportEntryCage(farm_id, startDate, endDate) {
+        const query = `
+        SELECT
+        f.farmName AS farm_name,
+        hce.dateAction AS entry_date,
+        SUM(hce.animalQuantity) AS total_quantity,
+        SUM(hce.unitPrice * hce.animalQuantity) AS total_amount,
+        SUM(hce.weightOfAnimal * hce.animalQuantity) AS total_weight
+        FROM
+        history_cage_entry hce
+        INNER JOIN
+        farms f ON hce.farm_id = f.id
+        WHERE
+        hce.farm_id = ?
+        AND hce.dateAction BETWEEN ? AND ?
+        GROUP BY
+        f.farmName,
+        hce.dateAction;
+        `;
+        const params = [farm_id, startDate, endDate];
+        const result = await connection.query(query, params);
+        return result;
+    }
+
+    /**
+     * Function Repository: 
+     */
 
 
 
