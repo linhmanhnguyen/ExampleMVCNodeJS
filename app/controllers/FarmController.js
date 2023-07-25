@@ -277,9 +277,9 @@ class FarmController {
             await insertEntryCage.validateAsync(req.body);
 
             // Kiểm tra xem đã có sự kiện liên quan đến việc nhập chuồng chưa
-            const event = await EventRepository.getEventByFarm(farm_id);
+            const events = await EventRepository.getEventByFarm(farm_id);
 
-            if (!EventRepository.isEventActive(event)) {
+            if (!EventRepository.isEventActive(events)) {
                 // Nếu chưa có sự kiện hoặc sự kiện chưa kích hoạt, tạo một sự kiện mới với thời gian bắt đầu và kết thúc
 
                 const start_date = currentTime;

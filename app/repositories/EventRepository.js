@@ -14,8 +14,8 @@ class EventRepository {
     }
 
     // Hàm kiểm tra xem sự kiện có đang kích hoạt hay không
-    static isEventActive(event) {
-        return event && event.status === 1;
+    static isEventActive(events) {
+        return events && events.some(event => event.status === 1); // Sử dụng Array.some để kiểm tra xem trong danh sách có sự kiện nào đang kích hoạt hay không
     }
 
     // Hàm kiểm tra xem đã có sự kiện liên quan đến việc nhập chuồng chưa
