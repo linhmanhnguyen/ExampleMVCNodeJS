@@ -341,7 +341,7 @@ class FarmController {
             }
         } catch (error) {
             // Nếu có lỗi xảy ra, ghi log và trả về phản hồi lỗi
-            console.log(error);
+            // console.log(error);
             res.status(400).json({
                 "isSuccess": false,
                 "message": `An error has occurred, please try again.`,
@@ -350,9 +350,10 @@ class FarmController {
     }
 
 
+
+
     static async ReportEntryCage(req, res) {
         const farm_id = req.params.id;
-
         const result = await FarmRepository.ReportEntryCage(farm_id);
 
         if (result) {
@@ -360,7 +361,6 @@ class FarmController {
                 {
                     "isSuccess": true,
                     "message": `Test`,
-
                 }
             )
         }
