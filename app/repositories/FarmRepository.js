@@ -1,6 +1,7 @@
 const connection = require('../configs/MySQLConnect');
 const AnimalSummaryModel = require('../models/AnimalSummaryModel');
 const FarmModel = require('../models/FarmModel');
+const ReportEntryCageModel = require('../models/ReportEntryCageModel');
 
 class FarmRepository {
     /**
@@ -118,35 +119,33 @@ class FarmRepository {
     /**
      * Function Repository: Lấy thông tin báo cáo nhập chuồng dựa trên 1 khoảng thời gian
      */
-    static async ReportEntryCage(farm_id, startDate, endDate) {
+    static async ReportEntryCage(farm_id, event_id) {
         const query = `
-        SELECT
-        f.farmName AS farm_name,
-        hce.dateAction AS entry_date,
-        SUM(hce.animalQuantity) AS total_quantity,
-        SUM(hce.unitPrice * hce.animalQuantity) AS total_amount,
-        SUM(hce.weightOfAnimal * hce.animalQuantity) AS total_weight
-        FROM
-        history_cage_entry hce
-        INNER JOIN
-        farms f ON hce.farm_id = f.id
-        WHERE
-        hce.farm_id = ?
-        AND hce.dateAction BETWEEN ? AND ?
-        GROUP BY
-        f.farmName,
-        hce.dateAction;
+        SELECT 
+        SUM(hce.animalQuantity) AS totalAnimals,
+        ROUND(AVG(hce.weightOfAnimal), 2) AS averageWeightOfAnimal,
+        ROUND(SUM(hce.weightOfAnimal), 2) AS totalWeightOfAnimals,
+        ROUND(AVG(hce.unitPrice), 2) AS averageUnitPrice,
+        ROUND(SUM(hce.animalQuantity * hce.unitPrice), 2) AS totalPrice
+        FROM 
+            history_cage_entry AS hce
+        WHERE 
+            hce.farm_id = ? AND hce.event_id = ?;
         `;
-        const params = [farm_id, startDate, endDate];
+        const params = [farm_id, event_id];
         const result = await connection.query(query, params);
-        return result;
+
+        if (result.length === 0) {
+            return null;
+        }
+
+        const report = new ReportEntryCageModel(result[0].totalAnimals, result[0].averageWeightOfAnimal, result[0].totalWeightOfAnimals, result[0].averageUnitPrice, result[0].totalPrice);
+        return report;
     }
 
     /**
-     * Function Repository: 
+     * Function Repository: Lấy thông tin 
      */
-
-
 
 }
 

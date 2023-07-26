@@ -27,6 +27,6 @@ router.post('/:id/users/create-multiple', authenticateToken, authorize(['admin',
 router.get('/:id/report-animal-summary', authenticateToken, authorize(['admin', 'owner']), farmController.ReportAnimalSummary);
 router.post('/:id/cage-entry', authenticateToken, authorize(['admin', 'owner']), farmController.InsertHistoryEntryCage);
 
-// router.get('/:id/report-entry-cage', authenticateToken, authorize(['admin', 'owner']), farmController.ReportEntryCage);
+router.get('/:id/events/:event_id/report-entry-cage', authenticateToken, authorize(['admin', 'owner']), farmController.ReportEntryCage);
 
 module.exports = router;
