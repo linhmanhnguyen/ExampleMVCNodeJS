@@ -139,7 +139,14 @@ class FarmRepository {
             return null;
         }
 
-        const report = new ReportEntryCageModel(result.totalAnimals, result.averageWeightOfAnimal, result.totalWeightOfAnimals, result.averageUnitPrice, result.totalPrice);
+        const report = new ReportEntryCageModel(
+            result[0].totalAnimals,
+            result[0].averageWeightOfAnimal,
+            result[0].totalWeightOfAnimals,
+            result[0].averageUnitPrice,
+            result[0].totalPrice
+        );
+
         return report;
     }
 
