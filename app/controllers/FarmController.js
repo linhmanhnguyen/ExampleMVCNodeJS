@@ -354,7 +354,8 @@ class FarmController {
 
     static async ReportEntryCage(req, res) {
         const farm_id = req.params.id;
-        const result = await FarmRepository.ReportEntryCage(farm_id);
+        const event_id = req.params.event_id;
+        const result = await FarmRepository.ReportEntryCage(farm_id, event_id);
 
         if (result) {
             res.status(200).json(
