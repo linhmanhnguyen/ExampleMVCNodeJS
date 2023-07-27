@@ -1,7 +1,7 @@
 class ReturnResponseUtils {
     static returnResponse(res, statusCode, isSuccess, message, data = []) {
 
-        if (data != []) {
+        if (data.length !== 0) {
             res.status(statusCode).json(
                 {
                     "isSuccess": isSuccess,
