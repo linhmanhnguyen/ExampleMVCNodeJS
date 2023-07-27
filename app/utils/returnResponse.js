@@ -1,4 +1,4 @@
-class ReturnResponseUtils {
+class ReturnResponseUtil {
     static returnResponse(res, statusCode, isSuccess, message, data = []) {
 
         if (data.length !== 0) {
@@ -23,4 +23,4 @@ class ReturnResponseUtils {
     }
 }
 
-module.exports = ReturnResponseUtils;
+module.exports = ReturnResponseUtil;

@@ -1,4 +1,5 @@
 const AddressRepository = require("../repositories/AddressRepository");
+const ReturnResponseUtil = require("../utils/returnResponse");
 
 class AddressController {
     /**
@@ -8,29 +9,13 @@ class AddressController {
         try {
             var result = await AddressRepository.GetAllProvinces();
             if (result.length > 0) {
-                res.status(200).json(
-                    {
-                        "isSuccess": true,
-                        "message": "Get all provinces successfully.",
-                        "data": result,
-                    }
-                );
+                ReturnResponseUtil.returnResponse(res, 200, true, 'Get all provinces successfully', result);
             }
             else {
-                res.status(404).json(
-                    {
-                        "isSuccess": false,
-                        "message": `No records found at the moment.`,
-                    }
-                );
+                ReturnResponseUtil.returnResponse(res, 404, false, 'No records found at the moment');
             }
         } catch (error) {
-            res.status(400).json(
-                {
-                    "isSuccess": false,
-                    "message": `An error has occurred, please try again.`,
-                }
-            );
+            ReturnResponseUtil.returnResponse(res, 400, false, 'An error has occurred, please try again.');
         }
     }
 
@@ -43,29 +28,13 @@ class AddressController {
 
             var result = await AddressRepository.GetAllDistrictsByProvince(province_id);
             if (result.length > 0) {
-                res.status(200).json(
-                    {
-                        "isSuccess": true,
-                        "message": "Get all districts successfully.",
-                        "data": result,
-                    }
-                );
+                ReturnResponseUtil.returnResponse(res, 200, true, 'Get all districts successfully', result);
             }
             else {
-                res.status(404).json(
-                    {
-                        "isSuccess": false,
-                        "message": `No records found at the moment.`,
-                    }
-                );
+                ReturnResponseUtil.returnResponse(res, 404, false, 'No records found at the moment');
             }
         } catch (error) {
-            res.status(400).json(
-                {
-                    "isSuccess": false,
-                    "message": `An error has occurred, please try again.`,
-                }
-            );
+            ReturnResponseUtil.returnResponse(res, 400, false, 'An error has occurred, please try again');
         }
     }
 
@@ -78,29 +47,13 @@ class AddressController {
 
             var result = await AddressRepository.GetAllWardsByDistrict(district_id);
             if (result.length > 0) {
-                res.status(200).json(
-                    {
-                        "isSuccess": true,
-                        "message": "Get all wards successfully.",
-                        "data": result,
-                    }
-                );
+                ReturnResponseUtil.returnResponse(res, 200, true, 'Get all wards successfully', result);
             }
             else {
-                res.status(404).json(
-                    {
-                        "isSuccess": false,
-                        "message": `No records found at the moment.`,
-                    }
-                );
+                ReturnResponseUtil.returnResponse(res, 404, false, 'No records found at the moment');
             }
         } catch (error) {
-            res.status(400).json(
-                {
-                    "isSuccess": false,
-                    "message": `An error has occurred, please try again.`,
-                }
-            );
+            ReturnResponseUtil.returnResponse(res, 400, false, 'An error has occurred, please try again');
         }
     }
 
@@ -113,29 +66,13 @@ class AddressController {
 
             var result = await AddressRepository.GetAddressByWardID(wards_id);
             if (result.length > 0) {
-                res.status(200).json(
-                    {
-                        "isSuccess": true,
-                        "message": "Get address detail successfully.",
-                        "data": result,
-                    }
-                );
+                ReturnResponseUtil.returnResponse(res, 200, true, 'Get address detail successfully', result);
             }
             else {
-                res.status(404).json(
-                    {
-                        "isSuccess": false,
-                        "message": `No records found at the moment.`,
-                    }
-                );
+                ReturnResponseUtil.returnResponse(res, 404, false, 'No records found at the moment');
             }
         } catch (error) {
-            res.status(400).json(
-                {
-                    "isSuccess": false,
-                    "message": `An error has occurred, please try again.`,
-                }
-            );
+            ReturnResponseUtil.returnResponse(res, 400, false, 'An error has occurred, please try again');
         }
     }
 

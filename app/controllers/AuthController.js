@@ -6,7 +6,7 @@ const moment = require('moment-timezone');
 const { registerAccountSchema } = require('../validations/userAccountSchema');
 const RoleRepository = require('../repositories/RoleRepository');
 const GenerateAccessToken = require('../utils/genarateAccessToken');
-const ReturnResponseUtils = require('../utils/returnResponse');
+const ReturnResponseUtil = require('../utils/returnResponse');
 const currentTime = moment().tz('Asia/Ho_Chi_Minh').format('YYYY-MM-DD_HH-mm-ss');
 
 class AuthController {
@@ -19,39 +19,20 @@ class AuthController {
         if (user.length > 0) {
             const checkPassword = await bcrypt.compare(password, user[0].password);
             if (!checkPassword) {
-                ReturnResponseUtils.returnResponse(res, 422, false, `Password is not correct`);
-
+                ReturnResponseUtil.returnResponse(res, 422, false, `Password is not correct`);
             }
             else {
                 if (user[0].status == true) {
                     const token = GenerateAccessToken.GenerateAccessTokenForOwnerWhenLogin(user[0].id, user[0].userDetail_id, user[0].roleName, user[0].farm_id);
-
-                    ReturnResponseUtils.returnResponse(res, 200, true, 'Login Successful', token);
-                    // res.status(200).json(
-                    //     {
-                    //         "isSuccess": true,
-                    //         "data": token,
-                    //     }
-                    // );
-
+                    ReturnResponseUtil.returnResponse(res, 200, true, 'Login Successful', token);
                 }
                 else {
-                    res.status(422).json(
-                        {
-                            "isSuccess": false,
-                            "message": `Account is not attivated`,
-                        }
-                    );
+                    ReturnResponseUtil.returnResponse(res, 422, false, `Account is not attivated`);
                 }
             }
         }
         else {
-            res.status(404).json(
-                {
-                    "isSuccess": false,
-                    "message": `No records found at the moment.`,
-                }
-            );
+            ReturnResponseUtil.returnResponse(res, 404, false, `No records found at the moment`);
         }
 
     }
@@ -68,10 +49,7 @@ class AuthController {
 
             const checkExistUsername = await UserAccountModel.CheckExistUsername(username);
             if (checkExistUsername.length > 0) {
-                return res.status(400).json({
-                    "isSuccess": false,
-                    "message": "Username already exists",
-                });
+                ReturnResponseUtil.returnResponse(res, 404, false, `Username already exists`);
             }
             else {
                 const { insertId: userDetail_ID } = await UserDetailModel.InsertUserDetailWhenRegister(fullname, username);
@@ -80,19 +58,11 @@ class AuthController {
                 const role = await RoleRepository.GetRoleByID(role_ID);
                 const accesstoken = GenerateAccessToken.GenerateAccessTokenForOwner(userAccount_ID, userDetail_ID, role.roleName);
 
-                res.status(200).json({
-                    "isSuccess": true,
-                    "message": "Register Successfully",
-                    "data": accesstoken
-                });
+                ReturnResponseUtil.returnResponse(res, 200, true, `Register Successfully`, accesstoken);
             }
 
         } catch (error) {
-            console.log(error);
-            res.status(400).json({
-                "isSuccess": false,
-                "message": "An error has occurred, please try again.",
-            });
+            ReturnResponseUtil.returnResponse(res, 400, false, `An error has occurred, please try again`);
         }
     }
 
@@ -100,16 +70,10 @@ class AuthController {
         const username = req.params.username;
         const checkExistUsername = await UserAccountModel.CheckExistUsername(username);
         if (checkExistUsername.length > 0) {
-            return res.status(400).json({
-                "isSuccess": false,
-                "message": "Username already exists",
-            });
+            ReturnResponseUtil.returnResponse(res, 400, false, `Username already exists`);
         }
         else {
-            return res.status(200).json({
-                "isSuccess": true,
-                "message": "Username does not exist",
-            });
+            ReturnResponseUtil.returnResponse(res, 200, true, `Username does not exist`);
         }
     }
 }
