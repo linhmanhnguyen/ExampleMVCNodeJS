@@ -1,5 +1,5 @@
 class ReturnResponseUtils {
-    static returnResponse(statusCode, isSuccess, message, data = []) {
+    static returnResponse(statusCode, isSuccess, message, data = [], res) {
 
         if (data != []) {
             res.status(statusCode).json(
