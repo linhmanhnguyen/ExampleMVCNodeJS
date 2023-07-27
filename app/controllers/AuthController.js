@@ -19,7 +19,7 @@ class AuthController {
         if (user.length > 0) {
             const checkPassword = await bcrypt.compare(password, user[0].password);
             if (!checkPassword) {
-                ReturnResponseUtils.returnResponse(422, false, `Password is not correct`);
+                ReturnResponseUtils.returnResponse(res, 422, false, `Password is not correct`);
 
                 // res.status(422).json(
                 //     {
