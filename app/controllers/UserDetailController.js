@@ -1,4 +1,5 @@
-const userDetailModel = require('../models/UserDetailModel');
+const UserDetailRepository = require('../repositories/UserDetailRepository');
+const ReturnResponseUtil = require('../utils/returnResponse');
 const { userDetailSchema } = require('../validations/userDetailSchema');
 
 class UserDetailController {
@@ -19,36 +20,21 @@ class UserDetailController {
             var email = req.body.email;
             var phone = req.body.phoneNumber;
 
-            var CheckUserDetailExistsByCitizenIDOrPhone = await userDetailModel.CheckUserDetailExistsByCitizenIDOrPhone(citizenIdentification_ID, phone);
+            var CheckUserDetailExistsByCitizenIDOrPhone = await UserDetailRepository.CheckUserDetailExistsByCitizenIDOrPhone(citizenIdentification_ID, phone);
             if (CheckUserDetailExistsByCitizenIDOrPhone.length > 0) {
-                res.status(400).json(
-                    {
-                        "isSuccess": false,
-                        "message": `Citizen Identification ID or Phone existed`,
-                    }
-                );
+                ReturnResponseUtil.returnResponse(res, 400, false, 'Citizen Identification ID or Phone existed');
             }
             else {
-                var result = await userDetailModel.InsertUserDetail(fullname, dateOfBirth, gender, citizenIdentification_ID, Ward_ID, addressDetail, phone, email,);
+                var result = await UserDetailRepository.InsertUserDetail(fullname, dateOfBirth, gender, citizenIdentification_ID, Ward_ID, addressDetail, phone, email,);
                 if (result) {
-                    res.status(200).json(
-                        {
-                            "isSuccess": true,
-                            "message": `Created User Detail successfully`,
-                            "data": result.insertId
-                        }
-                    );
+                    ReturnResponseUtil.returnResponse(res, 200, true, 'Created User Detail successfully', result.insertId);
                 }
             }
 
         } catch (error) {
-            console.log(error);
-            res.status(400).json(
-                {
-                    "isSuccess": false,
-                    "message": `An error has occurred, please try again.`,
-                }
-            );
+            // console.log(error);
+            ReturnResponseUtil.returnResponse(res, 400, false, 'An error has occurred, please try again');
+
         }
     }
 
@@ -56,23 +42,12 @@ class UserDetailController {
      * Function Controller: Lấy toàn bộ thông tin người dùng
      */
     static async GetAllUserDetails(req, res) {
-        var result = await userDetailModel.GetAllUserDetails();
+        var result = await UserDetailRepository.GetAllUserDetails();
         if (result.length > 0) {
-            res.json(
-                {
-                    "isSuccess": true,
-                    "message": `Get All User Details Successfully`,
-                    "data": result
-                }
-            );
+            ReturnResponseUtil.returnResponse(res, 200, true, 'Get All User Details Successfully', result);
         }
         else {
-            res.status(404).json(
-                {
-                    "isSuccess": false,
-                    "message": `No records found at the moment.`,
-                }
-            );
+            ReturnResponseUtil.returnResponse(res, 404, false, 'No records found at the moment');
         }
     }
 
@@ -82,23 +57,12 @@ class UserDetailController {
     static async GetUserDetailsByID(req, res) {
         var id = req.params.id;
 
-        var result = await userDetailModel.GetUserDetailsByID(id);
+        var result = await UserDetailRepository.GetUserDetailsByID(id);
         if (result.length > 0) {
-            res.json(
-                {
-                    "isSuccess": true,
-                    "message": `Get User Detail By ID Successfully`,
-                    "data": result
-                }
-            );
+            ReturnResponseUtil.returnResponse(res, 200, true, 'Get User Detail By ID Successfully', result);
         }
         else {
-            res.status(404).json(
-                {
-                    "isSuccess": false,
-                    "message": `No records found at the moment.`,
-                }
-            );
+            ReturnResponseUtil.returnResponse(res, 404, false, 'No records found at the moment');
         }
     }
 
@@ -121,24 +85,13 @@ class UserDetailController {
 
             var id = req.params.id;
 
-            var result = await userDetailModel.UpdateUserDetailByID(fullname, dateOfBirth, gender, citizenIdentification_ID, Ward_ID, addressDetail, email, phoneNumber, id);
+            var result = await UserDetailRepository.UpdateUserDetailByID(fullname, dateOfBirth, gender, citizenIdentification_ID, Ward_ID, addressDetail, email, phoneNumber, id);
             if (result) {
-                res.status(200).json(
-                    {
-                        "isSuccess": true,
-                        "message": `User Detail Updated Successfully`
-                    }
-                );
+                ReturnResponseUtil.returnResponse(res, 200, true, 'User Detail Updated Successfully');
             }
         } catch (error) {
-            console.log(error);
-
-            res.status(400).json(
-                {
-                    "isSuccess": false,
-                    "message": `An error has occurred, please try again.`,
-                }
-            );
+            // console.log(error);
+            ReturnResponseUtil.returnResponse(res, 400, false, 'An error has occurred, please try again');
         }
     }
 
@@ -150,22 +103,12 @@ class UserDetailController {
         try {
             var id = req.params.id;
 
-            var result = await userDetailModel.DeleteUserDetailByID(id);
+            var result = await UserDetailRepository.DeleteUserDetailByID(id);
             if (result) {
-                res.status(200).json(
-                    {
-                        "isSuccess": true,
-                        "message": `User detail deleted successfully`,
-                    }
-                );
+                ReturnResponseUtil.returnResponse(res, 200, true, 'User detail deleted successfully');
             }
         } catch (error) {
-            res.status(400).json(
-                {
-                    "isSuccess": false,
-                    "message": `An error has occurred, please try again.`,
-                }
-            );
+            ReturnResponseUtil.returnResponse(res, 400, false, 'An error has occurred, please try again');
         }
     }
 

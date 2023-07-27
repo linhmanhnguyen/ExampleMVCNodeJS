@@ -5,11 +5,12 @@ const { farmSchema } = require('../validations/farmSchema');
 const UserAccountModel = require('../models/UserAccountModel');
 const UserDetailModel = require('../models/UserDetailModel');
 const FarmRepository = require('../repositories/FarmRepository');
-const HistoryCageEntryModel = require('../models/HistoryCageEntryModel');
+const HistoryCageEntryRepository = require('../repositories/HistoryCageEntryRepository');
 const { insertEntryCage } = require('../validations/historyEntryCage');
 const CageModel = require('../models/CageModel');
 const AnimalRepository = require('../repositories/AnimalRepository');
 const EventRepository = require('../repositories/EventRepository');
+const ReturnResponseUtil = require('../utils/returnResponse');
 
 const currentTime = moment().tz('Asia/Ho_Chi_Minh').format('YYYY-MM-DD_HH-mm-ss');
 
@@ -40,22 +41,11 @@ class FarmController {
 
                 // Dựa theo tài khoản đang thực hiện, gán thông tin tài khoản đó vào trong farm vừa tạo
                 await userAccountModel.InsertUserAccountToFarm(userAccount_ID, farm_ID, createDate, status);
+                ReturnResponseUtil.returnResponse(res, 200, true, 'Created Farm successfully', farm_ID);
 
-                res.status(200).json(
-                    {
-                        "isSuccess": true,
-                        "message": `Created Farm successfully`,
-                        "data": farm_ID
-                    }
-                );
             }
         } catch (error) {
-            res.status(400).json(
-                {
-                    "isSuccess": false,
-                    "message": `An error has occurred, please try again.`,
-                }
-            );
+            ReturnResponseUtil.returnResponse(res, 400, false, 'An error has occurred, please try again');
         }
 
     }
@@ -69,21 +59,10 @@ class FarmController {
 
         var result = await FarmRepository.GetAllFarms(useraccount_id);
         if (result == null) {
-            res.status(404).json(
-                {
-                    "isSuccess": false,
-                    "message": `No records found at the moment.`,
-                }
-            );
+            ReturnResponseUtil.returnResponse(res, 404, false, 'No records found at the moment');
         }
         else {
-            res.json(
-                {
-                    "isSuccess": true,
-                    "message": `Get All Animal Types Successfully`,
-                    "data": result
-                }
-            );
+            ReturnResponseUtil.returnResponse(res, 200, true, 'Get All Animal Types Successfully', result);
         }
     }
 
@@ -94,21 +73,10 @@ class FarmController {
         var id = req.params.id;
         var result = await FarmRepository.GetFarmByID(id);
         if (result != null) {
-            res.json(
-                {
-                    "isSuccess": true,
-                    "message": `Get Farm Successfully`,
-                    "data": result
-                }
-            );
+            ReturnResponseUtil.returnResponse(res, 200, true, 'Get farm successfully', result);
         }
         else {
-            res.status(404).json(
-                {
-                    "isSuccess": false,
-                    "message": `No records found at the moment.`,
-                }
-            );
+            ReturnResponseUtil.returnResponse(res, 404, false, 'No records found at the moment');
         }
     }
 
@@ -131,20 +99,10 @@ class FarmController {
             var result = await FarmRepository.UpdateFarmByID(farmName, status, animalType_ID, animalDensity, ward_ID, addressDetail, lastModified, id);
 
             if (result) {
-                res.status(200).json(
-                    {
-                        "isSuccess": true,
-                        "message": `Farm Updated Successfully`
-                    }
-                );
+                ReturnResponseUtil.returnResponse(res, 200, true, 'Farm Updated Successfully');
             }
         } catch (error) {
-            res.status(400).json(
-                {
-                    "isSuccess": false,
-                    "message": `An error has occurred, please try again.`,
-                }
-            );
+            ReturnResponseUtil.returnResponse(res, 400, false, 'An error has occurred, please try again');
         }
     }
 
@@ -157,20 +115,10 @@ class FarmController {
 
             var result = await FarmRepository.DeleteFarm(id);
             if (result) {
-                res.status(200).json(
-                    {
-                        "isSuccess": true,
-                        "message": `Deleted Farm successfully`,
-                    }
-                );
+                ReturnResponseUtil.returnResponse(res, 200, true, 'Deleted Farm successfully');
             }
         } catch (error) {
-            res.status(400).json(
-                {
-                    "isSuccess": false,
-                    "message": `An error has occurred, please try again.`,
-                }
-            );
+            ReturnResponseUtil.returnResponse(res, 400, false, 'An error has occurred, please try again');
         }
     }
 
@@ -209,23 +157,11 @@ class FarmController {
                     numberSuccess = ++numberSuccess;
                 }
             }
-
-            res.status(200).json(
-                {
-                    "isSuccess": true,
-                    "message": `Insert ${numberSuccess} users To Farm Successfully`,
-                    "data": users
-                }
-            )
+            ReturnResponseUtil.returnResponse(res, 200, true, `Insert ${numberSuccess} users To Farm Successfully`, users);
 
         } catch (error) {
-            console.log(error);
-            res.status(400).json(
-                {
-                    "isSuccess": false,
-                    "message": `An error has occurred, please try again.`,
-                }
-            );
+            // console.log(error);
+            ReturnResponseUtil.returnResponse(res, 400, false, 'An error has occurred, please try again');
         }
     }
 
@@ -238,21 +174,10 @@ class FarmController {
 
         var result = await FarmRepository.ReportAnimalSummary(farm_id);
         if (result != null) {
-            res.json(
-                {
-                    "isSuccess": true,
-                    "message": `Get Report Animal Sumary Successfully`,
-                    "data": result
-                }
-            );
+            ReturnResponseUtil.returnResponse(res, 200, true, 'Get Report Animal Sumary Successfully', result);
         }
         else {
-            res.status(404).json(
-                {
-                    "isSuccess": false,
-                    "message": `No records found at the moment.`,
-                }
-            );
+            ReturnResponseUtil.returnResponse(res, 404, false, 'No records found at the moment');
         }
     }
 
@@ -286,8 +211,8 @@ class FarmController {
                 const end_date = null;
                 const newEventId = await EventRepository.CreateEvent(start_date, end_date, 1, farm_id);
                 if (newEventId) {
-                    // Gọi hàm InsertHistory từ model HistoryCageEntryModel để chèn thông tin lịch sử vào database
-                    var result = await HistoryCageEntryModel.InsertHistory(user_id, farm_id, typeAnimal_id, animalQuantity, weightOfAnimal, unitPrice, dateAction, supplier_id, newEventId.insertId);
+                    // Gọi hàm InsertHistory từ model HistoryCageEntryRepository để chèn thông tin lịch sử vào database
+                    var result = await HistoryCageEntryRepository.InsertHistory(user_id, farm_id, typeAnimal_id, animalQuantity, weightOfAnimal, unitPrice, dateAction, supplier_id, newEventId.insertId);
                     if (result) {
                         // Nếu chèn thành công, tiến hành chia số lượng động vật đang có vào các chuồng
                         // Bước này nhằm giả định động vật được phân bố đều vào số chuồng có sẵn
@@ -306,15 +231,12 @@ class FarmController {
                         }
 
                         // Trả về phản hồi thành công nếu mọi thứ đều thành công
-                        res.status(200).json({
-                            "isSuccess": true,
-                            "message": `Inserted history entry cage successfully.`,
-                        });
+                        ReturnResponseUtil.returnResponse(res, 200, true, 'Inserted history entry cage successfully');
                     }
                 }
             }
             else {
-                var result = await HistoryCageEntryModel.InsertHistory(user_id, farm_id, typeAnimal_id, animalQuantity, weightOfAnimal, unitPrice, dateAction, supplier_id, events[0].id);
+                var result = await HistoryCageEntryRepository.InsertHistory(user_id, farm_id, typeAnimal_id, animalQuantity, weightOfAnimal, unitPrice, dateAction, supplier_id, events[0].id);
                 if (result) {
                     // Nếu chèn thành công, tiến hành chia số lượng động vật đang có vào các chuồng
                     // Bước này nhằm giả định động vật được phân bố đều vào số chuồng có sẵn
@@ -333,19 +255,14 @@ class FarmController {
                     }
 
                     // Trả về phản hồi thành công nếu mọi thứ đều thành công
-                    res.status(200).json({
-                        "isSuccess": true,
-                        "message": `Inserted history entry cage successfully.`,
-                    });
+                    ReturnResponseUtil.returnResponse(res, 200, true, 'Inserted history entry cage successfully');
                 }
             }
         } catch (error) {
             // Nếu có lỗi xảy ra, ghi log và trả về phản hồi lỗi
             // console.log(error);
-            res.status(400).json({
-                "isSuccess": false,
-                "message": `An error has occurred, please try again.`,
-            });
+            ReturnResponseUtil.returnResponse(res, 400, false, 'An error has occurred, please try again');
+
         }
     }
 
@@ -359,21 +276,10 @@ class FarmController {
         const result = await FarmRepository.ReportEntryCage(farm_id, event_id);
 
         if (result) {
-            res.status(200).json(
-                {
-                    "isSuccess": true,
-                    "message": `Get report entry cage successfully`,
-                    "data": result
-                }
-            )
+            ReturnResponseUtil.returnResponse(res, 200, true, 'Get report entry cage successfully', result);
         }
         else {
-            res.status(400).json(
-                {
-                    "isSuccess": false,
-                    "message": `An error has occurred, please try again.`,
-                }
-            );
+            ReturnResponseUtil.returnResponse(res, 400, true, 'An error has occurred, please try again');
         }
     }
 

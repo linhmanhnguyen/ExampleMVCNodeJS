@@ -1,6 +1,7 @@
 const farmModel = require('../models/FarmModel');
 const cageModel = require('../models/CageModel');
 const { cageSchema } = require('../validations/cageSchema');
+const ReturnResponseUtil = require('../utils/returnResponse');
 
 class CageController {
 
@@ -19,20 +20,10 @@ class CageController {
                 await cageModel.InsertCage(cageName, farm_ID, location);
             }
 
-            res.status(200).json(
-                {
-                    "isSuccess": true,
-                    "message": `Created ${numberOfCages} Cages Successfully`,
-                }
-            );
+            ReturnResponseUtil.returnResponse(res, 200, true, `Created ${numberOfCages} cages successfully`);
 
         } catch (error) {
-            res.status(400).json(
-                {
-                    "isSuccess": false,
-                    "message": `An error has occurred, please try again.`,
-                }
-            );
+            ReturnResponseUtil.returnResponse(res, 400, false, 'An error has occurred, please try again');
         }
     }
 
@@ -52,23 +43,12 @@ class CageController {
 
             var result = await cageModel.InsertCage(cageName, farm_ID, location, manager_ID);
             if (result) {
-                res.status(200).json(
-                    {
-                        "isSuccess": true,
-                        "message": `Created Cage Successfully`,
-                        "data": result.insertId
-                    }
-                );
+                ReturnResponseUtil.returnResponse(res, 200, true, 'Created cage successfully');
             }
 
         } catch (error) {
-            console.log(error);
-            res.status(400).json(
-                {
-                    "isSuccess": false,
-                    "message": `An error has occurred, please try again.`,
-                }
-            );
+            // console.log(error);
+            ReturnResponseUtil.returnResponse(res, 400, false, 'An error has occurred, please try again');
         }
     }
 
@@ -80,21 +60,10 @@ class CageController {
 
         var result = await cageModel.GetAllCagesInFarm(farm_ID);
         if (result.length > 0) {
-            res.status(200).json(
-                {
-                    "isSuccess": true,
-                    "message": `Get All Cages In Farm Successfully`,
-                    "data": result
-                }
-            );
+            ReturnResponseUtil.returnResponse(res, 200, true, `Get all cages in farm successfully`, result);
         }
         else {
-            res.status(404).json(
-                {
-                    "isSuccess": false,
-                    "message": `No records found at the moment.`,
-                }
-            );
+            ReturnResponseUtil.returnResponse(res, 404, false, `No records found at the moment`);
         }
     }
 
@@ -107,21 +76,10 @@ class CageController {
 
         var result = await cageModel.GetCageByID(cage_ID, farm_ID);
         if (result.length > 0) {
-            res.status(200).json(
-                {
-                    "isSuccess": true,
-                    "message": `Get Cage In Farm Successfully`,
-                    "data": result
-                }
-            );
+            ReturnResponseUtil.returnResponse(res, 200, true, `Get Cage In Farm Successfully`, result);
         }
         else {
-            res.status(404).json(
-                {
-                    "isSuccess": false,
-                    "message": `No records found at the moment.`,
-                }
-            );
+            ReturnResponseUtil.returnResponse(res, 404, false, `No records found at the moment`);
         }
     }
 
@@ -143,21 +101,11 @@ class CageController {
 
             var result = await cageModel.UpdateCageByID(cageName, location, manager_ID, cage_ID, farm_ID);
             if (result) {
-                res.status(200).json(
-                    {
-                        "isSuccess": true,
-                        "message": `Updated Cage Successfully`
-                    }
-                );
+                ReturnResponseUtil.returnResponse(res, 200, true, `Updated Cage Successfully`);
             }
 
         } catch (error) {
-            res.status(400).json(
-                {
-                    "isSuccess": false,
-                    "message": `An error has occurred, please try again.`,
-                }
-            );
+            ReturnResponseUtil.returnResponse(res, 400, false, `An error has occurred, please try again`);
         }
 
     }
@@ -171,12 +119,7 @@ class CageController {
 
         var result = await cageModel.DeleteCageByID(cage_ID, farm_ID);
         if (result) {
-            res.status(200).json(
-                {
-                    "isSuccess": true,
-                    "message": `Deleted Cage successfully`
-                }
-            );
+            ReturnResponseUtil.returnResponse(res, 200, true, 'Deleted Cage successfully');
         }
     }
 

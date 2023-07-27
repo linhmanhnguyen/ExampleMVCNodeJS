@@ -1,7 +1,7 @@
 const animalModel = require('../models/AnimalModel');
-const historyAnimalTransferCageModel = require('../models/HistoryAnimalTransferCageModel');
-const historyAnimalDeath = require('../models/HistoryAnimalDeathModel');
-const historyAnimalWeight = require('../models/HistoryAnimalWeightModel');
+const HistoryAnimalTransferCageRepository = require('../repositories/HistoryAnimalTransferCageRepository');
+const HistoryAnimalDeathRepository = require('../repositories/HistoryAnimalDeathRepository');
+const HistoryAnimalWeightRepository = require('../repositories/HistoryAnimalWeightRepository');
 
 const { animalSchema, updateAnimalSchema } = require('../validations/animalSchema');
 const { historyAnimalTransferCageSchema } = require('../validations/historyAnimalTransferCageSchema');
@@ -9,6 +9,7 @@ const { historyAnimalDeathSchema } = require('../validations/historyAnimalDeathS
 const { historyAnimalWeightSchema } = require('../validations/historyAnimalWeightSchema');
 
 const moment = require('moment-timezone');
+const ReturnResponseUtil = require('../utils/returnResponse');
 const currentTime = moment().tz('Asia/Ho_Chi_Minh').format('YYYY-MM-DD_HH-mm-ss');
 
 class AnimalController {
@@ -29,23 +30,12 @@ class AnimalController {
 
             var result = await animalModel.InsertAnimal(cage_ID, type, gender_Animal, weight, entry_Date, status);
             if (result) {
-                res.status(200).json(
-                    {
-                        "isSuccess": true,
-                        "message": `Create Animal Successfully`,
-                        "data": result.insertId
-                    }
-                );
+                ReturnResponseUtil.returnResponse(res, 200, true, 'Create Animal Successfully', result.insertId);
             }
 
         } catch (error) {
-            console.log(error);
-            res.status(400).json(
-                {
-                    "isSuccess": false,
-                    "message": `An error has occurred, please try again.`,
-                }
-            );
+            // console.log(error);
+            ReturnResponseUtil.returnResponse(res, 400, false, 'An error has occurred, please try again');
         }
     }
 
@@ -58,21 +48,10 @@ class AnimalController {
 
         var result = await animalModel.GetAllAnimalsInCage(cage_ID);
         if (result.length > 0) {
-            res.json(
-                {
-                    "isSuccess": true,
-                    "message": `Get All Animal Types Successfully`,
-                    "data": result
-                }
-            );
+            ReturnResponseUtil.returnResponse(res, 200, true, 'Get all animal in this cage successfully', result);
         }
         else {
-            res.status(404).json(
-                {
-                    "isSuccess": false,
-                    "message": `No records found at the moment.`,
-                }
-            );
+            ReturnResponseUtil.returnResponse(res, 404, false, 'No records found at the moment');
         }
     }
 
@@ -84,21 +63,10 @@ class AnimalController {
 
         var result = await animalModel.GetAnimalByID(animal_id);
         if (result.length > 0) {
-            res.json(
-                {
-                    "isSuccess": true,
-                    "message": `Get Animal By ID Successfully`,
-                    "data": result
-                }
-            );
+            ReturnResponseUtil.returnResponse(res, 200, true, 'Get Animal By ID Successfully');
         }
         else {
-            res.status(404).json(
-                {
-                    "isSuccess": false,
-                    "message": `No records found at the moment.`,
-                }
-            );
+            ReturnResponseUtil.returnResponse(res, 404, false, 'No records found at the moment');
         }
     }
 
@@ -118,22 +86,10 @@ class AnimalController {
 
             var result = await animalModel.UpdateAnimalByID(type, gender_Animal, weight, entry_Date, animal_id);
             if (result) {
-                res.status(200).json(
-                    {
-                        "isSuccess": true,
-                        "message": `Updated Animal Successfully`
-                    }
-                );
+                ReturnResponseUtil.returnResponse(res, 200, true, 'Updated Animal Successfully');
             }
         } catch (error) {
-
-            res.status(400).json(
-                {
-                    "isSuccess": false,
-                    "message": `An error has occurred, please try again.`,
-                    "error": error
-                }
-            );
+            ReturnResponseUtil.returnResponse(res, 400, false, 'An error has occurred, please try again');
         }
     }
 
@@ -146,20 +102,10 @@ class AnimalController {
 
             var result = await animalModel.DeleteAnimalByID(animal_id);
             if (result) {
-                res.status(200).json(
-                    {
-                        "isSuccess": true,
-                        "message": `Deleted animal successfully`,
-                    }
-                );
+                ReturnResponseUtil.returnResponse(res, 200, true, 'Deleted animal successfully');
             }
         } catch (error) {
-            res.status(400).json(
-                {
-                    "isSuccess": false,
-                    "message": `An error has occurred, please try again.`,
-                }
-            );
+            ReturnResponseUtil.returnResponse(res, 400, false, 'An error has occurred, please try again');
         }
     }
 
@@ -183,34 +129,19 @@ class AnimalController {
 
                 var result = await animalModel.TransferCageForAnimal(transferCage_ID, animal_id);
                 if (result) {
-                    var result_history = await historyAnimalTransferCageModel.CreateHistory(animal_id, originalCage_ID, transferCage_ID, Employee_ID, content, date_action);
+                    var result_history = await HistoryAnimalTransferCageRepository.CreateHistory(animal_id, originalCage_ID, transferCage_ID, Employee_ID, content, date_action);
                     if (result_history) {
-                        res.status(200).json(
-                            {
-                                "isSuccess": true,
-                                "message": `Transfer Cage For Animal Successfully`,
-                            }
-                        );
+                        ReturnResponseUtil.returnResponse(res, 200, true, 'Transfer Cage For Animal Successfully');
                     }
                 }
             }
             else {
-                res.status(404).json(
-                    {
-                        "isSuccess": false,
-                        "message": `No records found at the moment.`,
-                    }
-                );
+                ReturnResponseUtil.returnResponse(res, 404, false, 'No records found at the moment');
             }
 
         } catch (error) {
-            console.log(error);
-            res.status(400).json(
-                {
-                    "isSuccess": false,
-                    "message": `An error has occurred, please try again.`,
-                }
-            );
+            // console.log(error);
+            ReturnResponseUtil.returnResponse(res, 400, false, 'An error has occurred, please try again');
         }
     }
 
@@ -220,23 +151,12 @@ class AnimalController {
     static async GetHistoiesTransferCageOfAnimal(req, res) {
         var animal_id = req.params.id;
 
-        var result = await historyAnimalTransferCageModel.GetHistoryByAnimalID(animal_id);
+        var result = await HistoryAnimalTransferCageRepository.GetHistoryByAnimalID(animal_id);
         if (result.length > 0) {
-            res.json(
-                {
-                    "isSuccess": true,
-                    "message": `Get History Transfer Cage Of Animal Successfully`,
-                    "data": result
-                }
-            );
+            ReturnResponseUtil.returnResponse(res, 200, false, 'Get History Transfer Cage Of Animal Successfully', result);
         }
         else {
-            res.status(404).json(
-                {
-                    "isSuccess": false,
-                    "message": `No records found at the moment.`,
-                }
-            );
+            ReturnResponseUtil.returnResponse(res, 404, false, 'No records found at the moment');
         }
     }
 
@@ -247,23 +167,12 @@ class AnimalController {
         var animal_id = req.params.id;
         var history_id = req.params.history_id;
 
-        var result = await historyAnimalTransferCageModel.GetHistoryByID(history_id, animal_id);
+        var result = await HistoryAnimalTransferCageRepository.GetHistoryByID(history_id, animal_id);
         if (result.length > 0) {
-            res.json(
-                {
-                    "isSuccess": true,
-                    "message": `Get History Transfer Cage By ID Successfully`,
-                    "data": result
-                }
-            );
+            ReturnResponseUtil.returnResponse(res, 200, true, 'Get History Transfer Cage By ID Successfully', result);
         }
         else {
-            res.status(404).json(
-                {
-                    "isSuccess": false,
-                    "message": `No records found at the moment.`,
-                }
-            );
+            ReturnResponseUtil.returnResponse(res, 404, false, 'No records found at the moment');
         }
     }
 
@@ -275,22 +184,12 @@ class AnimalController {
             var animal_id = req.params.id;
             var history_id = req.params.history_id;
 
-            var result = await historyAnimalTransferCageModel.DeleteHistoryByID(history_id, animal_id);
+            var result = await HistoryAnimalTransferCageRepository.DeleteHistoryByID(history_id, animal_id);
             if (result) {
-                res.status(200).json(
-                    {
-                        "isSuccess": true,
-                        "message": `Deleted history successfully`,
-                    }
-                );
+                ReturnResponseUtil.returnResponse(res, 200, true, 'Deleted history successfully');
             }
         } catch (error) {
-            res.status(400).json(
-                {
-                    "isSuccess": false,
-                    "message": `An error has occurred, please try again.`,
-                }
-            );
+            ReturnResponseUtil.returnResponse(res, 400, false, 'An error has occurred, please try again');
         }
     }
 
@@ -301,22 +200,12 @@ class AnimalController {
         try {
             var animal_id = req.params.id;
 
-            var result = await historyAnimalTransferCageModel.DeleteHistoriesOfAnimal(animal_id);
+            var result = await HistoryAnimalTransferCageRepository.DeleteHistoriesOfAnimal(animal_id);
             if (result) {
-                res.status(200).json(
-                    {
-                        "isSuccess": true,
-                        "message": `Deleted histories animal transfer cage successfully`,
-                    }
-                );
+                ReturnResponseUtil.returnResponse(res, 200, true, 'Deleted histories animal transfer cage successfully');
             }
         } catch (error) {
-            res.status(400).json(
-                {
-                    "isSuccess": false,
-                    "message": `An error has occurred, please try again.`,
-                }
-            );
+            ReturnResponseUtil.returnResponse(res, 400, false, 'An error has occurred, please try again');
         }
     }
 
@@ -338,24 +227,14 @@ class AnimalController {
 
             var result = await animalModel.UpdateStatusOfAnimal(status, animal_id);
             if (result) {
-                var result_history = historyAnimalDeath.InsertHistory(animal_id, employee_id, type_Cause, reason, date_occursion);
+                var result_history = HistoryAnimalDeathRepository.InsertHistory(animal_id, employee_id, type_Cause, reason, date_occursion);
                 if (result_history) {
-                    res.status(200).json(
-                        {
-                            "isSuccess": true,
-                            "message": `Inserted history animal death successfully.`,
-                        }
-                    )
+                    ReturnResponseUtil.returnResponse(res, 200, true, 'Inserted history animal death successfully');
                 }
             }
 
         } catch (error) {
-            res.status(400).json(
-                {
-                    "isSuccess": false,
-                    "message": `An error has occurred, please try again.`,
-                }
-            );
+            ReturnResponseUtil.returnResponse(res, 400, false, 'An error has occurred, please try again');
         }
     }
 
@@ -365,23 +244,12 @@ class AnimalController {
     static async GetHistoryAnimalDeath(req, res) {
         var animal_id = req.params.id;
 
-        var result = await historyAnimalDeath.GetHistoryOfAnimal(animal_id);
+        var result = await HistoryAnimalDeathRepository.GetHistoryOfAnimal(animal_id);
         if (result.length > 0) {
-            res.status(200).json(
-                {
-                    "isSuccess": true,
-                    "message": `Get History Animal Death Successfully`,
-                    "data": result
-                }
-            );
+            ReturnResponseUtil.returnResponse(res, 200, true, 'Get History Animal Death Successfully', result);
         }
         else {
-            res.status(404).json(
-                {
-                    "isSuccess": false,
-                    "message": `No records found at the moment.`,
-                }
-            );
+            ReturnResponseUtil.returnResponse(res, 404, false, 'No records found at the moment');
         }
     }
 
@@ -391,23 +259,13 @@ class AnimalController {
     static async DeleteHistoryAnimalDeath(req, res) {
         try {
             var animal_id = req.params.id;
-            var result = await historyAnimalDeath.DeleteHistory(animal_id);
+            var result = await HistoryAnimalDeathRepository.DeleteHistory(animal_id);
 
             if (result) {
-                res.status(200).json(
-                    {
-                        "isSuccess": true,
-                        "message": `Deleted History Animal Death Successfully.`,
-                    }
-                );
+                ReturnResponseUtil.returnResponse(res, 200, true, 'Deleted History Animal Death Successfully');
             }
         } catch (error) {
-            res.status(400).json(
-                {
-                    "isSuccess": false,
-                    "message": `An error has occurred, please try again.`,
-                }
-            );
+            ReturnResponseUtil.returnResponse(res, 400, false, 'An error has occurred, please try again');
         }
     }
 
@@ -426,23 +284,12 @@ class AnimalController {
             var content = req.body.content;
             var date_action = currentTime;
 
-            var result = await historyAnimalWeight.InsertHistory(type_action, animal_id, employee_id, weight, content, date_action);
+            var result = await HistoryAnimalWeightRepository.InsertHistory(type_action, animal_id, employee_id, weight, content, date_action);
             if (result) {
-                res.status(200).json(
-                    {
-                        "isSuccess": true,
-                        "message": `Inserted history animal weight successfully.`,
-                    }
-                );
+                ReturnResponseUtil.returnResponse(res, 200, true, 'Inserted history animal weight successfully');
             }
-
         } catch (error) {
-            res.status(400).json(
-                {
-                    "isSuccess": false,
-                    "message": `An error has occurred, please try again.`,
-                }
-            );
+            ReturnResponseUtil.returnResponse(res, 400, true, 'An error has occurred, please try again');
         }
     }
 
@@ -452,23 +299,12 @@ class AnimalController {
     static async GetHistoriesAnimalWeight(req, res) {
         var animal_id = req.params.id;
 
-        var result = await historyAnimalWeight.GetHistoriesOfAnimal(animal_id);
+        var result = await HistoryAnimalWeightRepository.GetHistoriesOfAnimal(animal_id);
         if (result.length > 0) {
-            res.status(200).json(
-                {
-                    "isSuccess": true,
-                    "message": `Get History Animal Weight Successfully`,
-                    "data": result
-                }
-            );
+            ReturnResponseUtil.returnResponse(res, 200, true, 'Get histories animal weight successfully');
         }
         else {
-            res.status(404).json(
-                {
-                    "isSuccess": false,
-                    "message": `No records found at the moment.`,
-                }
-            );
+            ReturnResponseUtil.returnResponse(res, 404, false, 'No records found at the moment');
         }
     }
 
@@ -479,23 +315,12 @@ class AnimalController {
         var animal_id = req.params.id;
         var history_id = req.params.history_id;
 
-        var result = await historyAnimalWeight.GetHistoryOfAnimal(history_id, animal_id);
+        var result = await HistoryAnimalWeightRepository.GetHistoryOfAnimal(history_id, animal_id);
         if (result.length > 0) {
-            res.status(200).json(
-                {
-                    "isSuccess": true,
-                    "message": `Get History Animal Weight Successfully`,
-                    "data": result
-                }
-            );
+            ReturnResponseUtil.returnResponse(res, 200, true, 'Get history animal weight successfully', result);
         }
         else {
-            res.status(404).json(
-                {
-                    "isSuccess": false,
-                    "message": `No records found at the moment.`,
-                }
-            );
+            ReturnResponseUtil.returnResponse(res, 404, false, 'No records found at the moment');
         }
     }
 
@@ -506,22 +331,12 @@ class AnimalController {
         try {
             var animal_id = req.params.id;
             var history_id = req.params.history_id;
-            var result = await historyAnimalWeight.DeleteHistoryOfAnimal(history_id, animal_id);
+            var result = await HistoryAnimalWeightRepository.DeleteHistoryOfAnimal(history_id, animal_id);
             if (result) {
-                res.status(200).json(
-                    {
-                        "isSuccess": true,
-                        "message": `Deleted history animal weight successfully.`,
-                    }
-                );
+                ReturnResponseUtil.returnResponse(res, 200, true, 'Deleted history animal weight successfully');
             }
         } catch (error) {
-            res.status(400).json(
-                {
-                    "isSuccess": false,
-                    "message": `An error has occurred, please try again.`,
-                }
-            );
+            ReturnResponseUtil.returnResponse(res, 400, false, 'An error has occurred, please try again');
         }
     }
 
@@ -532,22 +347,12 @@ class AnimalController {
         try {
             var animal_id = req.params.id;
 
-            var result = await historyAnimalWeight.DeleteHistoriesOfAnimal(animal_id);
+            var result = await HistoryAnimalWeightRepository.DeleteHistoriesOfAnimal(animal_id);
             if (result) {
-                res.status(200).json(
-                    {
-                        "isSuccess": true,
-                        "message": `Deleted history animal weight successfully.`,
-                    }
-                );
+                ReturnResponseUtil.returnResponse(res, 200, true, 'Deleted history animal weight successfully');
             }
         } catch (error) {
-            res.status(400).json(
-                {
-                    "isSuccess": false,
-                    "message": `An error has occurred, please try again.`,
-                }
-            );
+            ReturnResponseUtil.returnResponse(res, 400, false, 'An error has occurred, please try again');
         }
     }
 

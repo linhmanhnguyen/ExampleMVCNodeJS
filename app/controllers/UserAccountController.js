@@ -1,8 +1,9 @@
-const userAccountModel = require('../models/UserAccountModel');
+const UserAccountRepository = require('../repositories/UserAccountRepository');
 const moment = require('moment-timezone');
 const { userAccountSchema, updateUserAccountSchema } = require('../validations/userAccountSchema');
-const UserAccountModel = require('../models/UserAccountModel');
+
 const jwt = require('jsonwebtoken');
+const ReturnResponseUtil = require('../utils/returnResponse');
 const currentTime = moment().tz('Asia/Ho_Chi_Minh').format('YYYY-MM-DD_HH-mm-ss');
 
 class UserAccountController {
@@ -21,58 +22,31 @@ class UserAccountController {
             var refreshtoken = generateRefreshToken(username);
             var role_ID = req.body.role_ID;
 
-            var searchUserAccount = await UserAccountModel.SearchUserAccountByUsername(username);
+            var searchUserAccount = await UserAccountRepository.SearchUserAccountByUsername(username);
             if (searchUserAccount.length > 0) {
-                res.status(400).json(
-                    {
-                        "isSuccess": false,
-                        "message": `Username existed`,
-                    }
-                );
+                ReturnResponseUtil.returnResponse(res, 400, false, 'Username existed');
             }
             else {
-                var result = await userAccountModel.InsertUserAccount(username, password, createDate, userDetail_ID, refreshtoken)
+                var result = await UserAccountRepository.InsertUserAccount(username, password, createDate, userDetail_ID, refreshtoken)
                 if (result) {
                     var userAccount_ID = result.insertId;
 
-                    var resultInsertRole = await userAccountModel.InsertRoleForUserAccount(userAccount_ID, role_ID, createDate, status);
+                    var resultInsertRole = await UserAccountRepository.InsertRoleForUserAccount(userAccount_ID, role_ID, createDate, status);
                     if (resultInsertRole) {
-                        res.status(200).json(
-                            {
-                                "isSuccess": true,
-                                "message": `Create User Account Successfully`,
-                                "data": userAccount_ID
-                            }
-                        );
+                        ReturnResponseUtil.returnResponse(res, 200, true, 'Create User Account Successfully', userAccount_ID);
                     }
                     else {
-                        res.status(400).json(
-                            {
-                                "isSuccess": false,
-                                "message": `An error has occurred, please try again.`,
-                            }
-                        );
+                        ReturnResponseUtil.returnResponse(res, 400, false, 'An error has occurred, please try again');
                     }
                 }
                 else {
-                    res.status(400).json(
-                        {
-                            "isSuccess": false,
-                            "message": `An error has occurred, please try again.`,
-                        }
-                    );
+                    ReturnResponseUtil.returnResponse(res, 400, false, 'An error has occurred, please try again');
                 }
             }
 
         } catch (error) {
-            res.status(400).json(
-                {
-                    "isSuccess": false,
-                    "message": `An error has occurred, please try again.`,
-                }
-            );
-
-            console.log(error);
+            // console.log(error);
+            ReturnResponseUtil.returnResponse(res, 400, false, 'An error has occurred, please try again');
         }
     }
 
@@ -80,23 +54,12 @@ class UserAccountController {
      * Function Controller: Lấy toàn bộ danh sách tài khoản trong hệ thống
      */
     static async GetAllUserAccounts(req, res) {
-        var result = await userAccountModel.GetAllUserAccounts();
+        var result = await UserAccountRepository.GetAllUserAccounts();
         if (result.length > 0) {
-            res.json(
-                {
-                    "isSuccess": true,
-                    "message": `Get All User Accounts Successfully`,
-                    "data": result
-                }
-            );
+            ReturnResponseUtil.returnResponse(res, 200, true, 'Get All User Accounts Successfully', result);
         }
         else {
-            res.status(404).json(
-                {
-                    "isSuccess": false,
-                    "message": `No records found at the moment.`,
-                }
-            );
+            ReturnResponseUtil.returnResponse(res, 404, false, 'No records found at the moment');
         }
     }
 
@@ -106,23 +69,12 @@ class UserAccountController {
     static async GetUserAccountByID(req, res) {
         var id = req.params.id;
 
-        var result = await userAccountModel.GetUserAccountByID(id);
+        var result = await UserAccountRepository.GetUserAccountByID(id);
         if (result.length > 0) {
-            res.json(
-                {
-                    "isSuccess": true,
-                    "message": `Get User Account By ID Successfully`,
-                    "data": result
-                }
-            );
+            ReturnResponseUtil.returnResponse(res, 200, true, 'Get User Account By ID Successfully');
         }
         else {
-            res.status(404).json(
-                {
-                    "isSuccess": false,
-                    "message": `No records found at the moment.`,
-                }
-            );
+            ReturnResponseUtil.returnResponse(res, 404, false, 'No records found at the moment');
         }
     }
 
@@ -137,22 +89,12 @@ class UserAccountController {
 
             var password = req.body.password;
 
-            var result = await userAccountModel.UpdateUserAccountById(password, id);
+            var result = await UserAccountRepository.UpdateUserAccountById(password, id);
             if (result) {
-                res.status(200).json(
-                    {
-                        "isSuccess": true,
-                        "message": `Updated User Account Successfully`
-                    }
-                );
+                ReturnResponseUtil.returnResponse(res, 200, true, 'Updated User Account Successfully');
             }
         } catch (error) {
-            res.status(400).json(
-                {
-                    "isSuccess": false,
-                    "message": `An error has occurred, please try again.`,
-                }
-            );
+            ReturnResponseUtil.returnResponse(res, 400, false, 'An error has occurred, please try again');
         }
     }
 
@@ -163,23 +105,12 @@ class UserAccountController {
         try {
             var id = req.params.id;
 
-            var result = await userAccountModel.DeleteUserAccountByID(id);
+            var result = await UserAccountRepository.DeleteUserAccountByID(id);
             if (result) {
-                res.status(200).send("User Account deleted successfully");
-                res.status(200).json(
-                    {
-                        "isSuccess": true,
-                        "message": `Deleted User Account successfully`,
-                    }
-                );
+                ReturnResponseUtil.returnResponse(res, 200, true, 'Deleted User Account successfully');
             }
         } catch (error) {
-            res.status(400).json(
-                {
-                    "isSuccess": false,
-                    "message": `An error has occurred, please try again.`,
-                }
-            );
+            ReturnResponseUtil.returnResponse(res, 400, false, 'An error has occurred, please try again');
         }
     }
 }

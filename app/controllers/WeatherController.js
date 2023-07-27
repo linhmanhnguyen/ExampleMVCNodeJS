@@ -1,5 +1,6 @@
 const dotenv = require('dotenv');
 const GetWeather = require('../utils/getWeatherData');
+const ReturnResponseUtil = require('../utils/returnResponse');
 
 // Load environment variables from .env file
 dotenv.config();
@@ -14,20 +15,10 @@ class WeatherController {
 
         try {
             const weatherData = await GetWeather.GetWeatherData(latitude, longitude);
-            res.status(200).json(
-                {
-                    "isSuccess": true,
-                    "message": "Get weather successfully.",
-                    "data": weatherData,
-                }
-            );
+            ReturnResponseUtil.returnResponse(res, 200, true, 'Get weather successfully', weatherData);
+
         } catch (error) {
-            res.status(400).json(
-                {
-                    "isSuccess": false,
-                    "message": `An error has occurred, please try again.`,
-                }
-            );
+            ReturnResponseUtil.returnResponse(res, 400, false, 'An error has occurred, please try again');
         }
     }
 
