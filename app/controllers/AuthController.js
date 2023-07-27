@@ -21,23 +21,18 @@ class AuthController {
             if (!checkPassword) {
                 ReturnResponseUtils.returnResponse(res, 422, false, `Password is not correct`);
 
-                // res.status(422).json(
-                //     {
-                //         "isSuccess": false,
-                //         "message": `Password is not correct`,
-                //     }
-                // );
             }
             else {
                 if (user[0].status == true) {
-
                     const token = GenerateAccessToken.GenerateAccessTokenForOwnerWhenLogin(user[0].id, user[0].userDetail_id, user[0].roleName, user[0].farm_id);
-                    res.status(200).json(
-                        {
-                            "isSuccess": true,
-                            "data": token,
-                        }
-                    );
+
+                    ReturnResponseUtils.returnResponse(res, 200, true, 'Login Successful', token);
+                    // res.status(200).json(
+                    //     {
+                    //         "isSuccess": true,
+                    //         "data": token,
+                    //     }
+                    // );
 
                 }
                 else {
