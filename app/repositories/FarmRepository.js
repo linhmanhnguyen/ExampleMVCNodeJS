@@ -117,7 +117,7 @@ class FarmRepository {
     }
 
     /**
-     * Function Repository: Lấy thông tin báo cáo nhập chuồng dựa trên 1 khoảng thời gian
+     * Function Repository: Lấy thông tin báo cáo nhập chuồng dựa trên 1 event
      */
     static async ReportEntryCage(farm_id, event_id) {
         const query = `

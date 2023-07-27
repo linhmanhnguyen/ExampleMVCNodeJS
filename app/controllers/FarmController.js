@@ -350,8 +350,9 @@ class FarmController {
     }
 
 
-
-
+    /**
+     * Function Controller: Lấy thông tin báo cáo nhập chuồng dựa trên 1 event
+     */
     static async ReportEntryCage(req, res) {
         const farm_id = req.params.id;
         const event_id = req.params.event_id;
@@ -361,7 +362,7 @@ class FarmController {
             res.status(200).json(
                 {
                     "isSuccess": true,
-                    "message": `Test`,
+                    "message": `Get report entry cage successfully`,
                     "data": result
                 }
             )
@@ -374,10 +375,11 @@ class FarmController {
                 }
             );
         }
-
     }
 
-
+    /**
+     * Function Controller: Phân tích 
+     */
 
 }
 

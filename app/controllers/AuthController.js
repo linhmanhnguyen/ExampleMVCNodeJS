@@ -6,6 +6,7 @@ const moment = require('moment-timezone');
 const { registerAccountSchema } = require('../validations/userAccountSchema');
 const RoleRepository = require('../repositories/RoleRepository');
 const GenerateAccessToken = require('../utils/genarateAccessToken');
+const ReturnResponseUtils = require('../utils/returnResponse');
 const currentTime = moment().tz('Asia/Ho_Chi_Minh').format('YYYY-MM-DD_HH-mm-ss');
 
 class AuthController {
@@ -18,12 +19,14 @@ class AuthController {
         if (user.length > 0) {
             const checkPassword = await bcrypt.compare(password, user[0].password);
             if (!checkPassword) {
-                res.status(422).json(
-                    {
-                        "isSuccess": false,
-                        "message": `Password is not correct`,
-                    }
-                );
+                ReturnResponseUtils.returnResponse(422, false, `Password is not correct`);
+
+                // res.status(422).json(
+                //     {
+                //         "isSuccess": false,
+                //         "message": `Password is not correct`,
+                //     }
+                // );
             }
             else {
                 if (user[0].status == true) {
