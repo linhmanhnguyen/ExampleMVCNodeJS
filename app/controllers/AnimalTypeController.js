@@ -1,5 +1,5 @@
 const animalTypeRepository = require('../repositories/AnimalTypeRepository');
-// const { animalTypeSchema } = require('../validations/animalTypeSchema');
+const ReturnResponseUtil = require('../utils/returnResponse');
 
 class AnimalTypeController {
     /**
