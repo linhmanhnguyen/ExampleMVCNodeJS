@@ -5,7 +5,7 @@ function authenticateToken(req, res, next) {
     const authHeader = req.headers.authorization;
 
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
-        ReturnResponseUtil.returnResponse(res, 401, false, `Unauthorized`);
+        return ReturnResponseUtil.returnResponse(res, 401, false, `Unauthorized`);
 
         // return res.status(401).json(
         //     {
@@ -19,7 +19,7 @@ function authenticateToken(req, res, next) {
 
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
         if (err) {
-            ReturnResponseUtil.returnResponse(res, 403, false, err);
+            return ReturnResponseUtil.returnResponse(res, 403, false, err);
 
             // return res.status(403).json(
             //     {
