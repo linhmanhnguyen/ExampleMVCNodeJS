@@ -283,9 +283,6 @@ class FarmController {
         }
     }
 
-    /**
-     * Function Controller: Phân tích 
-     */
 
 }
 

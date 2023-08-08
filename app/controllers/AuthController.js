@@ -1,6 +1,6 @@
 
 const bcrypt = require('bcrypt');
-const UserAccountModel = require('../models/UserAccountModel');
+const UserAccountRepository = require('../repositories/UserAccountRepository');
 const UserDetailModel = require('../models/UserDetailModel');
 const moment = require('moment-timezone');
 const { registerAccountSchema } = require('../validations/userAccountSchema');
@@ -14,7 +14,7 @@ class AuthController {
         const username = req.body.username;
         const password = req.body.password;
 
-        const user = await UserAccountModel.SearchUserAccountByUsername(username);
+        const user = await UserAccountRepository.SearchUserAccountByUsername(username);
 
         if (user.length > 0) {
             const checkPassword = await bcrypt.compare(password, user[0].password);
@@ -47,14 +47,14 @@ class AuthController {
             const refreshtoken = "";
             const role_ID = 2; // Chủ sở hữu
 
-            const checkExistUsername = await UserAccountModel.CheckExistUsername(username);
+            const checkExistUsername = await UserAccountRepository.CheckExistUsername(username);
             if (checkExistUsername.length > 0) {
                 ReturnResponseUtil.returnResponse(res, 404, false, `Username already exists`);
             }
             else {
-                const { insertId: userDetail_ID } = await UserDetailModel.InsertUserDetailWhenRegister(fullname, username);
-                const { insertId: userAccount_ID } = await UserAccountModel.InsertUserAccount(username, password, createDate, userDetail_ID, refreshtoken);
-                await UserAccountModel.InsertRoleForUserAccount(userAccount_ID, role_ID, createDate, status);
+                const { insertId: userDetail_ID } = await UserAccountRepository.InsertUserDetailWhenRegister(fullname, username);
+                const { insertId: userAccount_ID } = await UserAccountRepository.InsertUserAccount(username, password, createDate, userDetail_ID, refreshtoken);
+                await UserAccountRepository.InsertRoleForUserAccount(userAccount_ID, role_ID, createDate, status);
                 const role = await RoleRepository.GetRoleByID(role_ID);
                 const accesstoken = GenerateAccessToken.GenerateAccessTokenForOwner(userAccount_ID, userDetail_ID, role.roleName);
 
@@ -68,7 +68,7 @@ class AuthController {
 
     static async CheckExistUsername(req, res) {
         const username = req.params.username;
-        const checkExistUsername = await UserAccountModel.CheckExistUsername(username);
+        const checkExistUsername = await UserAccountRepository.CheckExistUsername(username);
         if (checkExistUsername.length > 0) {
             ReturnResponseUtil.returnResponse(res, 400, false, `Username already exists`);
         }
