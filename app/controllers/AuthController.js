@@ -44,7 +44,7 @@ class AuthController {
             await registerAccountSchema.validateAsync({
                 username: req.body.username,
                 password: req.body.password,
-                fullName: req.body.fullname,
+                fullname: req.body.fullname,
                 farmName: req.body.farmName,
                 animalTypeId: req.body.animalTypeId,
                 animalDensity: req.body.animalDensity,
