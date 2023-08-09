@@ -41,7 +41,17 @@ class AuthController {
 
     static async Register(req, res) {
         try {
-            await registerAccountSchema.validateAsync(req.body);
+            await registerAccountSchema.validateAsync(
+                req.body.username,
+                req.body.password,
+                req.body.fullName,
+                req.body.farmName,
+                req.body.animalTypeId,
+                req.body.animalDensity,
+                req.body.wardId,
+                req.body.addressDetail,
+                req.body.numberOfCages
+            );
 
             const { username, password, fullname } = req.body;
             const createDate = currentTime;
