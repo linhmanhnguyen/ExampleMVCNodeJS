@@ -16,7 +16,7 @@ const registerAccountSchema = Joi.object({
     farmName: Joi.string().required(),
     animalTypeId: Joi.number().integer().positive().required(),
     animalDensity: Joi.number().integer().positive().required(),
-    wardId: Joi.number().integer().positive().required(),
+    ward_ID: Joi.number().integer().positive().required(),
     addressDetail: Joi.string().required(),
     numberOfCages: Joi.number().integer().positive().required(),
 });
