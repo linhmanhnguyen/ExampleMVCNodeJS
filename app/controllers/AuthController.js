@@ -48,7 +48,7 @@ class AuthController {
                 farmName: req.body.farmName,
                 animalTypeId: req.body.animalTypeId,
                 animalDensity: req.body.animalDensity,
-                wardId: req.body.wardId,
+                ward_ID: req.body.ward_ID,
                 addressDetail: req.body.addressDetail,
                 numberOfCages: req.body.numberOfCages
             });
@@ -63,7 +63,7 @@ class AuthController {
             const farmName = req.body.farmName;
             const animalTypeId = req.body.animalTypeId;
             const animalDensity = req.body.animalDensity;
-            const wardId = req.body.wardId;
+            const ward_ID = req.body.ward_ID;
             const addressDetail = req.body.addressDetail;
             const numberOfCages = req.body.numberOfCages;
             const accountList = req.body.accountList;
@@ -79,7 +79,7 @@ class AuthController {
                 await UserAccountRepository.InsertRoleForUserAccount(userAccount_ID, role_ID, createDate, status);
                 const role = await RoleRepository.GetRoleByID(role_ID);
 
-                const { insertId: farm_ID } = await FarmRepository.InsertFarm(farmName, createDate, status, animalTypeId, animalDensity, wardId, addressDetail, lastModified);
+                const { insertId: farm_ID } = await FarmRepository.InsertFarm(farmName, createDate, status, animalTypeId, animalDensity, ward_ID, addressDetail, lastModified);
                 await UserAccountRepository.InsertUserAccountToFarm(userAccount_ID, farm_ID, createDate, status);
 
                 if (numberOfCages > 0) {
