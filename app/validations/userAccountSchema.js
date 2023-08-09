@@ -13,6 +13,12 @@ const registerAccountSchema = Joi.object({
     username: Joi.string().pattern(/^(03|05|07|08|09)[0-9]{8}$/),
     password: Joi.string().required(),
     fullname: Joi.string().required(),
+    farmName: Joi.string().required(),
+    animalTypeId: Joi.number().integer().positive().required(),
+    animalDensity: Joi.number().integer().positive().required(),
+    wardId: Joi.number().integer().positive().required(),
+    addressDetail: Joi.string().required(),
+    numberOfCages: Joi.number().integer().positive().required(),
 });
 
 const updateUserAccountSchema = Joi.object({
