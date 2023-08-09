@@ -41,17 +41,17 @@ class AuthController {
 
     static async Register(req, res) {
         try {
-            await registerAccountSchema.validateAsync(
-                req.body.username,
-                req.body.password,
-                req.body.fullName,
-                req.body.farmName,
-                req.body.animalTypeId,
-                req.body.animalDensity,
-                req.body.wardId,
-                req.body.addressDetail,
-                req.body.numberOfCages
-            );
+            await registerAccountSchema.validateAsync({
+                username: req.body.username,
+                password: req.body.password,
+                fullName: req.body.fullname,
+                farmName: req.body.farmName,
+                animalTypeId: req.body.animalTypeId,
+                animalDensity: req.body.animalDensity,
+                wardId: req.body.wardId,
+                addressDetail: req.body.addressDetail,
+                numberOfCages: req.body.numberOfCages
+            });
 
             const { username, password, fullname } = req.body;
             const createDate = currentTime;
