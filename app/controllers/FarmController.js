@@ -1,9 +1,9 @@
 
-const userAccountModel = require('../models/UserAccountModel')
+
 const moment = require('moment-timezone');
 const { farmSchema } = require('../validations/farmSchema');
-const UserAccountModel = require('../models/UserAccountModel');
-const UserDetailModel = require('../models/UserDetailModel');
+const UserAccountRepository = require('../repositories/UserAccountRepository');
+const UserDetailRepository = require('../repositories/UserDetailRepository');
 const FarmRepository = require('../repositories/FarmRepository');
 const HistoryCageEntryRepository = require('../repositories/HistoryCageEntryRepository');
 const { insertEntryCage } = require('../validations/historyEntryCage');
@@ -40,7 +40,7 @@ class FarmController {
                 const userAccount_ID = req.user.userAccount_ID;
 
                 // Dựa theo tài khoản đang thực hiện, gán thông tin tài khoản đó vào trong farm vừa tạo
-                await userAccountModel.InsertUserAccountToFarm(userAccount_ID, farm_ID, createDate, status);
+                await UserAccountRepository.InsertUserAccountToFarm(userAccount_ID, farm_ID, createDate, status);
                 ReturnResponseUtil.returnResponse(res, 200, true, 'Created Farm successfully', farm_ID);
 
             }
@@ -148,12 +148,12 @@ class FarmController {
                     const password = "123456789";
 
                     // b1: thêm thông tin của người dùng
-                    const { insertId: userDetail_ID } = await UserDetailModel.InsertUserDetailWhenSetupFarm(fullName, gender, phoneNumber);
+                    const { insertId: userDetail_ID } = await UserDetailRepository.InsertUserDetailWhenSetupFarm(fullName, gender, phoneNumber);
                     // b2: thêm tài khoản
-                    const { insertId: userAccount_ID } = await UserAccountModel.InsertUserAccount(phoneNumber, password, createDate, userDetail_ID);
-                    await UserAccountModel.InsertRoleForUserAccount(userAccount_ID, roleId, createDate, status);
+                    const { insertId: userAccount_ID } = await UserDetailRepository.InsertUserAccount(phoneNumber, password, createDate, userDetail_ID);
+                    await UserAccountRepository.InsertRoleForUserAccount(userAccount_ID, roleId, createDate, status);
                     // b3: add ID của tài khoản với farm
-                    await UserAccountModel.InsertUserAccountToFarm(userAccount_ID, farm_id, createDate, status);
+                    await UserAccountRepository.InsertUserAccountToFarm(userAccount_ID, farm_id, createDate, status);
                     numberSuccess = ++numberSuccess;
                 }
             }
@@ -214,48 +214,48 @@ class FarmController {
                     // Gọi hàm InsertHistory từ model HistoryCageEntryRepository để chèn thông tin lịch sử vào database
                     var result = await HistoryCageEntryRepository.InsertHistory(user_id, farm_id, typeAnimal_id, animalQuantity, weightOfAnimal, unitPrice, dateAction, supplier_id, newEventId.insertId);
                     if (result) {
-                        // Nếu chèn thành công, tiến hành chia số lượng động vật đang có vào các chuồng
-                        // Bước này nhằm giả định động vật được phân bố đều vào số chuồng có sẵn
-                        var resultTotalCages = await CageModel.GetAllCagesInFarm(farm_id);
-                        var totalCages = resultTotalCages.length;
+                        // // Nếu chèn thành công, tiến hành chia số lượng động vật đang có vào các chuồng
+                        // // Bước này nhằm giả định động vật được phân bố đều vào số chuồng có sẵn
+                        // var resultTotalCages = await CageModel.GetAllCagesInFarm(farm_id);
+                        // var totalCages = resultTotalCages.length;
 
-                        for (let index = 0; index < totalCages; index++) {
-                            // Tính số lượng động vật trong mỗi chuồng (countAnimalsInCage) dựa trên tổng số động vật và số chuồng
-                            const countAnimalsInCage = animalQuantity / totalCages;
-                            const cage_id = resultTotalCages[index].id;
+                        // for (let index = 0; index < totalCages; index++) {
+                        //     // Tính số lượng động vật trong mỗi chuồng (countAnimalsInCage) dựa trên tổng số động vật và số chuồng
+                        //     const countAnimalsInCage = animalQuantity / totalCages;
+                        //     const cage_id = resultTotalCages[index].id;
 
-                            // Chèn từng con vật vào mỗi chuồng
-                            for (let i = 0; i < countAnimalsInCage; i++) {
-                                await AnimalRepository.InsertAnimal(cage_id, "test", "male", weightOfAnimal, dateAction, "normal");
-                            }
-                        }
+                        //     // Chèn từng con vật vào mỗi chuồng
+                        //     for (let i = 0; i < countAnimalsInCage; i++) {
+                        //         await AnimalRepository.InsertAnimal(cage_id, "test", "male", weightOfAnimal, dateAction, "normal");
+                        //     }
+                        // }
 
-                        // Trả về phản hồi thành công nếu mọi thứ đều thành công
-                        ReturnResponseUtil.returnResponse(res, 200, true, 'Inserted history entry cage successfully');
+                        // // Trả về phản hồi thành công nếu mọi thứ đều thành công
+                        // ReturnResponseUtil.returnResponse(res, 200, true, 'Inserted history entry cage successfully');
                     }
                 }
             }
             else {
                 var result = await HistoryCageEntryRepository.InsertHistory(user_id, farm_id, typeAnimal_id, animalQuantity, weightOfAnimal, unitPrice, dateAction, supplier_id, events[0].id);
                 if (result) {
-                    // Nếu chèn thành công, tiến hành chia số lượng động vật đang có vào các chuồng
-                    // Bước này nhằm giả định động vật được phân bố đều vào số chuồng có sẵn
-                    var resultTotalCages = await CageModel.GetAllCagesInFarm(farm_id);
-                    var totalCages = resultTotalCages.length;
+                    // // Nếu chèn thành công, tiến hành chia số lượng động vật đang có vào các chuồng
+                    // // Bước này nhằm giả định động vật được phân bố đều vào số chuồng có sẵn
+                    // var resultTotalCages = await CageModel.GetAllCagesInFarm(farm_id);
+                    // var totalCages = resultTotalCages.length;
 
-                    for (let index = 0; index < totalCages; index++) {
-                        // Tính số lượng động vật trong mỗi chuồng (countAnimalsInCage) dựa trên tổng số động vật và số chuồng
-                        const countAnimalsInCage = animalQuantity / totalCages;
-                        const cage_id = resultTotalCages[index].id;
+                    // for (let index = 0; index < totalCages; index++) {
+                    //     // Tính số lượng động vật trong mỗi chuồng (countAnimalsInCage) dựa trên tổng số động vật và số chuồng
+                    //     const countAnimalsInCage = animalQuantity / totalCages;
+                    //     const cage_id = resultTotalCages[index].id;
 
-                        // Chèn từng con vật vào mỗi chuồng
-                        for (let i = 0; i < countAnimalsInCage; i++) {
-                            await AnimalRepository.InsertAnimal(cage_id, "test", "male", weightOfAnimal, dateAction, "normal");
-                        }
-                    }
+                    //     // Chèn từng con vật vào mỗi chuồng
+                    //     for (let i = 0; i < countAnimalsInCage; i++) {
+                    //         await AnimalRepository.InsertAnimal(cage_id, "test", "male", weightOfAnimal, dateAction, "normal");
+                    //     }
+                    // }
 
-                    // Trả về phản hồi thành công nếu mọi thứ đều thành công
-                    ReturnResponseUtil.returnResponse(res, 200, true, 'Inserted history entry cage successfully');
+                    // // Trả về phản hồi thành công nếu mọi thứ đều thành công
+                    // ReturnResponseUtil.returnResponse(res, 200, true, 'Inserted history entry cage successfully');
                 }
             }
         } catch (error) {
