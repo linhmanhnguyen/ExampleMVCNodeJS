@@ -1,7 +1,7 @@
 
 const bcrypt = require('bcrypt');
 const UserAccountRepository = require('../repositories/UserAccountRepository');
-const UserDetailModel = require('../models/UserDetailModel');
+const UserDetailRepository = require('../repositories/UserDetailRepository');
 const moment = require('moment-timezone');
 const { registerAccountSchema } = require('../validations/userAccountSchema');
 const RoleRepository = require('../repositories/RoleRepository');
@@ -74,7 +74,7 @@ class AuthController {
                 ReturnResponseUtil.returnResponse(res, 404, false, `Username already exists`);
             }
             else {
-                const { insertId: userDetail_ID } = await UserAccountRepository.InsertUserDetailWhenRegister(fullname, username);
+                const { insertId: userDetail_ID } = await UserDetailRepository.InsertUserDetailWhenRegister(fullname, username);
                 const { insertId: userAccount_ID } = await UserAccountRepository.InsertUserAccount(username, password, createDate, userDetail_ID, refreshtoken);
                 await UserAccountRepository.InsertRoleForUserAccount(userAccount_ID, role_ID, createDate, status);
                 const role = await RoleRepository.GetRoleByID(role_ID);
