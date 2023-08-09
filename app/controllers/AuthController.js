@@ -111,6 +111,8 @@ class AuthController {
             }
 
         } catch (error) {
+
+            console.log(error);
             ReturnResponseUtil.returnResponse(res, 400, false, `An error has occurred, please try again`);
         }
     }
