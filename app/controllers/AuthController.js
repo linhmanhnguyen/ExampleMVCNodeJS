@@ -107,7 +107,7 @@ class AuthController {
                             // b1: thêm thông tin của người dùng
                             const { insertId: userDetail_ID } = await UserDetailRepository.InsertUserDetailWhenSetupFarm(fullName, gender, phoneNumber);
                             // b2: thêm tài khoản
-                            const { insertId: userAccount_ID } = await UserDetailRepository.InsertUserAccount(phoneNumber, password, createDate, userDetail_ID);
+                            const { insertId: userAccount_ID } = await UserAccountRepository.InsertUserAccount(phoneNumber, password, createDate, userDetail_ID);
                             await UserAccountRepository.InsertRoleForUserAccount(userAccount_ID, roleId, createDate, status);
                             // b3: add ID của tài khoản với farm
                             await UserAccountRepository.InsertUserAccountToFarm(userAccount_ID, farm_ID, createDate, status);
