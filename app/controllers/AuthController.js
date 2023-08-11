@@ -74,12 +74,12 @@ class AuthController {
                 ReturnResponseUtil.returnResponse(res, 404, false, `Username already exists`);
             }
             else {
-                const { insertId: userDetail_ID } = await UserDetailRepository.InsertUserDetailWhenRegister(fullname, username);
-                const { insertId: userAccount_ID } = await UserAccountRepository.InsertUserAccount(username, password, createDate, userDetail_ID, refreshtoken);
+                var { insertId: userDetail_ID } = await UserDetailRepository.InsertUserDetailWhenRegister(fullname, username);
+                var { insertId: userAccount_ID } = await UserAccountRepository.InsertUserAccount(username, password, createDate, userDetail_ID, refreshtoken);
                 await UserAccountRepository.InsertRoleForUserAccount(userAccount_ID, role_ID, createDate, status);
                 const role = await RoleRepository.GetRoleByID(role_ID);
 
-                const { insertId: farm_ID } = await FarmRepository.InsertFarm(farmName, createDate, status, animalTypeId, animalDensity, ward_ID, addressDetail, lastModified);
+                var { insertId: farm_ID } = await FarmRepository.InsertFarm(farmName, createDate, status, animalTypeId, animalDensity, ward_ID, addressDetail, lastModified);
                 await UserAccountRepository.InsertUserAccountToFarm(userAccount_ID, farm_ID, createDate, status);
 
                 if (numberOfCages > 0) {
@@ -94,20 +94,20 @@ class AuthController {
                 if (accountList.length > 0) {
                     for (let index = 0; index < accountList.length; index++) {
                         if (accountList[index].hasOwnProperty('fullName') && accountList[index].hasOwnProperty('phoneNumber') && accountList[index].hasOwnProperty('gender') && accountList[index].hasOwnProperty('role_ID') && accountList[index].hasOwnProperty('roleName')) {
-                            const fullName = accountList[index].fullName;
-                            const phoneNumber = accountList[index].phoneNumber;       // usersname
-                            const gender = accountList[index].gender;
-                            const roleId = accountList[index].role_ID;
-                            const roleName = accountList[index].roleName;
+                            var fullName = accountList[index].fullName;
+                            var phoneNumber = accountList[index].phoneNumber;       // usersname
+                            var gender = accountList[index].gender;
+                            var roleId = accountList[index].role_ID;
+                            var roleName = accountList[index].roleName;
 
                             const createDate = currentTime;
                             const status = true;
                             const password = "123456789";
 
                             // b1: thêm thông tin của người dùng
-                            const { insertId: userDetail_ID } = await UserDetailRepository.InsertUserDetailWhenSetupFarm(fullName, gender, phoneNumber);
+                            var { insertId: userDetail_ID } = await UserDetailRepository.InsertUserDetailWhenSetupFarm(fullName, gender, phoneNumber);
                             // b2: thêm tài khoản
-                            const { insertId: userAccount_ID } = await UserAccountRepository.InsertUserAccount(phoneNumber, password, createDate, userDetail_ID);
+                            var { insertId: userAccount_ID } = await UserAccountRepository.InsertUserAccount(phoneNumber, password, createDate, userDetail_ID);
                             await UserAccountRepository.InsertRoleForUserAccount(userAccount_ID, roleId, createDate, status);
                             // b3: add ID của tài khoản với farm
                             await UserAccountRepository.InsertUserAccountToFarm(userAccount_ID, farm_ID, createDate, status);

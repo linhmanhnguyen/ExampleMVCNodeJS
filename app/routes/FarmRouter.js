@@ -25,7 +25,7 @@ router.get('/:id/cages/:cage_id/animals', authenticateToken, authorize(['admin']
 router.post('/:id/users/create-multiple', authenticateToken, authorize(['admin', 'owner']), farmController.InsertMultipleUserToFarm);
 
 router.get('/:id/report-animal-summary', authenticateToken, authorize(['admin', 'owner']), farmController.ReportAnimalSummary);
-router.post('/:id/cage-entry', authenticateToken, authorize(['admin', 'owner']), farmController.InsertHistoryEntryCage);
+router.post('/:id/entry-cage', authenticateToken, authorize(['admin', 'owner']), farmController.InsertHistoryEntryCage);
 
 router.get('/:id/events/:event_id/report-entry-cage', authenticateToken, authorize(['admin', 'owner']), farmController.ReportEntryCage);
 
