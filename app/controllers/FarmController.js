@@ -187,22 +187,27 @@ class FarmController {
      * Function Controller:  Thêm một lịch sử nhập chuồng 
      */
     static async InsertHistoryEntryCage(req, res) {
-        // Trích xuất farm_id và user_id từ đối tượng yêu cầu (req)
-        var farm_id = req.params.id;
-        var user_id = req.user.userAccount_ID;
-
-        // Trích xuất các thông tin về động vật từ đối tượng yêu cầu (req.body)
-        var typeAnimal_id = req.body.typeAnimal_id;
-        var animalQuantity = req.body.animalQuantity;
-        var weightOfAnimal = req.body.weightOfAnimal;
-        var unitPrice = req.body.unitPrice;
-        var dateAction = currentTime;
-        var supplier_id = req.body.supplier_id;
-        var cages = req.body.cages;
-
         try {
             // Kiểm tra và xác thực dữ liệu trong đối tượng yêu cầu bằng cách sử dụng một schema (insertEntryCage.validateAsync)
-            await insertEntryCage.validateAsync(req.body);
+            await insertEntryCage.validateAsync({
+                typeAnimal_id: req.body.typeAnimal_id,
+                animalQuantity: req.body.animalQuantity,
+                weightOfAnimal: req.body.weightOfAnimal,
+                unitPrice: req.body.unitPrice,
+            });
+
+            // Trích xuất farm_id và user_id từ đối tượng yêu cầu (req)
+            var farm_id = req.params.id;
+            var user_id = req.user.userAccount_ID;
+
+            // Trích xuất các thông tin về động vật từ đối tượng yêu cầu (req.body)
+            var typeAnimal_id = req.body.typeAnimal_id;
+            var animalQuantity = req.body.animalQuantity;
+            var weightOfAnimal = req.body.weightOfAnimal;
+            var unitPrice = req.body.unitPrice;
+            var dateAction = currentTime;
+            var supplier_id = req.body.supplier_id;
+            var cages = req.body.cages;
 
             // Kiểm tra xem đã có sự kiện liên quan đến việc nhập chuồng chưa
             const events = await EventRepository.getEventByFarm(farm_id);
