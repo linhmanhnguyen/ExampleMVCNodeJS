@@ -7,10 +7,12 @@ const UserDetailRepository = require('../repositories/UserDetailRepository');
 const FarmRepository = require('../repositories/FarmRepository');
 const HistoryCageEntryRepository = require('../repositories/HistoryCageEntryRepository');
 const { insertEntryCage } = require('../validations/historyEntryCage');
-const CageModel = require('../models/CageModel');
-const AnimalRepository = require('../repositories/AnimalRepository');
+const HistoryCageEntryDetailRepository = require('../repositories/HistoryCageEntryDetailRepository');
 const EventRepository = require('../repositories/EventRepository');
+const AnimalRepository = require('../repositories/AnimalRepository');
+
 const ReturnResponseUtil = require('../utils/returnResponse');
+
 
 const currentTime = moment().tz('Asia/Ho_Chi_Minh').format('YYYY-MM-DD_HH-mm-ss');
 
@@ -196,6 +198,7 @@ class FarmController {
         var unitPrice = req.body.unitPrice;
         var dateAction = currentTime;
         var supplier_id = req.body.supplier_id;
+        var cages = req.body.cages;
 
         try {
             // Kiểm tra và xác thực dữ liệu trong đối tượng yêu cầu bằng cách sử dụng một schema (insertEntryCage.validateAsync)
@@ -212,55 +215,51 @@ class FarmController {
                 const newEventId = await EventRepository.CreateEvent(start_date, end_date, 1, farm_id);
                 if (newEventId) {
                     // Gọi hàm InsertHistory từ model HistoryCageEntryRepository để chèn thông tin lịch sử vào database
-                    var result = await HistoryCageEntryRepository.InsertHistory(user_id, farm_id, typeAnimal_id, animalQuantity, weightOfAnimal, unitPrice, dateAction, supplier_id, newEventId.insertId);
-                    if (result) {
-                        // // Nếu chèn thành công, tiến hành chia số lượng động vật đang có vào các chuồng
-                        // // Bước này nhằm giả định động vật được phân bố đều vào số chuồng có sẵn
-                        // var resultTotalCages = await CageModel.GetAllCagesInFarm(farm_id);
-                        // var totalCages = resultTotalCages.length;
+                    var resultHistoryCageEntry = await HistoryCageEntryRepository.InsertHistory(user_id, farm_id, typeAnimal_id, animalQuantity, weightOfAnimal, unitPrice, dateAction, supplier_id, newEventId.insertId);
+                    if (resultHistoryCageEntry) {
 
-                        // for (let index = 0; index < totalCages; index++) {
-                        //     // Tính số lượng động vật trong mỗi chuồng (countAnimalsInCage) dựa trên tổng số động vật và số chuồng
-                        //     const countAnimalsInCage = animalQuantity / totalCages;
-                        //     const cage_id = resultTotalCages[index].id;
+                        if (cages.length > 0) {
+                            for (let i = 0; i < cages.length; i++) {
+                                const cage_id = cages[i].cage_id;
+                                const animalsEntry = cages[i].animalsEntry;
 
-                        //     // Chèn từng con vật vào mỗi chuồng
-                        //     for (let i = 0; i < countAnimalsInCage; i++) {
-                        //         await AnimalRepository.InsertAnimal(cage_id, "test", "male", weightOfAnimal, dateAction, "normal");
-                        //     }
-                        // }
+                                await HistoryCageEntryDetailRepository.InsertHistory(cage_id, animalsEntry, resultHistoryCageEntry.insertId);
 
-                        // // Trả về phản hồi thành công nếu mọi thứ đều thành công
-                        // ReturnResponseUtil.returnResponse(res, 200, true, 'Inserted history entry cage successfully');
+                                for (let j = 0; j < animalsEntry; j++) {
+                                    await AnimalRepository.InsertAnimal(cage_id, "test", "male", weightOfAnimal, dateAction, "normal");
+                                }
+                            }
+                        }
+
+                        // Trả về phản hồi thành công nếu mọi thứ đều thành công
+                        ReturnResponseUtil.returnResponse(res, 200, true, 'Inserted history entry cage successfully');
                     }
                 }
             }
             else {
-                var result = await HistoryCageEntryRepository.InsertHistory(user_id, farm_id, typeAnimal_id, animalQuantity, weightOfAnimal, unitPrice, dateAction, supplier_id, events[0].id);
-                if (result) {
-                    // // Nếu chèn thành công, tiến hành chia số lượng động vật đang có vào các chuồng
-                    // // Bước này nhằm giả định động vật được phân bố đều vào số chuồng có sẵn
-                    // var resultTotalCages = await CageModel.GetAllCagesInFarm(farm_id);
-                    // var totalCages = resultTotalCages.length;
+                var resultHistoryCageEntry = await HistoryCageEntryRepository.InsertHistory(user_id, farm_id, typeAnimal_id, animalQuantity, weightOfAnimal, unitPrice, dateAction, supplier_id, events[0].id);
+                if (resultHistoryCageEntry) {
 
-                    // for (let index = 0; index < totalCages; index++) {
-                    //     // Tính số lượng động vật trong mỗi chuồng (countAnimalsInCage) dựa trên tổng số động vật và số chuồng
-                    //     const countAnimalsInCage = animalQuantity / totalCages;
-                    //     const cage_id = resultTotalCages[index].id;
+                    if (cages.length > 0) {
+                        for (let i = 0; i < cages.length; i++) {
+                            const cage_id = cages[i].cage_id;
+                            const animalsEntry = cages[i].animalsEntry;
 
-                    //     // Chèn từng con vật vào mỗi chuồng
-                    //     for (let i = 0; i < countAnimalsInCage; i++) {
-                    //         await AnimalRepository.InsertAnimal(cage_id, "test", "male", weightOfAnimal, dateAction, "normal");
-                    //     }
-                    // }
+                            await HistoryCageEntryDetailRepository.InsertHistory(cage_id, animalsEntry, resultHistoryCageEntry.insertId);
 
-                    // // Trả về phản hồi thành công nếu mọi thứ đều thành công
-                    // ReturnResponseUtil.returnResponse(res, 200, true, 'Inserted history entry cage successfully');
+                            for (let j = 0; j < animalsEntry; j++) {
+                                await AnimalRepository.InsertAnimal(cage_id, "test", "male", weightOfAnimal, dateAction, "normal");
+                            }
+                        }
+                    }
+
+                    // Trả về phản hồi thành công nếu mọi thứ đều thành công
+                    ReturnResponseUtil.returnResponse(res, 200, true, 'Inserted history entry cage successfully');
                 }
             }
         } catch (error) {
             // Nếu có lỗi xảy ra, ghi log và trả về phản hồi lỗi
-            // console.log(error);
+            console.log(error);
             ReturnResponseUtil.returnResponse(res, 400, false, 'An error has occurred, please try again');
 
         }
