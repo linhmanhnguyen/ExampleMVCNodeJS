@@ -67,7 +67,8 @@ class AuthController {
             const addressDetail = req.body.addressDetail;
             const numberOfCages = req.body.numberOfCages;
             const accountList = req.body.accountList;
-            // const accountList = JSON.parse(accountList);
+            const list_users = JSON.parse(accountList);
+
 
             const checkExistUsername = await UserAccountRepository.CheckExistUsername(username);
             if (checkExistUsername.length > 0) {
@@ -91,16 +92,14 @@ class AuthController {
                     }
                 }
 
-                console.log(accountList.length);
-
-                if (accountList.length > 0) {
-                    for (let index = 0; index < accountList.length; index++) {
-                        if (accountList[index].hasOwnProperty('fullName') && accountList[index].hasOwnProperty('phoneNumber') && accountList[index].hasOwnProperty('gender') && accountList[index].hasOwnProperty('role_ID') && accountList[index].hasOwnProperty('roleName')) {
-                            var fullName = accountList[index].fullName;
-                            var phoneNumber = accountList[index].phoneNumber;       // usersname
-                            var gender = accountList[index].gender;
-                            var roleId = accountList[index].role_ID;
-                            var roleName = accountList[index].roleName;
+                if (list_users.length > 0) {
+                    for (let index = 0; index < list_users.length; index++) {
+                        if (list_users[index].hasOwnProperty('fullName') && list_users[index].hasOwnProperty('phoneNumber') && list_users[index].hasOwnProperty('gender') && list_users[index].hasOwnProperty('role_ID') && list_users[index].hasOwnProperty('roleName')) {
+                            var fullName = list_users[index].fullName;
+                            var phoneNumber = list_users[index].phoneNumber;       // usersname
+                            var gender = list_users[index].gender;
+                            var roleId = list_users[index].role_ID;
+                            var roleName = list_users[index].roleName;
 
                             const createDate = currentTime;
                             const status = true;
