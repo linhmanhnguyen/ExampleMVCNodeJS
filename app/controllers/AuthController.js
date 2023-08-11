@@ -91,7 +91,7 @@ class AuthController {
                     }
                 }
 
-                console.log(accountList);
+                console.log(accountList.length);
 
                 if (accountList.length > 0) {
                     for (let index = 0; index < accountList.length; index++) {
