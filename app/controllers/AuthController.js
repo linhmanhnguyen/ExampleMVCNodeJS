@@ -91,6 +91,8 @@ class AuthController {
                     }
                 }
 
+                console.log(accountList);
+
                 if (accountList.length > 0) {
                     for (let index = 0; index < accountList.length; index++) {
                         if (accountList[index].hasOwnProperty('fullName') && accountList[index].hasOwnProperty('phoneNumber') && accountList[index].hasOwnProperty('gender') && accountList[index].hasOwnProperty('role_ID') && accountList[index].hasOwnProperty('roleName')) {
