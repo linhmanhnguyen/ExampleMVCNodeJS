@@ -291,21 +291,21 @@ class FarmController {
      * Function Controller: Thống kê số động vật đạt tiêu chuẩn và không đạt tiêu chuẩn
      */
     static async ClassificationStatisticsOfAnimals(req, res) {
-        const farm_id = req.params.id;
-        const weight = req.query.weight;
+        try {
+            const farm_id = req.params.id;
+            const weight = req.query.weight;
 
-        const resultStandardAnimals = await FarmRepository.GetStandardAnimals(weight, farm_id);
-        const resultSubStandardAnimals = await FarmRepository.GetSubStandardAnimals(weight, farm_id);
+            const resultStandardAnimals = await FarmRepository.GetStandardAnimals(weight, farm_id);
+            const resultSubStandardAnimals = await FarmRepository.GetSubStandardAnimals(weight, farm_id);
 
-        const data = {
-            standardAnimals: resultStandardAnimals,
-            subStandardAnimals: resultSubStandardAnimals
-        };
+            const data = {
+                standardAnimals: resultStandardAnimals,
+                subStandardAnimals: resultSubStandardAnimals
+            };
 
-        if (resultStandardAnimals && resultSubStandardAnimals) {
             ReturnResponseUtil.returnResponse(res, 200, true, 'Get classification statistics of animals successfully', data);
-        }
-        else {
+
+        } catch (error) {
             ReturnResponseUtil.returnResponse(res, 404, false, 'No records found at the moment');
         }
     }
