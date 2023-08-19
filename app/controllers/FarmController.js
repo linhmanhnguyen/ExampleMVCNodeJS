@@ -294,12 +294,13 @@ class FarmController {
         const farm_id = req.params.id;
         const weight = req.query.weight;
 
-        console.log(weight);
-
         const resultStandardAnimals = await FarmRepository.GetStandardAnimals(weight, farm_id);
         const resultSubStandardAnimals = await FarmRepository.GetSubStandardAnimals(weight, farm_id);
 
-        const data = [resultStandardAnimals, resultSubStandardAnimals];
+        const data = {
+            standardAnimals: resultStandardAnimals,
+            subStandardAnimals: resultSubStandardAnimals
+        };
 
         if (resultStandardAnimals && resultSubStandardAnimals) {
             ReturnResponseUtil.returnResponse(res, 200, true, 'Get classification statistics of animals successfully', data);
