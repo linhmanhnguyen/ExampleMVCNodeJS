@@ -283,10 +283,29 @@ class FarmController {
             ReturnResponseUtil.returnResponse(res, 200, true, 'Get report entry cage successfully', result);
         }
         else {
-            ReturnResponseUtil.returnResponse(res, 400, true, 'An error has occurred, please try again');
+            ReturnResponseUtil.returnResponse(res, 400, false, 'An error has occurred, please try again');
         }
     }
 
+    /**
+     * Function Controller: 
+     */
+    static async ClassificationStatisticsOfAnimals() {
+        const farm_id = req.params.id;
+        const weight = req.params.weight;
+
+        const resultStandardAnimals = await FarmRepository.GetStandardAnimals(weight, farm_id);
+        const resultSubStandardAnimals = await FarmRepository.GetSubStandardAnimals(weight, farm_id);
+
+        const data = [resultStandardAnimals, resultSubStandardAnimals];
+
+        if (resultStandardAnimals && resultSubStandardAnimals) {
+            ReturnResponseUtil.returnResponse(res, 200, true, 'Get classification statistics of animals successfully', data);
+        }
+        else {
+            ReturnResponseUtil.returnResponse(res, 404, false, 'No records found at the moment');
+        }
+    }
 
 }
 

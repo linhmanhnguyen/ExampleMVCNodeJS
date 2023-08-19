@@ -1,6 +1,7 @@
 const connection = require('../configs/MySQLConnect');
 const AnimalSummaryModel = require('../models/AnimalSummaryModel');
 const FarmModel = require('../models/FarmModel');
+const GetSubStandardAnimalsModel = require('../models/GetSubStandardAnimalsModel');
 const ReportEntryCageModel = require('../models/ReportEntryCageModel');
 
 class FarmRepository {
@@ -151,8 +152,70 @@ class FarmRepository {
     }
 
     /**
-     * Function Repository: Lấy thông tin 
+     * Function Repository: Lấy thông tin số lượng động vật không đạt tiêu chuẩn trong 1 trang trại
      */
+    static async GetSubStandardAnimals(weight, farm_id) {
+        const query = `
+            SELECT
+            COUNT(a.id) AS totalAnimals,
+            ROUND(SUM(a.weight), 2) AS totalWeightAnimals,
+            ROUND(AVG(a.weight), 2) AS averageWeightAnimals
+        FROM
+            animals a
+        JOIN
+            cages c ON a.cage_id = c.id
+        JOIN
+            farms f ON c.farm_id = f.id
+        WHERE
+            a.weight < ?
+            AND a.status = 'normal'
+            AND f.id = ?;
+        `;
+
+        const params = [weight, farm_id];
+        const result = await connection.query(query, params);
+
+        const info = new GetSubStandardAnimalsModel(
+            result[0].totalAnimals,
+            result[0].totalWeightAnimals,
+            result[0].averageWeightAnimals
+        );
+
+        return info;
+    }
+
+    /**
+ * Function Repository: Lấy thông tin số lượng động vật đạt tiêu chuẩn trong 1 trang trại
+ */
+    static async GetStandardAnimals(weight, farm_id) {
+        const query = `
+                SELECT
+                COUNT(a.id) AS totalAnimals,
+                ROUND(SUM(a.weight), 2) AS totalWeightAnimals,
+                ROUND(AVG(a.weight), 2) AS averageWeightAnimals
+            FROM
+                animals a
+            JOIN
+                cages c ON a.cage_id = c.id
+            JOIN
+                farms f ON c.farm_id = f.id
+            WHERE
+                a.weight >= ?
+                AND a.status = 'normal'
+                AND f.id = ?;
+            `;
+
+        const params = [weight, farm_id];
+        const result = await connection.query(query, params);
+
+        const info = new GetSubStandardAnimalsModel(
+            result[0].totalAnimals,
+            result[0].totalWeightAnimals,
+            result[0].averageWeightAnimals
+        );
+
+        return info;
+    }
 
 }
 

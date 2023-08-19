@@ -28,5 +28,6 @@ router.get('/:id/report-animal-summary', authenticateToken, authorize(['admin', 
 router.post('/:id/entry-cage', authenticateToken, authorize(['admin', 'owner']), farmController.InsertHistoryEntryCage);
 
 router.get('/:id/events/:event_id/report-entry-cage', authenticateToken, authorize(['admin', 'owner']), farmController.ReportEntryCage);
+router.get('/:id/classifications-statistics-of-animals', authenticateToken, authorize(['admin', 'owner']), farmController.ClassificationStatisticsOfAnimals);
 
 module.exports = router;
