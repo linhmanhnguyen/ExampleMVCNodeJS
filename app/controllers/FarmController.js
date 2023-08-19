@@ -292,7 +292,7 @@ class FarmController {
      */
     static async ClassificationStatisticsOfAnimals(req, res) {
         const farm_id = req.params.id;
-        const weight = req.params.weight;
+        const weight = req.query.weight;
 
         console.log(weight);
 
