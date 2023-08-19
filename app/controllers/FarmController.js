@@ -290,7 +290,7 @@ class FarmController {
     /**
      * Function Controller: 
      */
-    static async ClassificationStatisticsOfAnimals() {
+    static async ClassificationStatisticsOfAnimals(req, res) {
         const farm_id = req.params.id;
         const weight = req.params.weight;
 
