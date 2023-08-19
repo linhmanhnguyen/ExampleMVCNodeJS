@@ -288,11 +288,13 @@ class FarmController {
     }
 
     /**
-     * Function Controller: 
+     * Function Controller: Thống kê số động vật đạt tiêu chuẩn và không đạt tiêu chuẩn
      */
     static async ClassificationStatisticsOfAnimals(req, res) {
         const farm_id = req.params.id;
         const weight = req.params.weight;
+
+        console.log(weight);
 
         const resultStandardAnimals = await FarmRepository.GetStandardAnimals(weight, farm_id);
         const resultSubStandardAnimals = await FarmRepository.GetSubStandardAnimals(weight, farm_id);
