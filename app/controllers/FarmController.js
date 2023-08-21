@@ -14,6 +14,8 @@ const AnimalRepository = require('../repositories/AnimalRepository');
 const ReturnResponseUtil = require('../utils/returnResponse');
 const { insertBuyer } = require('../validations/buyerSchema');
 const BuyerRepository = require('../repositories/BuyerRepository');
+const HistorySellAnimalsRepository = require('../repositories/HistorySellAnimalsRepository');
+const HistorySellAnimalsDetailRepository = require('../repositories/HistorySellAnimalsDetailRepository');
 
 
 const currentTime = moment().tz('Asia/Ho_Chi_Minh').format('YYYY-MM-DD_HH-mm-ss');
@@ -329,6 +331,30 @@ class FarmController {
             var unitPrice = req.body.unitPrice;
             var dateAction = currentTime;
             var buyer_id = req.body.buyer_id;
+            var cages = req.body.cages;
+
+            // Kiểm tra xem đang có mùa nào kích hoạt
+            const events = await EventRepository.getEventByFarm(farm_id);
+
+            if (!EventRepository.isEventActive(events)) {
+                // Thêm 1 đợt xuất bán tổng
+                var resultInsertHistorySellAnimals = await HistorySellAnimalsRepository.InsertHistory(user_id, farm_id, sellAnimals, totalWeightAnimals, unitPrice, dateAction, buyer_id, events[0].id);
+                if (resultInsertHistorySellAnimals) {
+
+                    // Thêm các đợt xuất bán từ chuồng nào trong 1 đợt xuất bán tổng
+                    if (cages.length > 0) {
+                        for (let i = 0; i < cages.length; i++) {
+                            const cage_id = cages[i].cage_id;
+                            const sellAnimalsInCage = cages[i].sellAnimals;
+                            const totalWeightAnimalsInCage = cages[i].totalWeightAnimals;
+
+                            await HistorySellAnimalsDetailRepository.InsertHistory(cage_id, sellAnimalsInCage, totalWeightAnimalsInCage, resultInsertHistorySellAnimals.insertId);
+                        }
+                    }
+                }
+
+                ReturnResponseUtil.returnResponse(res, 200, true, 'Inserted history sell animals successfully');
+            }
 
         } catch (error) {
             ReturnResponseUtil.returnResponse(res, 400, false, 'An error has occurred, please try again');
@@ -358,7 +384,6 @@ class FarmController {
             ReturnResponseUtil.returnResponse(res, 400, false, 'An error has occurred, please try again');
         }
     }
-
 }
 
 module.exports = FarmController;
