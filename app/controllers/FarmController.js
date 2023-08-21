@@ -351,9 +351,10 @@ class FarmController {
                             await HistorySellAnimalsDetailRepository.InsertHistory(cage_id, sellAnimalsInCage, totalWeightAnimalsInCage, resultInsertHistorySellAnimals.insertId);
                         }
                     }
+                    ReturnResponseUtil.returnResponse(res, 200, true, 'Inserted history sell animals successfully');
+
                 }
 
-                ReturnResponseUtil.returnResponse(res, 200, true, 'Inserted history sell animals successfully');
             }
 
         } catch (error) {
