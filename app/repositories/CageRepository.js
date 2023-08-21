@@ -2,7 +2,7 @@ const connection = require('../configs/MySQLConnect');
 
 class CageRepository {
     /**
-     * Function Model: Thêm thông tin 1 chuồng nuôi vào trong trang trại
+     * Function Repository: Thêm thông tin 1 chuồng nuôi vào trong trang trại
      */
     static async InsertCage(CageName, Farm_ID, Location, Manager_ID) {
         const query = `
@@ -15,7 +15,7 @@ class CageRepository {
     }
 
     /**
-     * Function Model: Lấy tất cả thông tin hiện có trong 1 trang trại
+     * Function Repository: Lấy tất cả thông tin hiện có trong 1 trang trại
      */
     static async GetAllCagesInFarm(Farm_ID) {
         const query = `SELECT * FROM cages WHERE farm_id = ?`;
@@ -25,7 +25,7 @@ class CageRepository {
     }
 
     /**
-     * Function Model: Lấy thông tin chi tiết của 1 chuồng nuôi trong 1 trang trại
+     * Function Repository: Lấy thông tin chi tiết của 1 chuồng nuôi trong 1 trang trại
      */
     static async GetCageByID(Cage_ID, Farm_ID) {
         const query = `SELECT * FROM Cages WHERE id = ? AND farm_id = ?`;
@@ -35,7 +35,7 @@ class CageRepository {
     }
 
     /**
-     * Function Model: Cập nhật thông tin của 1 chuồng nuôi
+     * Function Repository: Cập nhật thông tin của 1 chuồng nuôi
      */
     static async UpdateCageByID(CageName, Location, Manager_ID, Cage_ID, Farm_ID) {
         const query = `
@@ -49,7 +49,7 @@ class CageRepository {
     }
 
     /**
-     * Function Model: Xóa thông tin của 1 chuồng nuôi trong trang trại
+     * Function Repository: Xóa thông tin của 1 chuồng nuôi trong trang trại
      */
     static async DeleteCageByID(Cage_ID, Farm_ID) {
         const query = `DELETE FROM cages WHERE id = ? AND farm_id = ?`;

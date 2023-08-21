@@ -12,6 +12,8 @@ const EventRepository = require('../repositories/EventRepository');
 const AnimalRepository = require('../repositories/AnimalRepository');
 
 const ReturnResponseUtil = require('../utils/returnResponse');
+const { insertBuyer } = require('../validations/buyerSchema');
+const BuyerRepository = require('../repositories/BuyerRepository');
 
 
 const currentTime = moment().tz('Asia/Ho_Chi_Minh').format('YYYY-MM-DD_HH-mm-ss');
@@ -307,6 +309,53 @@ class FarmController {
 
         } catch (error) {
             ReturnResponseUtil.returnResponse(res, 404, false, 'No records found at the moment');
+        }
+    }
+
+    /**
+     * Function Controller: Xuất bán
+     */
+    static async SellAnimals(req, res) {
+        try {
+            // Kiểm tra và xác thực dữ liệu trong đối tượng yêu cầu bằng cách sử dụng một schema (insertEntryCage.validateAsync)
+
+            // Trích xuất farm_id và user_id từ đối tượng yêu cầu (req)
+            var farm_id = req.params.id;
+            var user_id = req.user.userAccount_ID;
+
+            // Trích xuất các thông tin về động vật từ đối tượng yêu cầu (req.body)
+            var sellAnimals = req.body.sellAnimals;
+            var totalWeightAnimals = req.body.totalWeightAnimals;
+            var unitPrice = req.body.unitPrice;
+            var dateAction = currentTime;
+            var buyer_id = req.body.buyer_id;
+
+        } catch (error) {
+            ReturnResponseUtil.returnResponse(res, 400, false, 'An error has occurred, please try again');
+        }
+    }
+
+    /**
+     * Function Controller: Thêm thông tin bên người mua
+     */
+    static async InsertBuyer(req, res) {
+        try {
+            await insertBuyer.validateAsync();
+
+            var farm_id = req.params.id;
+
+            var name = req.body.name;
+            var phone = req.body.phone;
+            var ward_id = req.body.ward_id;
+            var addressDetail = req.body.addressDetail;
+
+            var result = await BuyerRepository.InsertBuyer(name, phone, ward_id, farm_id, addressDetail);
+            if (result) {
+                ReturnResponseUtil.returnResponse(res, 200, true, 'Inserted buyer successfully');
+            }
+
+        } catch (error) {
+            ReturnResponseUtil.returnResponse(res, 400, false, 'An error has occurred, please try again');
         }
     }
 
