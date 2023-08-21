@@ -336,7 +336,7 @@ class FarmController {
             // Kiểm tra xem đang có mùa nào kích hoạt
             const events = await EventRepository.getEventByFarm(farm_id);
 
-            if (!EventRepository.isEventActive(events)) {
+            if (EventRepository.isEventActive(events)) {
                 // Thêm 1 đợt xuất bán tổng
                 var resultInsertHistorySellAnimals = await HistorySellAnimalsRepository.InsertHistory(user_id, farm_id, sellAnimals, totalWeightAnimals, unitPrice, dateAction, buyer_id, events[0].id);
                 if (resultInsertHistorySellAnimals) {
@@ -350,14 +350,14 @@ class FarmController {
 
                             await HistorySellAnimalsDetailRepository.InsertHistory(cage_id, sellAnimalsInCage, totalWeightAnimalsInCage, resultInsertHistorySellAnimals.insertId);
                         }
+                        ReturnResponseUtil.returnResponse(res, 200, true, 'Inserted history sell animals successfully');
                     }
-                    ReturnResponseUtil.returnResponse(res, 200, true, 'Inserted history sell animals successfully');
 
                 }
-
             }
 
         } catch (error) {
+            console.log(error);
             ReturnResponseUtil.returnResponse(res, 400, false, 'An error has occurred, please try again');
         }
     }
