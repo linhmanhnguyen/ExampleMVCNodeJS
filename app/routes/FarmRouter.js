@@ -33,4 +33,5 @@ router.get('/:id/classifications-statistics-of-animals', authenticateToken, auth
 router.post('/:id/buyers', authenticateToken, authorize(['admin', 'owner']), farmController.InsertBuyer);
 router.post('/:id/sell-animals', authenticateToken, authorize(['admin', 'owner']), farmController.SellAnimals);
 
+router.post('/:id/suppliers', authenticateToken, authorize(['admin', 'owner']), farmController.InsertSupplier);
 module.exports = router;

@@ -6,7 +6,7 @@ const UserAccountRepository = require('../repositories/UserAccountRepository');
 const UserDetailRepository = require('../repositories/UserDetailRepository');
 const FarmRepository = require('../repositories/FarmRepository');
 const HistoryCageEntryRepository = require('../repositories/HistoryCageEntryRepository');
-const { insertEntryCage } = require('../validations/historyEntryCage');
+const { insertEntryCage } = require('../validations/historyEntryCageSchema');
 const HistoryCageEntryDetailRepository = require('../repositories/HistoryCageEntryDetailRepository');
 const EventRepository = require('../repositories/EventRepository');
 const AnimalRepository = require('../repositories/AnimalRepository');
@@ -16,6 +16,8 @@ const { insertBuyer } = require('../validations/buyerSchema');
 const BuyerRepository = require('../repositories/BuyerRepository');
 const HistorySellAnimalsRepository = require('../repositories/HistorySellAnimalsRepository');
 const HistorySellAnimalsDetailRepository = require('../repositories/HistorySellAnimalsDetailRepository');
+const { insertSHistorySellAnimals } = require('../validations/historySellAnimals');
+const SupplierRepository = require('../repositories/SupplierRepository');
 
 
 const currentTime = moment().tz('Asia/Ho_Chi_Minh').format('YYYY-MM-DD_HH-mm-ss');
@@ -320,6 +322,11 @@ class FarmController {
     static async SellAnimals(req, res) {
         try {
             // Kiểm tra và xác thực dữ liệu trong đối tượng yêu cầu bằng cách sử dụng một schema (insertEntryCage.validateAsync)
+            await insertSHistorySellAnimals.validateAsync({
+                sellAnimals: req.body.sellAnimals,
+                totalWeightAnimals: req.body.totalWeightAnimals,
+                unitPrice: req.body.unitPrice
+            });
 
             // Trích xuất farm_id và user_id từ đối tượng yêu cầu (req)
             var farm_id = req.params.id;
@@ -379,6 +386,29 @@ class FarmController {
             var result = await BuyerRepository.InsertBuyer(name, phone, ward_id, farm_id, addressDetail);
             if (result) {
                 ReturnResponseUtil.returnResponse(res, 200, true, 'Inserted buyer successfully');
+            }
+
+        } catch (error) {
+            ReturnResponseUtil.returnResponse(res, 400, false, 'An error has occurred, please try again');
+        }
+    }
+
+    /**
+     * Function Controller: Thêm thông tin của người cung cấp
+     */
+    static async InsertSupplier(req, res) {
+        try {
+            var farm_id = req.params.id;
+
+            var name = req.body.name;
+            var phone = req.body.phone;
+            var ward_id = req.body.ward_id;
+            var addressDetail = req.body.addressDetail;
+            var supplyInventory_id = req.body.supplyInventory_id;
+
+            var result = await SupplierRepository.InsertSupplier(farm_id, name, phone, ward_id, addressDetail, supplyInventory_id);
+            if (result) {
+                ReturnResponseUtil.returnResponse(res, 200, true, 'Inserted supplier successfully');
             }
 
         } catch (error) {

@@ -4,13 +4,13 @@ class SupplierRepository {
     /**
      * Function Repository: Thêm thông tin người cung cấp
      */
-    static async InsertSupplier(name, phone, ward_ID, addressDetail) {
+    static async InsertSupplier(farm_id, name, phone, ward_id, addressDetail, supplyInventory_id) {
         const query = `
-                        INSERT INTO suppliers (name, phone, ward_id, addressDetail)
+                        INSERT INTO suppliers (farm_id, name, phone, ward_id, addressDetail, supplyInventory_id)
                         VALUES (?, ?, ?, ?)
                     `;
 
-        const params = [name, phone, ward_ID, addressDetail];
+        const params = [farm_id, name, phone, ward_id, addressDetail, supplyInventory_id];
 
         const result = await connection.query(query, params);
         return result;
@@ -56,7 +56,6 @@ class SupplierRepository {
         const result = await connection.query(query, params);
         return result;
     }
-
 }
 
 module.exports = SupplierRepository;
