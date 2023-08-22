@@ -275,7 +275,7 @@ class FarmRepository {
         const query = `
         SELECT
             SUM(CASE WHEN animal_count > 0 THEN 1 ELSE 0 END) AS cagesWithAnimals,
-            SUM(CASE WHEN animal_count = 0 THEN 1 ELSE 0 END) AS emptyCages
+            SUM(CASE WHEN animal_count = 0 THEN 1 ELSE 0 END) AS emptyCages,
             COUNT(*) AS totalCages
         FROM (
             SELECT
