@@ -1,5 +1,6 @@
 class CageSummaryModel {
-    constructor(totalCagesWithAnimals, totalEmptyCages) {
+    constructor(totalCages, totalCagesWithAnimals, totalEmptyCages) {
+        this.totalCages = totalCages;
         this.totalCagesWithAnimals = totalCagesWithAnimals;
         this.totalEmptyCages = totalEmptyCages;
     }

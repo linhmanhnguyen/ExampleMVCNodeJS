@@ -276,6 +276,7 @@ class FarmRepository {
         SELECT
             SUM(CASE WHEN animal_count > 0 THEN 1 ELSE 0 END) AS cagesWithAnimals,
             SUM(CASE WHEN animal_count = 0 THEN 1 ELSE 0 END) AS emptyCages
+            COUNT(*) AS totalCages
         FROM (
             SELECT
                 c.id AS cage_id,
@@ -297,7 +298,7 @@ class FarmRepository {
             return null;
         }
 
-        const summray = new CageSummaryModel(result[0].cagesWithAnimals, result[0].emptyCages);
+        const summray = new CageSummaryModel(result[0].totalCages, result[0].cagesWithAnimals, result[0].emptyCages);
         return summray;
     }
 
