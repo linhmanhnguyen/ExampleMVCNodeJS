@@ -1,6 +1,4 @@
-const express = require('express');
 const router = require('express').Router();
-
 const animalController = require('../controllers/AnimalController');
 const { authenticateToken } = require('../middlewares/authMiddleware');
 const { authorize } = require('../middlewares/authorizeMiddleware');

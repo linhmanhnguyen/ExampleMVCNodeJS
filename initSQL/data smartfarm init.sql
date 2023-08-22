@@ -11374,3 +11374,10 @@ INSERT INTO `roles` (`id`, `roleName`) VALUES
 (2, 'owner'),
 (3, 'manager'),
 (4, 'employee');
+
+INSERT INTO `suppliesInventory` (`id`, `name`) VALUES
+(1, 'medicine'),
+(2, 'food');
+
+INSERT INTO `units` (`id`, `name`) VALUES 
+('1', 'kg');

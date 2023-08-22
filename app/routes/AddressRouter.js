@@ -1,4 +1,3 @@
-const express = require('express');
 const AddressController = require('../controllers/AddressController');
 const router = require('express').Router();
 

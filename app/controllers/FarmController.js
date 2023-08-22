@@ -1,26 +1,26 @@
 
 
 const moment = require('moment-timezone');
-const { farmSchema } = require('../validations/farmSchema');
+
 const UserAccountRepository = require('../repositories/UserAccountRepository');
 const UserDetailRepository = require('../repositories/UserDetailRepository');
 const FarmRepository = require('../repositories/FarmRepository');
 const HistoryCageEntryRepository = require('../repositories/HistoryCageEntryRepository');
-const { insertEntryCage } = require('../validations/historyEntryCageSchema');
 const HistoryCageEntryDetailRepository = require('../repositories/HistoryCageEntryDetailRepository');
 const EventRepository = require('../repositories/EventRepository');
 const AnimalRepository = require('../repositories/AnimalRepository');
-
 const ReturnResponseUtil = require('../utils/returnResponse');
-const { insertBuyer } = require('../validations/buyerSchema');
 const BuyerRepository = require('../repositories/BuyerRepository');
 const HistorySellAnimalsRepository = require('../repositories/HistorySellAnimalsRepository');
 const HistorySellAnimalsDetailRepository = require('../repositories/HistorySellAnimalsDetailRepository');
-const { insertSHistorySellAnimals } = require('../validations/historySellAnimals');
 const SupplierRepository = require('../repositories/SupplierRepository');
 
+const { farmSchema } = require('../validations/farmSchema');
+const { insertEntryCage } = require('../validations/historyEntryCageSchema');
+const { insertBuyer } = require('../validations/buyerSchema');
+const { insertSHistorySellAnimals } = require('../validations/historySellAnimals');
 
-const currentTime = moment().tz('Asia/Ho_Chi_Minh').format('YYYY-MM-DD_HH-mm-ss');
+var currentTime = moment().tz('Asia/Ho_Chi_Minh').format('YYYY-MM-DD_HH-mm-ss');
 
 class FarmController {
 
@@ -174,7 +174,7 @@ class FarmController {
     }
 
     /**
-     * Function Controller: Lấy thông tin tổng quan về động vật trong trang trại như tổng trong tất cả chuồng, số lượng động vật đang ốm, bình thường và đã chết
+     * Function Controller: Lấy thông tin tổng quan về động vật trong trang trại như tổng động vật trong tất cả chuồng, số lượng động vật đang ốm, bình thường và đã chết
      */
     static async ReportAnimalSummary(req, res) {
 
@@ -317,6 +317,21 @@ class FarmController {
     }
 
     /**
+     * Function Controller: Lấy thông tin tổng quan về động vật của từng chuồng như tổng động vật trong từng chuồng, số lượng động vật đang ốm, bình thường và đã chết
+     */
+    static async GetAnimalSummaryOfEachCage(req, res) {
+        const farm_id = req.params.id;
+
+        var result = await FarmRepository.ReportAnimalSummaryOfEachCage(farm_id);
+        if (result != null) {
+            ReturnResponseUtil.returnResponse(res, 200, true, 'Get Report Animal Sumary Of Each Cage Successfully', result);
+        }
+        else {
+            ReturnResponseUtil.returnResponse(res, 404, false, 'No records found at the moment');
+        }
+    }
+
+    /**
      * Function Controller: Xuất bán
      */
     static async SellAnimals(req, res) {
@@ -359,7 +374,6 @@ class FarmController {
                         }
                         ReturnResponseUtil.returnResponse(res, 200, true, 'Inserted history sell animals successfully');
                     }
-
                 }
             }
 
@@ -415,6 +429,8 @@ class FarmController {
             ReturnResponseUtil.returnResponse(res, 400, false, 'An error has occurred, please try again');
         }
     }
+
+
 }
 
 module.exports = FarmController;

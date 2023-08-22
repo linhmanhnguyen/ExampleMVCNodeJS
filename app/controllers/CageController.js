@@ -87,9 +87,7 @@ class CageController {
      * Function Controller: Cập nhật thông tin của chuồng nuôi 
      */
     static async UpdateCageByID(req, res) {
-
         try {
-
             await cageSchema.validateAsync(req.body);
 
             var farm_ID = req.params.id;
@@ -122,7 +120,6 @@ class CageController {
             ReturnResponseUtil.returnResponse(res, 200, true, 'Deleted Cage successfully');
         }
     }
-
 
 }
 

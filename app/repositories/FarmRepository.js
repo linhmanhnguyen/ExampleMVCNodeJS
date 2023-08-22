@@ -1,5 +1,6 @@
 const connection = require('../configs/MySQLConnect');
 const AnimalSummaryModel = require('../models/AnimalSummaryModel');
+const AnimalSummaryOfEachCageModel = require('../models/AnimalSummaryOfEachCageModel');
 const FarmModel = require('../models/FarmModel');
 const GetSubStandardAnimalsModel = require('../models/GetSubStandardAnimalsModel');
 const ReportEntryCageModel = require('../models/ReportEntryCageModel');
@@ -115,6 +116,51 @@ class FarmRepository {
 
         const summary = new AnimalSummaryModel(result[0].healthy_animals, result[0].sick_animals, result[0].dead_animals, result[0].total_animals, result[0].typeAnimal);
         return summary;
+    }
+
+    /**
+     * Function Repository: Lấy thông tin tổng quan về động vật của từng chuồng như tổng động vật trong từng chuồng, số lượng động vật đang ốm, bình thường và đã chết
+     */
+    static async ReportAnimalSummaryOfEachCage(farm_id) {
+        const query = `
+        SELECT
+            c.id AS cage_id,
+            ud.fullName AS manager_fullname,
+            COUNT(a.id) AS total_animals,
+            COUNT(CASE WHEN a.status = 'normal' THEN 1 ELSE NULL END) AS healthy_count,
+            COUNT(CASE WHEN a.status = 'sick' THEN 1 ELSE NULL END) AS sick_count,
+            COUNT(CASE WHEN a.status = 'dead' THEN 1 ELSE NULL END) AS dead_count
+        FROM
+            cages c
+        LEFT JOIN
+            animals a ON c.id = a.cage_id
+        LEFT JOIN
+            user_accounts uc ON c.manager_id = uc.id
+        LEFT JOIN
+            user_details ud ON uc.userDetail_id = ud.id
+        WHERE
+            c.farm_id = ?
+        GROUP BY
+            c.id, c.cageName, ud.fullName
+        ORDER BY
+            c.id;
+        `;
+        const params = [farm_id];
+        const result = await connection.query(query, params);
+
+        if (result.length === 0) {
+            return null;
+        }
+
+        const cages = [];
+
+        for (const row of result) {
+            const cage = new AnimalSummaryOfEachCageModel(row.cage_id, row.manager_fullname, row.total_animals, row.healthy_count, row.sick_count, row.dead_count);
+            cages.push(cage);
+        }
+        return cages;
+
+
     }
 
     /**

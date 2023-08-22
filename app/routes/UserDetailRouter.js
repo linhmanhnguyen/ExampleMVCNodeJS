@@ -1,4 +1,3 @@
-const express = require('express');
 const router = require('express').Router();
 const UserDetailController = require('../controllers/UserDetailController');
 const { authenticateToken } = require('../middlewares/authMiddleware');
