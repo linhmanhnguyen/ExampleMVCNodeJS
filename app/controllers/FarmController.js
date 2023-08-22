@@ -339,7 +339,7 @@ class FarmController {
 
         var result = await FarmRepository.GetCageSummary(farm_id);
         if (result != null) {
-            ReturnResponseUtil.returnResponse(res, 200, true, 'Get Cage Sumary Successfully', result);
+            ReturnResponseUtil.returnResponse(res, 200, true, 'Get Cage Summary Successfully', result);
         }
         else {
             ReturnResponseUtil.returnResponse(res, 404, false, 'No records found at the moment');
