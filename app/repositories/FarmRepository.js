@@ -1,6 +1,7 @@
 const connection = require('../configs/MySQLConnect');
 const AnimalSummaryModel = require('../models/AnimalSummaryModel');
 const AnimalSummaryOfEachCageModel = require('../models/AnimalSummaryOfEachCageModel');
+const CageSummaryModel = require('../models/CageSummaryModel');
 const FarmModel = require('../models/FarmModel');
 const GetSubStandardAnimalsModel = require('../models/GetSubStandardAnimalsModel');
 const ReportEntryCageModel = require('../models/ReportEntryCageModel');
@@ -231,8 +232,8 @@ class FarmRepository {
     }
 
     /**
- * Function Repository: Lấy thông tin số lượng động vật đạt tiêu chuẩn trong 1 trang trại
- */
+     * Function Repository: Lấy thông tin số lượng động vật đạt tiêu chuẩn trong 1 trang trại
+     */
     static async GetStandardAnimals(weight, farm_id) {
         const query = `
                 SELECT
@@ -254,6 +255,10 @@ class FarmRepository {
         const params = [weight, farm_id];
         const result = await connection.query(query, params);
 
+        if (result.length === 0) {
+            return null;
+        }
+
         const info = new GetSubStandardAnimalsModel(
             result[0].totalAnimals,
             result[0].totalWeightAnimals,
@@ -261,6 +266,39 @@ class FarmRepository {
         );
 
         return info;
+    }
+
+    /**
+     * Function Repository: Lấy thông tin tổng quan về chuồng như có bao nhiêu chuồng đang trống và có bao nhiêu chuồng đang được sử dụng
+     */
+    static async GetCageSummary(farm_id) {
+        const query = `
+        SELECT
+            SUM(CASE WHEN animal_count > 0 THEN 1 ELSE 0 END) AS cagesWithAnimals,
+            SUM(CASE WHEN animal_count = 0 THEN 1 ELSE 0 END) AS emptyCages
+        FROM (
+            SELECT
+                c.id AS cage_id,
+                COUNT(a.id) AS animal_count
+            FROM
+                cages c
+            LEFT JOIN
+                animals a ON c.id = a.cage_id
+            WHERE
+                c.farm_id = ?
+            GROUP BY
+                c.id
+        ) AS cage_animal_counts;
+        `;
+        const params = [farm_id];
+        const result = await connection.query(query, params);
+
+        if (result.length === 0) {
+            return null;
+        }
+
+        const summray = new CageSummaryModel(result[0].cagesWithAnimals, result[0].emptyCages);
+        return summray;
     }
 
 }

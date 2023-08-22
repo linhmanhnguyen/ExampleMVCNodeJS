@@ -332,6 +332,21 @@ class FarmController {
     }
 
     /**
+     * Function Controller: La
+     */
+    static async GetCageSummary(req, res) {
+        const farm_id = req.params.id;
+
+        var result = await FarmRepository.GetCageSummary(farm_id);
+        if (result != null) {
+            ReturnResponseUtil.returnResponse(res, 200, true, 'Get Cage Sumary Successfully', result);
+        }
+        else {
+            ReturnResponseUtil.returnResponse(res, 404, false, 'No records found at the moment');
+        }
+    }
+
+    /**
      * Function Controller: Xuất bán
      */
     static async SellAnimals(req, res) {
