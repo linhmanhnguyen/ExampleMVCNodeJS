@@ -126,7 +126,7 @@ class FarmRepository {
         const query = `
         SELECT
             c.id AS cage_id,
-            c.cageName as cageName
+            c.cageName as cageName,
             ud.fullName AS manager_fullname,
             COUNT(a.id) AS total_animals,
             COUNT(CASE WHEN a.status = 'normal' THEN 1 ELSE NULL END) AS healthy_count,
