@@ -126,6 +126,7 @@ class FarmRepository {
         const query = `
         SELECT
             c.id AS cage_id,
+            c.cageName as cageName
             ud.fullName AS manager_fullname,
             COUNT(a.id) AS total_animals,
             COUNT(CASE WHEN a.status = 'normal' THEN 1 ELSE NULL END) AS healthy_count,
@@ -156,7 +157,7 @@ class FarmRepository {
         const cages = [];
 
         for (const row of result) {
-            const cage = new AnimalSummaryOfEachCageModel(row.cage_id, row.manager_fullname, row.total_animals, row.healthy_count, row.sick_count, row.dead_count);
+            const cage = new AnimalSummaryOfEachCageModel(row.cage_id, row.cageName, row.manager_fullname, row.total_animals, row.healthy_count, row.sick_count, row.dead_count);
             cages.push(cage);
         }
         return cages;

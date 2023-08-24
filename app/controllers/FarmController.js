@@ -55,7 +55,6 @@ class FarmController {
         } catch (error) {
             ReturnResponseUtil.returnResponse(res, 400, false, 'An error has occurred, please try again');
         }
-
     }
 
     /**
@@ -439,7 +438,6 @@ class FarmController {
             if (result) {
                 ReturnResponseUtil.returnResponse(res, 200, true, 'Inserted supplier successfully');
             }
-
         } catch (error) {
             ReturnResponseUtil.returnResponse(res, 400, false, 'An error has occurred, please try again');
         }
