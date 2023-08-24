@@ -86,7 +86,7 @@ class AuthController {
 
                 if (numberOfCages > 0) {
                     for (let index = 0; index < numberOfCages; index++) {
-                        var cageName = AddSerialNumber.addSerialNumber(index);
+                        var cageName = AddSerialNumber.addSerialNumber(index + 1);
                         var location = index + 1;
 
                         await CageRepository.InsertCage(cageName, farm_ID, location);
