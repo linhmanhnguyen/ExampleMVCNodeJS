@@ -332,7 +332,7 @@ class FarmController {
     }
 
     /**
-     * Function Controller: La
+     * Function Controller: Lấy thông tin tổng quan về chuồng như có bao nhiêu chuồng đang trống, bao nhiêu chuồng đang nuôi
      */
     static async GetCageSummary(req, res) {
         const farm_id = req.params.id;

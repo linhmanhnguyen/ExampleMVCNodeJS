@@ -1,4 +1,3 @@
-const farmModel = require('../models/FarmModel');
 const CageRepository = require('../repositories/CageRepository');
 const { cageSchema } = require('../validations/cageSchema');
 const ReturnResponseUtil = require('../utils/returnResponse');
@@ -105,7 +104,6 @@ class CageController {
         } catch (error) {
             ReturnResponseUtil.returnResponse(res, 400, false, `An error has occurred, please try again`);
         }
-
     }
 
     /**

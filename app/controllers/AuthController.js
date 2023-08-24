@@ -9,6 +9,7 @@ const FarmRepository = require('../repositories/FarmRepository');
 const GenerateAccessToken = require('../utils/genarateAccessToken');
 const ReturnResponseUtil = require('../utils/returnResponse');
 const CageRepository = require('../repositories/CageRepository');
+const AddSerialNumber = require('../utils/addSerialNumber');
 const currentTime = moment().tz('Asia/Ho_Chi_Minh').format('YYYY-MM-DD_HH-mm-ss');
 
 class AuthController {
@@ -85,7 +86,7 @@ class AuthController {
 
                 if (numberOfCages > 0) {
                     for (let index = 0; index < numberOfCages; index++) {
-                        var cageName = `Cage ${index + 1}`;
+                        var cageName = AddSerialNumber.addSerialNumber(index);
                         var location = index + 1;
 
                         await CageRepository.InsertCage(cageName, farm_ID, location);
