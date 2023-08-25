@@ -112,7 +112,7 @@ class UserDetailRepository {
     }
 
     /**
-     * Function Repository: 
+     * Function Repository: Lấy danh sách người dùng dựa theo role trong 1 trang trại
      */
     static async GetUsersByRoleInFarm(role_id, farm_id) {
         const query = `
@@ -126,11 +126,12 @@ class UserDetailRepository {
         const params = [role_id, farm_id];
         const result = await connection.query(query, params);
 
+        const users = [];
+
         if (result.length === 0) {
             return null;
         }
 
-        const users = [];
 
         for (const row of result) {
             const user = new UserInfoModel(row.userAccount_id, row.fullName);

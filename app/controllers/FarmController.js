@@ -451,7 +451,7 @@ class FarmController {
 
         var role_id = 4; // id của role nhân viên
 
-        var result = UserDetailRepository.GetUsersByRoleInFarm(role_id, farm_id);
+        var result = await UserDetailRepository.GetUsersByRoleInFarm(role_id, farm_id);
         if (result != null) {
             ReturnResponseUtil.returnResponse(res, 200, true, 'Get Employees in farm successfully', result);
         }
