@@ -238,7 +238,6 @@ class FarmController {
             // Nếu có lỗi xảy ra, ghi log và trả về phản hồi lỗi
             console.log(error);
             ReturnResponseUtil.returnResponse(res, 400, false, 'An error has occurred, please try again');
-
         }
     }
 

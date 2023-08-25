@@ -32,13 +32,13 @@ class CageController {
     static async InsertCage(req, res) {
         try {
 
-            await cageSchema.validateAsync(req.body);
+            // await cageSchema.validateAsync(req.body);
 
             var farm_ID = req.params.id;
 
-            var cageName = req.body.cageName;
-            var location = req.body.location;
-            var manager_ID = req.body.manager_ID;
+            // var cageName = req.body.cageName;
+            // var location = req.body.location;
+            // var manager_ID = req.body.manager_ID;
 
             // Properties để thêm nhân viên vào chuồng đó
             var livestockStaff_id = req.body.livestockStaff_id;
@@ -49,10 +49,17 @@ class CageController {
             var numberOfAnimalsInCage = req.body.numberOfAnimalsInCage;
             var totalWeight = req.body.totalWeight;
 
-            var result = await CageRepository.InsertCage(cageName, farm_ID, location, manager_ID);
-            if (result) {
-                ReturnResponseUtil.returnResponse(res, 200, true, 'Created cage successfully');
-            }
+            console.log(livestockStaff_id);
+            console.log(veterinaryStaff_id);
+
+            console.log(dateEntryCage);
+            console.log(numberOfAnimalsInCage);
+            console.log(totalWeight);
+
+            // var result = await CageRepository.InsertCage(cageName, farm_ID, location, manager_ID);
+            // if (result) {
+            ReturnResponseUtil.returnResponse(res, 200, true, 'Created cage successfully');
+            // }
         } catch (error) {
             // console.log(error);
             ReturnResponseUtil.returnResponse(res, 400, false, 'An error has occurred, please try again');
