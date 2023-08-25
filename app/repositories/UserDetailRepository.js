@@ -1,4 +1,5 @@
 const connection = require('../configs/MySQLConnect');
+const UserInfoModel = require('../models/UserInfoModel');
 
 class UserDetailRepository {
 
@@ -108,6 +109,34 @@ class UserDetailRepository {
         const params = [CitizenIdentification_ID, phone];
         const result = await connection.query(query, params);
         return result;
+    }
+
+    /**
+     * Function Repository: 
+     */
+    static async GetUserByRoleInFarm(role_id, farm_id) {
+        const query = `
+                        SELECT ua.id userAccount_id, ud.fullName
+                        FROM user_accounts ua
+                        JOIN user_roles ur ON ua.id = ur.userAccount_id
+                        JOIN user_farms uf ON ua.id = uf.userAccount_id
+                        JOIN user_details ud ON ua.userDetail_id = ud.id
+                        WHERE ur.role_id = ? AND uf.farm_id = ?;`
+
+        const params = [role_id, farm_id];
+        const result = await connection.query(query, params);
+
+        if (result.length === 0) {
+            return null;
+        }
+
+        const users = [];
+
+        for (const row of result) {
+            const user = new UserInfoModel(row.userAccount_id, row.fullName);
+            users.push(user);
+        }
+        return users;
     }
 }
 

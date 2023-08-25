@@ -36,4 +36,6 @@ router.post('/:id/buyers', authenticateToken, authorize(['admin', 'owner']), far
 router.post('/:id/sell-animals', authenticateToken, authorize(['admin', 'owner']), farmController.SellAnimals);
 
 router.post('/:id/suppliers', authenticateToken, authorize(['admin', 'owner']), farmController.InsertSupplier);
+
+router.get('/:id/employees', authenticateToken, authorize(['admin', 'owner']), farmController.GetEmployeeInFarm);
 module.exports = router;

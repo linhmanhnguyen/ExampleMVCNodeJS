@@ -161,8 +161,6 @@ class FarmRepository {
             cages.push(cage);
         }
         return cages;
-
-
     }
 
     /**

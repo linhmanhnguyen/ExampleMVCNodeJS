@@ -4,11 +4,11 @@ class CageRepository {
     /**
      * Function Repository: Thêm thông tin 1 chuồng nuôi vào trong trang trại
      */
-    static async InsertCage(CageName, Farm_ID, Location, Manager_ID) {
+    static async InsertCage(cageName, farm_id, location, manager_id) {
         const query = `
         INSERT INTO cages (cageName, farm_id, location, manager_id) 
         VALUES (?, ?, ?, ?)`;
-        const params = [CageName, Farm_ID, Location, Manager_ID];
+        const params = [cageName, farm_id, location, manager_id];
 
         const result = await connection.query(query, params);
         return result;
