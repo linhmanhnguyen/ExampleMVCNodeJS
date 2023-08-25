@@ -40,8 +40,14 @@ class CageController {
             var location = req.body.location;
             var manager_ID = req.body.manager_ID;
 
+            // Properties để thêm nhân viên vào chuồng đó
             var livestockStaff_id = req.body.livestockStaff_id;
             var veterinaryStaff_id = req.body.veterinaryStaff_id;
+
+            // Ngày nhập chuồng
+            var dateEntryCage = req.body.dateEntryCage;
+            var numberOfAnimalsInCage = req.body.numberOfAnimalsInCage;
+            var totalWeight = req.body.totalWeight;
 
             var result = await CageRepository.InsertCage(cageName, farm_ID, location, manager_ID);
             if (result) {

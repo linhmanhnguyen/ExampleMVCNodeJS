@@ -214,59 +214,26 @@ class FarmController {
             var supplier_id = req.body.supplier_id;
             var cages = req.body.cages;
 
-            // Kiểm tra xem đã có sự kiện liên quan đến việc nhập chuồng chưa
-            const events = await EventRepository.getEventByFarm(farm_id);
+            // Gọi hàm InsertHistory từ model HistoryCageEntryRepository để chèn thông tin lịch sử vào database
+            var resultHistoryCageEntry = await HistoryCageEntryRepository.InsertHistory(user_id, farm_id, typeAnimal_id, animalQuantity, weightOfAnimal, unitPrice, dateAction, supplier_id);
+            if (resultHistoryCageEntry) {
+                if (cages.length > 0) {
+                    for (let i = 0; i < cages.length; i++) {
+                        const cage_id = cages[i].cage_id;
+                        const animalsEntry = cages[i].animalsEntry;
 
-            if (!EventRepository.isEventActive(events)) {
-                // Nếu chưa có sự kiện hoặc sự kiện chưa kích hoạt, tạo một sự kiện mới với thời gian bắt đầu và kết thúc
+                        await HistoryCageEntryDetailRepository.InsertHistory(cage_id, animalsEntry, resultHistoryCageEntry.insertId);
 
-                const start_date = currentTime;
-                const end_date = null;
-                const newEventId = await EventRepository.CreateEvent(start_date, end_date, 1, farm_id);
-                if (newEventId) {
-                    // Gọi hàm InsertHistory từ model HistoryCageEntryRepository để chèn thông tin lịch sử vào database
-                    var resultHistoryCageEntry = await HistoryCageEntryRepository.InsertHistory(user_id, farm_id, typeAnimal_id, animalQuantity, weightOfAnimal, unitPrice, dateAction, supplier_id, newEventId.insertId);
-                    if (resultHistoryCageEntry) {
-
-                        if (cages.length > 0) {
-                            for (let i = 0; i < cages.length; i++) {
-                                const cage_id = cages[i].cage_id;
-                                const animalsEntry = cages[i].animalsEntry;
-
-                                await HistoryCageEntryDetailRepository.InsertHistory(cage_id, animalsEntry, resultHistoryCageEntry.insertId);
-
-                                for (let j = 0; j < animalsEntry; j++) {
-                                    await AnimalRepository.InsertAnimal(cage_id, "test", "male", weightOfAnimal, dateAction, "normal");
-                                }
-                            }
-                        }
-
-                        // Trả về phản hồi thành công nếu mọi thứ đều thành công
-                        ReturnResponseUtil.returnResponse(res, 200, true, 'Inserted history entry cage successfully');
-                    }
-                }
-            }
-            else {
-                var resultHistoryCageEntry = await HistoryCageEntryRepository.InsertHistory(user_id, farm_id, typeAnimal_id, animalQuantity, weightOfAnimal, unitPrice, dateAction, supplier_id, events[0].id);
-                if (resultHistoryCageEntry) {
-
-                    if (cages.length > 0) {
-                        for (let i = 0; i < cages.length; i++) {
-                            const cage_id = cages[i].cage_id;
-                            const animalsEntry = cages[i].animalsEntry;
-
-                            await HistoryCageEntryDetailRepository.InsertHistory(cage_id, animalsEntry, resultHistoryCageEntry.insertId);
-
-                            for (let j = 0; j < animalsEntry; j++) {
-                                await AnimalRepository.InsertAnimal(cage_id, "test", "male", weightOfAnimal, dateAction, "normal");
-                            }
+                        for (let j = 0; j < animalsEntry; j++) {
+                            await AnimalRepository.InsertAnimal(cage_id, "test", "male", weightOfAnimal, dateAction, "normal");
                         }
                     }
-
-                    // Trả về phản hồi thành công nếu mọi thứ đều thành công
-                    ReturnResponseUtil.returnResponse(res, 200, true, 'Inserted history entry cage successfully');
                 }
+                // Trả về phản hồi thành công nếu mọi thứ đều thành công
+                ReturnResponseUtil.returnResponse(res, 200, true, 'Inserted history entry cage successfully');
             }
+
+
         } catch (error) {
             // Nếu có lỗi xảy ra, ghi log và trả về phản hồi lỗi
             console.log(error);
