@@ -446,12 +446,12 @@ class FarmController {
     /**
      * Function Controller: Lấy thông tin nhân viên trong trại
      */
-    static async GetEmployeeInFarm(req, res) {
-        var farm_id = req.params.farm_id;
+    static async GetEmployeesInFarm(req, res) {
+        var farm_id = req.params.id;
 
         var role_id = 4; // id của role nhân viên
 
-        var result = UserDetailRepository.GetUserByRoleInFarm(role_id, farm_id);
+        var result = UserDetailRepository.GetUsersByRoleInFarm(role_id, farm_id);
         if (result != null) {
             ReturnResponseUtil.returnResponse(res, 200, true, 'Get Employees in farm successfully', result);
         }

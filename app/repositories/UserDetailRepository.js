@@ -114,7 +114,7 @@ class UserDetailRepository {
     /**
      * Function Repository: 
      */
-    static async GetUserByRoleInFarm(role_id, farm_id) {
+    static async GetUsersByRoleInFarm(role_id, farm_id) {
         const query = `
                         SELECT ua.id userAccount_id, ud.fullName
                         FROM user_accounts ua
