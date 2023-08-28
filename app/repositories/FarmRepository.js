@@ -5,6 +5,7 @@ const CageSummaryModel = require('../models/CageSummaryModel');
 const FarmModel = require('../models/FarmModel');
 const GetSubStandardAnimalsModel = require('../models/GetSubStandardAnimalsModel');
 const ReportEntryCageModel = require('../models/ReportEntryCageModel');
+const moment = require('moment');
 
 class FarmRepository {
     /**
@@ -166,9 +167,15 @@ class FarmRepository {
         const cages = [];
 
         for (const row of result) {
-            const cage = new AnimalSummaryOfEachCageModel(row.cage_id, row.cageName, row.manager_fullname, row.total_animals, row.healthy_count, row.sick_count, row.dead_count, row.startDate, row.endDate);
+            const startDate = row.startDate;
+            const originalFormat = "YYYY-MM-DDTHH:mm:ss.SSSZ";
+            const desiredFormat = "DD-MM-YYYY";
+            const formattedDate_startDate = moment(startDate, originalFormat).format(desiredFormat);
+            const endDate = row.endDate;
+            const formattedDate_endDate = moment(endDate, originalFormat).format(desiredFormat);
+
+            const cage = new AnimalSummaryOfEachCageModel(row.cage_id, row.cageName, row.manager_fullname, row.total_animals, row.healthy_count, row.sick_count, row.dead_count, formattedDate_startDate, formattedDate_endDate);
             cages.push(cage);
-            console.log(row.startDate);
         }
         return cages;
     }
