@@ -46,15 +46,19 @@ class CageController {
 
             // Ngày nhập chuồng
             var dateEntryCage = req.body.dateEntryCage;
+            const timestamp = Date.parse(dateEntryCage);
+            const dateObject = new Date(timestamp);
+            console.log(dateObject);
+
             var numberOfAnimalsInCage = req.body.numberOfAnimalsInCage;
             var totalWeight = req.body.totalWeight;
 
-            console.log(livestockStaff_id);
-            console.log(veterinaryStaff_id);
+            // console.log(livestockStaff_id);
+            // console.log(veterinaryStaff_id);
 
-            console.log(dateEntryCage);
-            console.log(numberOfAnimalsInCage);
-            console.log(totalWeight);
+            // console.log(dateEntryCage);
+            // console.log(numberOfAnimalsInCage);
+            // console.log(totalWeight);
 
             // var result = await CageRepository.InsertCage(cageName, farm_ID, location, manager_ID);
             // if (result) {
