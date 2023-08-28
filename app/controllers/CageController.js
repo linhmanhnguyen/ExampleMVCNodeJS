@@ -57,7 +57,7 @@ class CageController {
             var totalWeight = req.body.totalWeight;
             var dateAction = currentTime;
 
-            var resultInsertCage = await CageRepository.InsertCage('test', farm_ID, 9, manager_ID);
+            var resultInsertCage = await CageRepository.InsertCage('test', farm_ID, 9);
             if (resultInsertCage) {
                 var cage_id = resultInsertCage.insertId;
 
