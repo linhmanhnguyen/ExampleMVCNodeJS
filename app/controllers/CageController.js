@@ -40,7 +40,12 @@ class CageController {
     static async InsertCage(req, res) {
         try {
 
-            await insertCageSchema.validateAsync(req.body);
+            await insertCageSchema.validateAsync({
+                livestockStaff_id: req.body.username,
+                veterinaryStaff_id: req.body.password,
+
+            });
+
 
             var farm_ID = req.params.id;
             var user_id = req.user.userAccount_ID;
