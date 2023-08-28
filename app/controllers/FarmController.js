@@ -195,7 +195,6 @@ class FarmController {
         try {
             // Kiểm tra và xác thực dữ liệu trong đối tượng yêu cầu bằng cách sử dụng một schema (insertEntryCage.validateAsync)
             await insertEntryCage.validateAsync({
-                typeAnimal_id: req.body.typeAnimal_id,
                 animalQuantity: req.body.animalQuantity,
                 weightOfAnimal: req.body.weightOfAnimal,
                 unitPrice: req.body.unitPrice,
@@ -206,7 +205,6 @@ class FarmController {
             var user_id = req.user.userAccount_ID;
 
             // Trích xuất các thông tin về động vật từ đối tượng yêu cầu (req.body)
-            var typeAnimal_id = req.body.typeAnimal_id;
             var animalQuantity = req.body.animalQuantity;
             var weightOfAnimal = req.body.weightOfAnimal;
             var unitPrice = req.body.unitPrice;
@@ -215,7 +213,7 @@ class FarmController {
             var cages = req.body.cages;
 
             // Gọi hàm InsertHistory từ model HistoryCageEntryRepository để chèn thông tin lịch sử vào database
-            var resultHistoryCageEntry = await HistoryCageEntryRepository.InsertHistory(user_id, farm_id, typeAnimal_id, animalQuantity, weightOfAnimal, unitPrice, dateAction, supplier_id);
+            var resultHistoryCageEntry = await HistoryCageEntryRepository.InsertHistory(user_id, farm_id, animalQuantity, weightOfAnimal, unitPrice, dateAction, supplier_id);
             if (resultHistoryCageEntry) {
                 if (cages.length > 0) {
                     for (let i = 0; i < cages.length; i++) {

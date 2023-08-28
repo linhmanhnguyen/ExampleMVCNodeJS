@@ -47,9 +47,7 @@ class CageController {
 
             // Ngày nhập chuồng
             var dateEntryCage = req.body.dateEntryCage;
-            const dateObject = parse(dateEntryCage, 'dd-MM-yyyy', new Date());
-
-            console.log(dateObject);
+            const dateObject = parse(dateEntryCage, 'dd-MM-yyyy', new Date());      // Convert string to date
 
             var numberOfAnimalsInCage = req.body.numberOfAnimalsInCage;
             var totalWeight = req.body.totalWeight;
@@ -57,14 +55,15 @@ class CageController {
             // console.log(livestockStaff_id);
             // console.log(veterinaryStaff_id);
 
-            console.log(dateEntryCage);
+            // console.log(dateEntryCage);
             // console.log(numberOfAnimalsInCage);
             // console.log(totalWeight);
 
-            // var result = await CageRepository.InsertCage(cageName, farm_ID, location, manager_ID);
-            // if (result) {
-            ReturnResponseUtil.returnResponse(res, 200, true, 'Created cage successfully');
-            // }
+            var result = await CageRepository.InsertCage(cageName, farm_ID, location, manager_ID);
+            if (result) {
+
+                ReturnResponseUtil.returnResponse(res, 200, true, 'Created cage successfully');
+            }
         } catch (error) {
             // console.log(error);
             ReturnResponseUtil.returnResponse(res, 400, false, 'An error has occurred, please try again');
