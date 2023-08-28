@@ -61,7 +61,7 @@ class CageController {
             if (resultInsertCage) {
                 var cage_id = resultInsertCage.insertId;
 
-                if (livestockStaff_id == veterinaryStaff_id) {
+                if (parseInt(livestockStaff_id) == parseInt(veterinaryStaff_id)) {
                     await UserAccountRepository.InsertUserAccountToCage(livestockStaff_id, cage_id, dateAction, true, true, true, dateAction);
                 } else {
                     await UserAccountRepository.InsertUserAccountToCage(livestockStaff_id, cage_id, dateAction, true, false, true, dateAction);
