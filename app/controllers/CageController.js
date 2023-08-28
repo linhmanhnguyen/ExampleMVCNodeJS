@@ -47,9 +47,7 @@ class CageController {
 
             // Properties để thêm nhân viên vào chuồng đó
             var livestockStaff_id = req.body.livestockStaff_id;
-            console.log(livestockStaff_id);
             var veterinaryStaff_id = req.body.veterinaryStaff_id;
-            console.log(veterinaryStaff_id);
 
             // Ngày nhập chuồng
             var dateEntryCage = req.body.dateEntryCage;
@@ -63,14 +61,14 @@ class CageController {
             if (resultInsertCage) {
                 var cage_id = resultInsertCage.insertId;
 
-                // if (parseInt(livestockStaff_id) == parseInt(veterinaryStaff_id)) {
-                //     console.log(`${parseInt(livestockStaff_id)} == ${parseInt(veterinaryStaff_id)} Giống nhau`)
-                //     // await UserAccountRepository.InsertUserAccountToCage(livestockStaff_id, cage_id, dateAction, true, true, true, dateAction);
-                // } else if (parseInt(livestockStaff_id) != parseInt(veterinaryStaff_id)) {
-                //     console.log(`${parseInt(livestockStaff_id)} != ${parseInt(veterinaryStaff_id)} Giống nhau`)
-                //     // await UserAccountRepository.InsertUserAccountToCage(livestockStaff_id, cage_id, dateAction, true, false, true, dateAction);
-                //     // await UserAccountRepository.InsertUserAccountToCage(veterinaryStaff_id, cage_id, dateAction, false, true, true, dateAction);
-                // }
+                if (parseInt(livestockStaff_id) == parseInt(veterinaryStaff_id)) {
+                    console.log(`${parseInt(livestockStaff_id)} == ${parseInt(veterinaryStaff_id)} Giống nhau`)
+                    await UserAccountRepository.InsertUserAccountToCage(livestockStaff_id, cage_id, dateAction, true, true, true, dateAction);
+                } else if (parseInt(livestockStaff_id) != parseInt(veterinaryStaff_id)) {
+                    console.log(`${parseInt(livestockStaff_id)} != ${parseInt(veterinaryStaff_id)} Giống nhau`)
+                    await UserAccountRepository.InsertUserAccountToCage(livestockStaff_id, cage_id, dateAction, true, false, true, dateAction);
+                    await UserAccountRepository.InsertUserAccountToCage(veterinaryStaff_id, cage_id, dateAction, false, true, true, dateAction);
+                }
 
                 if (dateObject != null && numberOfAnimalsInCage != "" && totalWeight != "") {
                     var weightOfAnimal = parseInt(totalWeight) / parseInt(numberOfAnimalsInCage);
