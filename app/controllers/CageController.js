@@ -62,10 +62,12 @@ class CageController {
                 var cage_id = resultInsertCage.insertId;
 
                 if (parseInt(livestockStaff_id) == parseInt(veterinaryStaff_id)) {
-                    await UserAccountRepository.InsertUserAccountToCage(livestockStaff_id, cage_id, dateAction, true, true, true, dateAction);
-                } else {
-                    await UserAccountRepository.InsertUserAccountToCage(livestockStaff_id, cage_id, dateAction, true, false, true, dateAction);
-                    await UserAccountRepository.InsertUserAccountToCage(veterinaryStaff_id, cage_id, dateAction, false, true, true, dateAction);
+                    console.log(`${parseInt(livestockStaff_id)} == ${parseInt(veterinaryStaff_id)} Giống nhau`)
+                    // await UserAccountRepository.InsertUserAccountToCage(livestockStaff_id, cage_id, dateAction, true, true, true, dateAction);
+                } else if (parseInt(livestockStaff_id) != parseInt(veterinaryStaff_id)) {
+                    console.log(`${parseInt(livestockStaff_id)} != ${parseInt(veterinaryStaff_id)} Giống nhau`)
+                    // await UserAccountRepository.InsertUserAccountToCage(livestockStaff_id, cage_id, dateAction, true, false, true, dateAction);
+                    // await UserAccountRepository.InsertUserAccountToCage(veterinaryStaff_id, cage_id, dateAction, false, true, true, dateAction);
                 }
 
                 if (dateObject != null && numberOfAnimalsInCage != "" && totalWeight != "") {
