@@ -2,6 +2,7 @@ const CageRepository = require('../repositories/CageRepository');
 const { cageSchema } = require('../validations/cageSchema');
 const ReturnResponseUtil = require('../utils/returnResponse');
 const { parse } = require('date-fns');
+const HistoryCageEntryRepository = require('../repositories/HistoryCageEntryRepository');
 
 class CageController {
 
@@ -36,6 +37,7 @@ class CageController {
             // await cageSchema.validateAsync(req.body);
 
             var farm_ID = req.params.id;
+            var user_id = req.user.userAccount_ID;
 
             // var cageName = req.body.cageName;
             // var location = req.body.location;
@@ -52,20 +54,20 @@ class CageController {
             var numberOfAnimalsInCage = req.body.numberOfAnimalsInCage;
             var totalWeight = req.body.totalWeight;
 
-            // console.log(livestockStaff_id);
-            // console.log(veterinaryStaff_id);
+            console.log(livestockStaff_id);
+            console.log(veterinaryStaff_id);
 
-            // console.log(dateEntryCage);
-            // console.log(numberOfAnimalsInCage);
-            // console.log(totalWeight);
+            console.log(dateEntryCage);
+            console.log(numberOfAnimalsInCage);
+            console.log(totalWeight);
 
-            var result = await CageRepository.InsertCage(cageName, farm_ID, location, manager_ID);
-            if (result) {
-
-                ReturnResponseUtil.returnResponse(res, 200, true, 'Created cage successfully');
-            }
+            // var result = await CageRepository.InsertCage(cageName, farm_ID, location, manager_ID);
+            // if (result) {
+            //     await HistoryCageEntryRepository.InsertHistory(user_id, farm_ID, )
+            ReturnResponseUtil.returnResponse(res, 200, true, 'Created cage successfully');
+            // }
         } catch (error) {
-            // console.log(error);
+            console.log(error);
             ReturnResponseUtil.returnResponse(res, 400, false, 'An error has occurred, please try again');
         }
     }
