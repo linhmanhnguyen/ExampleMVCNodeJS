@@ -7,7 +7,7 @@ class HistoryCageEntryRepository {
     static async InsertHistory(userID, farmID, animalQuantity, weightOfAnimal, dateAction) {
         const query = `
                         INSERT INTO history_cage_entry (user_id, farm_id, animalQuantity, weightOfAnimal, dateAction)
-                        VALUES (?, ?, ?, ?, ?, ?)
+                        VALUES (?, ?, ?, ?, ?)
                     `;
 
         const params = [userID, farmID, animalQuantity, weightOfAnimal, dateAction];
