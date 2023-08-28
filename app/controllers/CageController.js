@@ -1,9 +1,8 @@
 const CageRepository = require('../repositories/CageRepository');
-const { cageSchema } = require('../validations/cageSchema');
+const { insertCageSchema } = require('../validations/cageSchema');
 const ReturnResponseUtil = require('../utils/returnResponse');
 const { parse } = require('date-fns');
 const HistoryCageEntryRepository = require('../repositories/HistoryCageEntryRepository');
-const { number } = require('joi');
 const HistoryCageEntryDetailRepository = require('../repositories/HistoryCageEntryDetailRepository');
 const moment = require('moment-timezone');
 const AnimalRepository = require('../repositories/AnimalRepository');
@@ -40,7 +39,7 @@ class CageController {
     static async InsertCage(req, res) {
         try {
 
-            // await cageSchema.validateAsync(req.body);
+            await insertCageSchema.validateAsync(req.body);
 
             var farm_ID = req.params.id;
             var user_id = req.user.userAccount_ID;
@@ -62,10 +61,8 @@ class CageController {
                 var cage_id = resultInsertCage.insertId;
 
                 if (parseInt(livestockStaff_id) == parseInt(veterinaryStaff_id)) {
-                    console.log(`${parseInt(livestockStaff_id)} == ${parseInt(veterinaryStaff_id)} Giống nhau`)
                     await UserAccountRepository.InsertUserAccountToCage(livestockStaff_id, cage_id, dateAction, true, true, true, dateAction);
                 } else if (parseInt(livestockStaff_id) != parseInt(veterinaryStaff_id)) {
-                    console.log(`${parseInt(livestockStaff_id)} != ${parseInt(veterinaryStaff_id)} Giống nhau`)
                     await UserAccountRepository.InsertUserAccountToCage(livestockStaff_id, cage_id, dateAction, true, false, true, dateAction);
                     await UserAccountRepository.InsertUserAccountToCage(veterinaryStaff_id, cage_id, dateAction, false, true, true, dateAction);
                 }
