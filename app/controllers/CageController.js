@@ -56,7 +56,7 @@ class CageController {
             // console.log(livestockStaff_id);
             // console.log(veterinaryStaff_id);
 
-            // console.log(dateEntryCage);
+            console.log(dateEntryCage);
             // console.log(numberOfAnimalsInCage);
             // console.log(totalWeight);
 
