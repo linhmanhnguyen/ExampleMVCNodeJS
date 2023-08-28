@@ -1,6 +1,7 @@
 const CageRepository = require('../repositories/CageRepository');
 const { cageSchema } = require('../validations/cageSchema');
 const ReturnResponseUtil = require('../utils/returnResponse');
+const { parse } = require('date-fns');
 
 class CageController {
 
@@ -46,7 +47,7 @@ class CageController {
 
             // Ngày nhập chuồng
             var dateEntryCage = req.body.dateEntryCage;
-            const dateObject = Date.parse(dateEntryCage, 'dd-MM-yyyy', new Date());
+            const dateObject = parse(dateEntryCage, 'dd-MM-yyyy', new Date());
 
             console.log(dateObject);
 
