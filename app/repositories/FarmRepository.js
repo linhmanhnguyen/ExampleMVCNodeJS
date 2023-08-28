@@ -168,6 +168,7 @@ class FarmRepository {
         for (const row of result) {
             const cage = new AnimalSummaryOfEachCageModel(row.cage_id, row.cageName, row.manager_fullname, row.total_animals, row.healthy_count, row.sick_count, row.dead_count, row.startDate, row.endDate);
             cages.push(cage);
+            console.log(row.startDate);
         }
         return cages;
     }
