@@ -46,8 +46,8 @@ class CageController {
 
             // Ngày nhập chuồng
             var dateEntryCage = req.body.dateEntryCage;
-            const timestamp = Date.parse(dateEntryCage);
-            const dateObject = new Date(timestamp);
+            const dateObject = Date.parse(dateEntryCage, 'dd-MM-yyyy', new Date());
+
             console.log(dateObject);
 
             var numberOfAnimalsInCage = req.body.numberOfAnimalsInCage;
