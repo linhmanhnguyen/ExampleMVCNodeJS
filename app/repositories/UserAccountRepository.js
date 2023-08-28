@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt');
 class UserAccountRepository {
 
     /**
-     * Function Model: Thêm thông tin tài khoản cho 1 người dùng
+     * Function Repository: Thêm thông tin tài khoản cho 1 người dùng
      */
     static async InsertUserAccount(Username, Password, CreateDate, UserDetail_ID, RefreshToken, Farm_ID) {
 
@@ -21,7 +21,7 @@ class UserAccountRepository {
     }
 
     /**
-     * Function Model: Lấy toàn bộ danh sách tài khoản
+     * Function Repository: Lấy toàn bộ danh sách tài khoản
      */
     static async GetAllUserAccounts() {
         const query = `SELECT id, username, createDate FROM user_accounts`;
@@ -31,7 +31,7 @@ class UserAccountRepository {
     }
 
     /**
-     * Function Model: Lấy thông tin chi tiết của 1 tài khoản bằng ID
+     * Function Repository: Lấy thông tin chi tiết của 1 tài khoản bằng ID
      */
     static async GetUserAccountByID(id) {
         const query = `SELECT id, username, createDate FROM user_accounts WHERE id = ?`;
@@ -41,7 +41,7 @@ class UserAccountRepository {
     }
 
     /**
-     * Function Model: Cập nhập thông tin chi tiết của 1 tài khoản bằng ID
+     * Function Repository: Cập nhập thông tin chi tiết của 1 tài khoản bằng ID
      */
     static async UpdateUserAccountById(password, id) {
         const query = `
@@ -57,7 +57,7 @@ class UserAccountRepository {
     }
 
     /**
-     * Function Model: Xóa thông tin tài khoản trong 1 thông tin người dùng
+     * Function Repository: Xóa thông tin tài khoản trong 1 thông tin người dùng
      */
     static async DeleteUserAccountByID(id) {
         const query = `DELETE FROM user_accounts WHERE id = ?`;
@@ -68,7 +68,7 @@ class UserAccountRepository {
     }
 
     /**
-     * Function Model: Gán tài khoản vừa được tạo với role ID
+     * Function Repository: Gán tài khoản vừa được tạo với role ID
      */
     static async InsertRoleForUserAccount(UserAccount_ID, Role_ID, CreateDate, Status) {
         const query = `
@@ -80,7 +80,7 @@ class UserAccountRepository {
     }
 
     /**
-     * Function Model: Gán tài khoản vào trang trại
+     * Function Repository: Gán tài khoản vào trang trại
      */
     static async InsertUserAccountToFarm(UserAccount_ID, Farm_ID, CreateDate, Status) {
         const query = `
@@ -92,7 +92,7 @@ class UserAccountRepository {
     }
 
     /**
-     * Function Model: Tìm tài khoản bằng username ()
+     * Function Repository: Tìm tài khoản bằng username ()
      */
     static async SearchUserAccountByUsername(username) {
         const query = ` SELECT user_accounts.id, user_accounts.username, user_accounts.password, user_accounts.userDetail_id,
@@ -112,7 +112,7 @@ class UserAccountRepository {
     }
 
     /**
-     * Function Model: Tìm tài khoản bằng username
+     * Function Repository: Tìm tài khoản bằng username
      */
     static async CheckExistUsername(username) {
         const query = `SELECT username FROM user_accounts WHERE username = ?`;
@@ -121,6 +121,18 @@ class UserAccountRepository {
         return result;
     }
 
+    /**
+     * Function Repository: Thêm tài khoản vào trong 1 chuồng
+     */
+    static async InsertUserAccountToCage(employee_id, cage_id, dateStart, isLivestockStaff, isVeterinaryStaff, status, lastModified) {
+        const query = `
+                        INSERT INTO cage_employees (employee_id, cage_id, dateStart, isLivestockStaff, isVeterinaryStaff, status, lastModified)
+                        VALUES (?, ?, ?, ?, ?, ?, ?)`;
+
+        const params = [employee_id, cage_id, dateStart, isLivestockStaff, isVeterinaryStaff, status, lastModified];
+        const result = await connection.query(query, params);
+        return result;
+    }
 }
 
 module.exports = UserAccountRepository;

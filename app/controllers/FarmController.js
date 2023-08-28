@@ -197,7 +197,6 @@ class FarmController {
             await insertEntryCage.validateAsync({
                 animalQuantity: req.body.animalQuantity,
                 weightOfAnimal: req.body.weightOfAnimal,
-                unitPrice: req.body.unitPrice,
             });
 
             // Trích xuất farm_id và user_id từ đối tượng yêu cầu (req)
@@ -207,13 +206,12 @@ class FarmController {
             // Trích xuất các thông tin về động vật từ đối tượng yêu cầu (req.body)
             var animalQuantity = req.body.animalQuantity;
             var weightOfAnimal = req.body.weightOfAnimal;
-            var unitPrice = req.body.unitPrice;
             var dateAction = currentTime;
             var supplier_id = req.body.supplier_id;
             var cages = req.body.cages;
 
             // Gọi hàm InsertHistory từ model HistoryCageEntryRepository để chèn thông tin lịch sử vào database
-            var resultHistoryCageEntry = await HistoryCageEntryRepository.InsertHistory(user_id, farm_id, animalQuantity, weightOfAnimal, unitPrice, dateAction, supplier_id);
+            var resultHistoryCageEntry = await HistoryCageEntryRepository.InsertHistory(user_id, farm_id, animalQuantity, weightOfAnimal, dateAction, supplier_id);
             if (resultHistoryCageEntry) {
                 if (cages.length > 0) {
                     for (let i = 0; i < cages.length; i++) {

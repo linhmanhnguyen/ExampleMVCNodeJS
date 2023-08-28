@@ -3,6 +3,12 @@ const { cageSchema } = require('../validations/cageSchema');
 const ReturnResponseUtil = require('../utils/returnResponse');
 const { parse } = require('date-fns');
 const HistoryCageEntryRepository = require('../repositories/HistoryCageEntryRepository');
+const { number } = require('joi');
+const HistoryCageEntryDetailRepository = require('../repositories/HistoryCageEntryDetailRepository');
+const moment = require('moment-timezone');
+const AnimalRepository = require('../repositories/AnimalRepository');
+const UserAccountRepository = require('../repositories/UserAccountRepository');
+var currentTime = moment().tz('Asia/Ho_Chi_Minh').format('YYYY-MM-DD_HH-mm-ss');
 
 class CageController {
 
@@ -39,10 +45,6 @@ class CageController {
             var farm_ID = req.params.id;
             var user_id = req.user.userAccount_ID;
 
-            // var cageName = req.body.cageName;
-            // var location = req.body.location;
-            // var manager_ID = req.body.manager_ID;
-
             // Properties để thêm nhân viên vào chuồng đó
             var livestockStaff_id = req.body.livestockStaff_id;
             var veterinaryStaff_id = req.body.veterinaryStaff_id;
@@ -53,19 +55,32 @@ class CageController {
 
             var numberOfAnimalsInCage = req.body.numberOfAnimalsInCage;
             var totalWeight = req.body.totalWeight;
+            var dateAction = currentTime;
 
-            console.log(livestockStaff_id);
-            console.log(veterinaryStaff_id);
+            var resultInsertCage = await CageRepository.InsertCage('test', farm_ID, 9, manager_ID);
+            if (resultInsertCage) {
+                var cage_id = resultInsertCage.insertId;
 
-            console.log(dateEntryCage);
-            console.log(numberOfAnimalsInCage);
-            console.log(totalWeight);
+                if (livestockStaff_id == veterinaryStaff_id) {
+                    await UserAccountRepository.InsertUserAccountToCage(livestockStaff_id, cage_id, dateAction, true, true, true, dateAction);
+                } else {
+                    await UserAccountRepository.InsertUserAccountToCage(livestockStaff_id, cage_id, dateAction, true, false, true, dateAction);
+                    await UserAccountRepository.InsertUserAccountToCage(veterinaryStaff_id, cage_id, dateAction, false, true, true, dateAction);
+                }
 
-            // var result = await CageRepository.InsertCage(cageName, farm_ID, location, manager_ID);
-            // if (result) {
-            //     await HistoryCageEntryRepository.InsertHistory(user_id, farm_ID, )
-            ReturnResponseUtil.returnResponse(res, 200, true, 'Created cage successfully');
-            // }
+                if (dateObject != null && numberOfAnimalsInCage != "" && totalWeight != "") {
+                    var weightOfAnimal = parseInt(totalWeight) / parseInt(numberOfAnimalsInCage);
+
+                    var resultInsertHistoryEntryCage = await HistoryCageEntryRepository.InsertHistory(user_id, farm_ID, numberOfAnimalsInCage, weightOfAnimal, dateAction);
+                    await HistoryCageEntryDetailRepository.InsertHistory(cage_id, numberOfAnimalsInCage, resultInsertHistoryEntryCage.insertId)
+
+                    for (let i = 0; i < numberOfAnimalsInCage; i++) {
+                        await AnimalRepository.InsertAnimal(cage_id, "test", "male", weightOfAnimal, dateAction, "normal");
+                    }
+                }
+
+                ReturnResponseUtil.returnResponse(res, 200, true, 'Created cage successfully');
+            }
         } catch (error) {
             console.log(error);
             ReturnResponseUtil.returnResponse(res, 400, false, 'An error has occurred, please try again');
