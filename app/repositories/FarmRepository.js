@@ -126,12 +126,14 @@ class FarmRepository {
         const query = `
         SELECT
             c.id AS cage_id,
-            c.cageName as cageName,
+            c.cageName AS cageName,
             ud.fullName AS manager_fullname,
             COUNT(a.id) AS total_animals,
             COUNT(CASE WHEN a.status = 'normal' THEN 1 ELSE NULL END) AS healthy_count,
             COUNT(CASE WHEN a.status = 'sick' THEN 1 ELSE NULL END) AS sick_count,
-            COUNT(CASE WHEN a.status = 'dead' THEN 1 ELSE NULL END) AS dead_count
+            COUNT(CASE WHEN a.status = 'dead' THEN 1 ELSE NULL END) AS dead_count,
+            e.startDate AS startDate,
+            e.endDate AS endDate
         FROM
             cages c
         LEFT JOIN
@@ -140,10 +142,17 @@ class FarmRepository {
             user_accounts uc ON c.manager_id = uc.id
         LEFT JOIN
             user_details ud ON uc.userDetail_id = ud.id
+
+        LEFT JOIN
+            history_cage_entry_detail hced ON c.id = hced.cage_id -- Tham gia bảng history_cage_entry
+        LEFT JOIN 
+            history_cage_entry hce ON hced.historyEntryCage_id = hce.id
+        LEFT JOIN
+            events e ON e.id = hce.event_id
         WHERE
             c.farm_id = ?
         GROUP BY
-            c.id, c.cageName, ud.fullName
+            c.id, c.cageName, ud.fullName, e.startDate, e.endDate
         ORDER BY
             c.id;
         `;
@@ -157,7 +166,7 @@ class FarmRepository {
         const cages = [];
 
         for (const row of result) {
-            const cage = new AnimalSummaryOfEachCageModel(row.cage_id, row.cageName, row.manager_fullname, row.total_animals, row.healthy_count, row.sick_count, row.dead_count);
+            const cage = new AnimalSummaryOfEachCageModel(row.cage_id, row.cageName, row.manager_fullname, row.total_animals, row.healthy_count, row.sick_count, row.dead_count, row.startDate, row.endDate);
             cages.push(cage);
         }
         return cages;
