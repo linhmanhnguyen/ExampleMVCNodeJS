@@ -4,13 +4,13 @@ class HistoryCageEntryRepository {
     /**
      * Function Model: Thêm lịch sử nhập chuồng
      */
-    static async InsertHistory(userID, farmID, animalQuantity, weightOfAnimal, dateAction) {
+    static async InsertHistory(userID, farmID, animalQuantity, weightOfAnimal, dateAction, event_id) {
         const query = `
-                        INSERT INTO history_cage_entry (user_id, farm_id, animalQuantity, weightOfAnimal, dateAction)
-                        VALUES (?, ?, ?, ?, ?)
+                        INSERT INTO history_cage_entry (user_id, farm_id, animalQuantity, weightOfAnimal, dateAction, event_id)
+                        VALUES (?, ?, ?, ?, ?, ?)
                     `;
 
-        const params = [userID, farmID, animalQuantity, weightOfAnimal, dateAction];
+        const params = [userID, farmID, animalQuantity, weightOfAnimal, dateAction, event_id];
         const result = await connection.query(query, params);
         return result;
     }

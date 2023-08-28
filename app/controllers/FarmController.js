@@ -207,11 +207,18 @@ class FarmController {
             var animalQuantity = req.body.animalQuantity;
             var weightOfAnimal = req.body.weightOfAnimal;
             var dateAction = currentTime;
-            var supplier_id = req.body.supplier_id;
             var cages = req.body.cages;
+            const endDate = new Date(startDate);
+
+            // Thêm 5 tháng vào ngày kết thúc
+            endDate.setMonth(endDate.getMonth() + 5);
+
+            var resultInsertEvent = await EventRepository.CreateEvent(dateAction, endDate.toISOString().split('T')[0]);
+            const event_id = resultInsertEvent.insertId;
 
             // Gọi hàm InsertHistory từ model HistoryCageEntryRepository để chèn thông tin lịch sử vào database
-            var resultHistoryCageEntry = await HistoryCageEntryRepository.InsertHistory(user_id, farm_id, animalQuantity, weightOfAnimal, dateAction, supplier_id);
+            var resultHistoryCageEntry = await HistoryCageEntryRepository.InsertHistory(user_id, farm_id, animalQuantity, weightOfAnimal, dateAction, event_id);
+
             if (resultHistoryCageEntry) {
                 if (cages.length > 0) {
                     for (let i = 0; i < cages.length; i++) {

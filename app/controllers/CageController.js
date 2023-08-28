@@ -7,6 +7,7 @@ const HistoryCageEntryDetailRepository = require('../repositories/HistoryCageEnt
 const moment = require('moment-timezone');
 const AnimalRepository = require('../repositories/AnimalRepository');
 const UserAccountRepository = require('../repositories/UserAccountRepository');
+const EventRepository = require('../repositories/EventRepository');
 var currentTime = moment().tz('Asia/Ho_Chi_Minh').format('YYYY-MM-DD_HH-mm-ss');
 
 class CageController {
@@ -51,9 +52,14 @@ class CageController {
             // Ngày nhập chuồng
             var dateEntryCage = req.body.dateEntryCage;
             const dateObject = parse(dateEntryCage, 'dd-MM-yyyy', new Date());      // Convert string to date
+            const endDate = new Date(dateObject);
+
+            // Thêm 5 tháng vào ngày kết thúc
+            endDate.setMonth(endDate.getMonth() + 5);
 
             var numberOfAnimalsInCage = req.body.numberOfAnimalsInCage;
             var totalWeight = req.body.totalWeight;
+
             var dateAction = currentTime;
 
             var resultInsertCage = await CageRepository.InsertCage('test', farm_ID, 9);
@@ -68,9 +74,12 @@ class CageController {
                 }
 
                 if (dateObject != null && numberOfAnimalsInCage != "" && totalWeight != "") {
+                    var resultInsertEvent = await EventRepository.CreateEvent(dateObject, endDate.toISOString().split('T')[0]);
+                    const event_id = resultInsertEvent.insertId;
+
                     var weightOfAnimal = parseInt(totalWeight) / parseInt(numberOfAnimalsInCage);
 
-                    var resultInsertHistoryEntryCage = await HistoryCageEntryRepository.InsertHistory(user_id, farm_ID, numberOfAnimalsInCage, weightOfAnimal, dateAction);
+                    var resultInsertHistoryEntryCage = await HistoryCageEntryRepository.InsertHistory(user_id, farm_ID, numberOfAnimalsInCage, weightOfAnimal, dateAction, event_id);
                     await HistoryCageEntryDetailRepository.InsertHistory(cage_id, numberOfAnimalsInCage, resultInsertHistoryEntryCage.insertId)
 
                     for (let i = 0; i < numberOfAnimalsInCage; i++) {
