@@ -30,12 +30,12 @@ class CageRepository {
      */
     static async GetCageByID(Cage_ID) {
         const queryGetLivetockStaffInCage = `SELECT * FROM cage_employees WHERE cage_id = ? AND isLivestockStaff = true AND status = true`;
-        const paramsGetLivetockStaffInCage = [Cage_ID];
-        const resultGetLivetockStaffInCage = await connection.query(queryGetLivetockStaffInCage, paramsGetLivetockStaffInCage);
+        const params = [Cage_ID];
+        const resultGetLivetockStaffInCage = await connection.query(queryGetLivetockStaffInCage, params);
 
         const queryGetVeterinaryStaffInCage = `SELECT * FROM cage_employees WHERE cage_id = ? AND isVeterinaryStaff = true AND status = true`;
-        const paramsGetVeterinaryStaffInCage = [Cage_ID];
-        const resultGetVeterinaryStaffInCage = await connection.query(queryGetVeterinaryStaffInCage, paramsGetVeterinaryStaffInCage);
+
+        const resultGetVeterinaryStaffInCage = await connection.query(queryGetVeterinaryStaffInCage, params);
 
         if (resultGetLivetockStaffInCage.length === 0 && resultGetVeterinaryStaffInCage.length === 0) {
             return null;
