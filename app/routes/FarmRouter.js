@@ -13,9 +13,9 @@ router.delete('/:id', authenticateToken, authorize(['admin']), farmController.De
 
 router.post('/:id/cages', authenticateToken, authorize(['admin', 'owner']), cageController.InsertCage);
 router.post('/:id/cages/create-multiple', authenticateToken, authorize(['admin', 'owner']), cageController.InsertMultipleCages);
-router.get('/:id/cages/:cage_id', authenticateToken, authorize(['admin', 'owner']), cageController.GetCageByID);
-router.put('/:id/cages/:cage_id', authenticateToken, authorize(['admin', 'owner']), cageController.UpdateCageByID);
-router.delete('/:id/cages/:cage_id', authenticateToken, authorize(['admin', 'owner']), cageController.DeleteCageByID);
+// router.get('/:id/cages/:cage_id', authenticateToken, authorize(['admin', 'owner']), cageController.GetCageByID);
+// router.put('/:id/cages/:cage_id', authenticateToken, authorize(['admin', 'owner']), cageController.UpdateCageByID);
+// router.delete('/:id/cages/:cage_id', authenticateToken, authorize(['admin', 'owner']), cageController.DeleteCageByID);
 
 router.post('/:id/cages/:cage_id/animals', authenticateToken, authorize(['admin', 'owner']), animalController.InsertAnimal);
 router.get('/:id/cages/:cage_id/animals', authenticateToken, authorize(['admin']), animalController.GetAllAnimalsInCage);

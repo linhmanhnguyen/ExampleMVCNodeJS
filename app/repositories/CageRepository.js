@@ -29,11 +29,11 @@ class CageRepository {
      * Function Repository: Lấy thông tin chi tiết của 1 chuồng nuôi trong 1 trang trại
      */
     static async GetCageByID(Cage_ID) {
-        const queryGetLivetockStaffInCage = `SELECT * FROM cage_employees WHERE cage_id = ? AND `;
+        const queryGetLivetockStaffInCage = `SELECT * FROM cage_employees WHERE cage_id = ? AND status = true`;
         const paramsGetLivetockStaffInCage = [Cage_ID];
         const resultGetLivetockStaffInCage = await connection.query(queryGetLivetockStaffInCage, paramsGetLivetockStaffInCage);
 
-        const queryGetVeterinaryStaffInCage = `SELECT * FROM cage_employees WHERE cage_id = ?`;
+        const queryGetVeterinaryStaffInCage = `SELECT * FROM cage_employees WHERE cage_id = ? AND status = true`;
         const paramsGetVeterinaryStaffInCage = [Cage_ID];
         const resultGetVeterinaryStaffInCage = await connection.query(queryGetVeterinaryStaffInCage, paramsGetVeterinaryStaffInCage);
 
