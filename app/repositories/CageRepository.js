@@ -42,9 +42,10 @@ class CageRepository {
         if (resultGetLivetockStaffInCage.length === 0 && resultGetVeterinaryStaffInCage === 0) {
             return null;
         }
-
-        const cage = new CageModel(resultGetLivetockStaffInCage[0].employee_id, resultGetVeterinaryStaffInCage[0].employee_id, resultAnimalCount[0].animal_count);
-        return cage;
+        else {
+            const cage = new CageModel(resultGetLivetockStaffInCage[0].employee_id, resultGetVeterinaryStaffInCage[0].employee_id, resultAnimalCount[0].animal_count);
+            return cage;
+        }
     }
 
     /**
