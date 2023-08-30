@@ -36,9 +36,9 @@ class CageRepository {
         const queryGetVeterinaryStaffInCage = `SELECT * FROM cage_employees WHERE cage_id = ? AND isVeterinaryStaff = true AND status = true`;
         const resultGetVeterinaryStaffInCage = await connection.query(queryGetVeterinaryStaffInCage, params);
 
-        // if (resultGetLivetockStaffInCage.length === 0) {
-        //     return null;
-        // }
+        if (resultGetLivetockStaffInCage.length === 0 && resultGetVeterinaryStaffInCage === 0) {
+            return null;
+        }
 
         const cage = new CageModel(resultGetLivetockStaffInCage[0].employee_id, resultGetVeterinaryStaffInCage[0].employee_id);
 
