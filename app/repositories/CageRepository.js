@@ -36,12 +36,14 @@ class CageRepository {
         const queryGetVeterinaryStaffInCage = `SELECT * FROM cage_employees WHERE cage_id = ? AND isVeterinaryStaff = true AND status = true`;
         const resultGetVeterinaryStaffInCage = await connection.query(queryGetVeterinaryStaffInCage, params);
 
+        const queryAnimalCount = `SELECT COUNT(*) AS animal_count FROM animals WHERE cage_id = ?`;
+        const resultAnimalCount = await connection.query(queryAnimalCount, params);
+
         if (resultGetLivetockStaffInCage.length === 0 && resultGetVeterinaryStaffInCage === 0) {
             return null;
         }
 
-        const cage = new CageModel(resultGetLivetockStaffInCage[0].employee_id, resultGetVeterinaryStaffInCage[0].employee_id);
-
+        const cage = new CageModel(resultGetLivetockStaffInCage[0].employee_id, resultGetVeterinaryStaffInCage[0].employee_id, resultAnimalCount[0].animal_count);
         return cage;
     }
 
