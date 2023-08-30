@@ -101,10 +101,9 @@ class CageController {
      * Function Controller: Lấy thông tin 1 chuồng nuôi trong 1 trang trại
      */
     static async GetCageByID(req, res) {
-        var farm_ID = req.params.id;
         var cage_ID = req.params.cage_id;
 
-        var result = await CageRepository.GetCageByID(cage_ID, farm_ID);
+        var result = await CageRepository.GetCageByID(cage_ID);
         if (result.length > 0) {
             ReturnResponseUtil.returnResponse(res, 200, true, `Get Cage In Farm Successfully`, result);
         }
