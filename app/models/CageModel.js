@@ -1,8 +1,8 @@
 class CageModel {
-    constructor(livestockStaff_id, veterinaryStaff_id, animal_count) {
+    constructor(livestockStaff_id, veterinaryStaff_id, numberOfAnimalsInCage) {
         this.livestockStaff_id = livestockStaff_id;
         this.veterinaryStaff_id = veterinaryStaff_id;
-        this.animal_count = animal_count;
+        this.numberOfAnimalsInCage = numberOfAnimalsInCage;
     }
 }
 
