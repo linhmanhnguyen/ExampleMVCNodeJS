@@ -28,18 +28,17 @@ class CageRepository {
     /**
      * Function Repository: Lấy thông tin chi tiết của 1 chuồng nuôi trong 1 trang trại
      */
-    static async GetCageByID(Cage_ID) {
+    static async GetCageByID(cage_id) {
         const queryGetLivetockStaffInCage = `SELECT * FROM cage_employees WHERE cage_id = ? AND isLivestockStaff = true AND status = true`;
-        const params = [Cage_ID];
+        const params = [cage_id];
         const resultGetLivetockStaffInCage = await connection.query(queryGetLivetockStaffInCage, params);
 
         const queryGetVeterinaryStaffInCage = `SELECT * FROM cage_employees WHERE cage_id = ? AND isVeterinaryStaff = true AND status = true`;
-
         const resultGetVeterinaryStaffInCage = await connection.query(queryGetVeterinaryStaffInCage, params);
 
-        if (resultGetLivetockStaffInCage.length === 0 && resultGetVeterinaryStaffInCage.length === 0) {
-            return null;
-        }
+        // if (resultGetLivetockStaffInCage.length === 0) {
+        //     return null;
+        // }
 
         const cage = new CageModel(resultGetLivetockStaffInCage[0].employee_id, resultGetVeterinaryStaffInCage[0].employee_id);
 
