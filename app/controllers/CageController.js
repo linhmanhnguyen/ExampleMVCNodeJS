@@ -104,7 +104,7 @@ class CageController {
         var cage_ID = req.params.cage_id;
 
         var result = await CageRepository.GetCageByID(cage_ID);
-        if (result.length > 0) {
+        if (result != null) {
             ReturnResponseUtil.returnResponse(res, 200, true, `Get Cage In Farm Successfully`, result);
         }
         else {
