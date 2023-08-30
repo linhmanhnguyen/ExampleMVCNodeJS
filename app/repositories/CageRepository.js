@@ -39,7 +39,7 @@ class CageRepository {
         const queryAnimalCount = `SELECT COUNT(*) AS animal_count FROM animals WHERE cage_id = ?`;
         const resultAnimalCount = await connection.query(queryAnimalCount, params);
 
-        if (resultGetLivetockStaffInCage.length === 0 && resultGetVeterinaryStaffInCage === 0) {
+        if (resultGetLivetockStaffInCage.length === 0 && resultGetVeterinaryStaffInCage === 0 && resultAnimalCount[0].animal_count == 0) {
             return null;
         }
         else {
