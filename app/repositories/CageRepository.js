@@ -29,23 +29,35 @@ class CageRepository {
      * Function Repository: Lấy thông tin chi tiết của 1 chuồng nuôi trong 1 trang trại
      */
     static async GetCageByID(cage_id) {
-        const queryGetLivetockStaffInCage = `SELECT * FROM cage_employees WHERE cage_id = ? AND isLivestockStaff = true AND status = true`;
+        const query = `
+        SELECT
+            ce1.employee_id AS livestockStaff_id,
+            ce2.employee_id AS veterinaryStaff_id,
+            COUNT(a.id) AS numberOfAnimalsInCage
+        FROM
+            cage_employees ce1
+        LEFT JOIN
+            cage_employees ce2 ON ce1.cage_id = ce2.cage_id
+        LEFT JOIN
+            animals a ON ce1.cage_id = a.cage_id
+        WHERE
+            ce1.cage_id = ? AND
+            ce1.isLivestockStaff = true AND
+            ce1.status = true AND
+            ce2.isVeterinaryStaff = true AND
+            ce2.status = true
+        GROUP BY
+            ce1.employee_id, ce2.employee_id;
+        `;
         const params = [cage_id];
-        const resultGetLivetockStaffInCage = await connection.query(queryGetLivetockStaffInCage, params);
+        const result = await connection.query(query, params);
 
-        const queryGetVeterinaryStaffInCage = `SELECT * FROM cage_employees WHERE cage_id = ? AND isVeterinaryStaff = true AND status = true`;
-        const resultGetVeterinaryStaffInCage = await connection.query(queryGetVeterinaryStaffInCage, params);
-
-        const queryAnimalCount = `SELECT COUNT(*) AS animal_count FROM animals WHERE cage_id = ?`;
-        const resultAnimalCount = await connection.query(queryAnimalCount, params);
-
-        if (resultGetLivetockStaffInCage.length === 0 && resultGetVeterinaryStaffInCage === 0 && resultAnimalCount[0].animal_count == 0) {
+        if (result.length === 0) {
             return null;
         }
-        else {
-            const cage = new CageModel(resultGetLivetockStaffInCage[0].employee_id, resultGetVeterinaryStaffInCage[0].employee_id, resultAnimalCount[0].animal_count);
-            return cage;
-        }
+
+        const cage = new CageModel(result[0].livestockStaff_id, result[0].veterinaryStaff_id, result[0].numberOfAnimalsInCage);
+        return cage;
     }
 
     /**
