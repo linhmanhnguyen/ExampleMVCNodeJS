@@ -39,11 +39,9 @@ class CageController {
      */
     static async InsertCage(req, res) {
         try {
-
             await insertCageSchema.validateAsync({
                 livestockStaff_id: req.body.livestockStaff_id,
                 veterinaryStaff_id: req.body.veterinaryStaff_id,
-
             });
 
             var farm_ID = req.params.id;
@@ -96,21 +94,6 @@ class CageController {
         } catch (error) {
             console.log(error);
             ReturnResponseUtil.returnResponse(res, 400, false, 'An error has occurred, please try again');
-        }
-    }
-
-    /**
-     * Function Controller: Lấy tất cả chuồng nuôi trong 1 trang trại
-     */
-    static async GetAllCagesInFarms(req, res) {
-        var farm_ID = req.params.id;
-
-        var result = await CageRepository.GetAllCagesInFarm(farm_ID);
-        if (result.length > 0) {
-            ReturnResponseUtil.returnResponse(res, 200, true, `Get all cages in farm successfully`, result);
-        }
-        else {
-            ReturnResponseUtil.returnResponse(res, 404, false, `No records found at the moment`);
         }
     }
 
