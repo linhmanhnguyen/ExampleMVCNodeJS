@@ -117,19 +117,26 @@ class CageController {
      */
     static async UpdateCageByID(req, res) {
         try {
-            await cageSchema.validateAsync(req.body);
+            // await cageSchema.validateAsync(req.body);
 
-            var farm_ID = req.params.id;
-            var cage_ID = req.params.cage_id;
+            var cage_ID = req.params.id;
 
-            var cageName = req.body.cageName;
-            var location = req.body.location;
-            var manager_ID = req.body.manager_ID;
+            // var cageName = req.body.cageName;
+            // var location = req.body.location;
+            // var manager_ID = req.body.manager_ID;
 
-            var result = await CageRepository.UpdateCageByID(cageName, location, manager_ID, cage_ID, farm_ID);
-            if (result) {
-                ReturnResponseUtil.returnResponse(res, 200, true, `Updated Cage Successfully`);
-            }
+            // var result = await CageRepository.UpdateCageByID(cageName, location, manager_ID, cage_ID, farm_ID);
+            // if (result) {
+            //     ReturnResponseUtil.returnResponse(res, 200, true, `Updated Cage Successfully`);
+            // }
+
+            var livestockStaff_id = req.body.livestockStaff_id;
+            console.log(livestockStaff_id);
+            var veterinaryStaff_id = req.body.veterinaryStaff_id;
+            console.log(veterinaryStaff_id);
+
+            ReturnResponseUtil.returnResponse(res, 200, true, `Updated Cage Successfully`);
+
 
         } catch (error) {
             ReturnResponseUtil.returnResponse(res, 400, false, `An error has occurred, please try again`);
