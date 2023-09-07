@@ -143,34 +143,7 @@ class UserAccountRepository {
     return result;
   }
 
-  /**
-   * Function Repository: Thêm tài khoản vào trong 1 chuồng
-   */
-  static async InsertUserAccountToCage(
-    employee_id,
-    cage_id,
-    dateStart,
-    isLivestockStaff,
-    isVeterinaryStaff,
-    status,
-    lastModified
-  ) {
-    const query = `
-                        INSERT INTO cage_employees (employee_id, cage_id, dateStart, isLivestockStaff, isVeterinaryStaff, status, lastModified)
-                        VALUES (?, ?, ?, ?, ?, ?, ?)`;
-
-    const params = [
-      employee_id,
-      cage_id,
-      dateStart,
-      isLivestockStaff,
-      isVeterinaryStaff,
-      status,
-      lastModified,
-    ];
-    const result = await connection.query(query, params);
-    return result;
-  }
+  
 }
 
 module.exports = UserAccountRepository;

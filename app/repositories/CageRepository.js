@@ -94,9 +94,83 @@ class CageRepository {
     return result;
   }
 
+  /**
+   * Function Repository: Lấy tổng số lượng chuồng nuôi trong 1 trang trại
+   */
   static async GetTotalCages(Farm_ID) {
-    const query = `SELECT COUNT(*) as totalCages FROM cages WHERE farm_id = ?;`;
+    const query = `SELECT COUNT(*) as totalCages FROM cages WHERE farm_id = ?`;
     const params = [Farm_ID];
+    const result = await connection.query(query, params);
+    return result;
+  }
+
+  /**
+   * Function Repository: Tìm nhân viên đang làm việc trong chuồng
+   */
+  static async SearchEmployeeInCage(cage_id, employee_id) {
+    const query = `SELECT id FROM cage_employees WHERE cage_id = ? AND employee_id = ?`;
+    const params = [cage_id, employee_id];
+    const result = await connection.query(query, params);
+    return result;
+  }
+
+  /**
+   * Function Repository: Cập nhật vai trò của nhân viên trong chuồng
+   */
+  static async UpdateStaffInCage(
+    cage_id,
+    employee_id,
+    isLivestockStaff,
+    isVeterinaryStaff,
+    lastModified
+  ) {
+    const query = `UPDATE cage_employees SET isLivestockStaff = ?, isVeterinaryStaff = ?, lastModified = ? WHERE cage_id = ? AND employee_id = ?`;
+    const params = [
+      isLivestockStaff,
+      isVeterinaryStaff,
+      lastModified,
+      cage_id,
+      employee_id,
+    ];
+    const result = await connection.query(query, params);
+    return result;
+  }
+
+  /**
+   * Function Repository: Tạm thời vô hiệu hóa nhân viên trong chuồng
+   */
+  static async DisableEmployeeInCage(cage_id, lastModified) {
+    const query = `UPDATE cage_employees SET status = false, lastModified = ? WHERE cage_id = ?`;
+    const params = [lastModified, cage_id];
+    const result = await connection.query(query, params);
+    return result;
+  }
+
+  /**
+   * Function Repository: Thêm tài khoản vào trong 1 chuồng
+   */
+  static async InsertStaffToCage(
+    employee_id,
+    cage_id,
+    dateStart,
+    isLivestockStaff,
+    isVeterinaryStaff,
+    status,
+    lastModified
+  ) {
+    const query = `
+                        INSERT INTO cage_employees (employee_id, cage_id, dateStart, isLivestockStaff, isVeterinaryStaff, status, lastModified)
+                        VALUES (?, ?, ?, ?, ?, ?, ?)`;
+
+    const params = [
+      employee_id,
+      cage_id,
+      dateStart,
+      isLivestockStaff,
+      isVeterinaryStaff,
+      status,
+      lastModified,
+    ];
     const result = await connection.query(query, params);
     return result;
   }
