@@ -131,7 +131,9 @@ class CageController {
             // }
 
             var livestockStaff_id = req.body.livestockStaff_id;
+
             console.log(livestockStaff_id);
+
             var veterinaryStaff_id = req.body.veterinaryStaff_id;
             console.log(veterinaryStaff_id);
 
