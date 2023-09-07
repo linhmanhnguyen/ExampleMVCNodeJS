@@ -224,12 +224,21 @@ class CageController {
             livestockStaff_id,
             true,
             false,
+            true,
             lastModified
           );
-        } 
+        }
         // 2.1.1.2. ID nhân viên chưa tồn tại trong chuồng
         else {
-          await CageRepository.InsertStaffToCage(livestockStaff_id, cage_ID, lastModified, true, false, true, lastModified);
+          await CageRepository.InsertStaffToCage(
+            livestockStaff_id,
+            cage_ID,
+            lastModified,
+            true,
+            false,
+            true,
+            lastModified
+          );
         }
 
         // 2.1.2. Tìm ID nhân viên để chuyển thành nhân viên kỹ thuật
@@ -245,24 +254,51 @@ class CageController {
             veterinaryStaff_id,
             false,
             true,
+            true,
             lastModified
           );
-        } 
+        }
         // 2.1.2.2. ID nhân viên chưa tồn tại trong chuồng
         else {
-          await CageRepository.InsertStaffToCage(veterinaryStaff_id, cage_ID, lastModified, false, true, true, lastModified);
+          await CageRepository.InsertStaffToCage(
+            veterinaryStaff_id,
+            cage_ID,
+            lastModified,
+            false,
+            true,
+            true,
+            lastModified
+          );
         }
       }
-      // 2.2. Kiểm tra xem nhân viên chăm sóc và nhân viên kỹ thuật có cùng 1 ID không? (Trường hợp khác ID)
+      // 2.2. Kiểm tra xem nhân viên chăm sóc và nhân viên kỹ thuật có cùng 1 ID không? (Trường hợp cùng ID)
       else {
-        const resultStaffInCage = await CageRepository.SearchEmployeeInCage(cage_ID, livestockStaff_id);
+        const resultStaffInCage = await CageRepository.SearchEmployeeInCage(
+          cage_ID,
+          livestockStaff_id
+        );
         // 2.2.1. Đã có ID nhân viên trong chuồng rồi
-        if(resultStaffInCage.length > 0) {
-          await CageRepository.UpdateStaffInCage(cage_ID, livestockStaff_id, true, true, true, lastModified);
+        if (resultStaffInCage.length > 0) {
+          await CageRepository.UpdateStaffInCage(
+            cage_ID,
+            livestockStaff_id,
+            true,
+            true,
+            true,
+            lastModified
+          );
         }
         // 2.2.2. Chưa có ID nhân viên trong chuồng rồi
         else {
-          await CageRepository.InsertStaffToCage(livestockStaff_id, cage_ID, lastModified, true, true, true, lastModified);
+          await CageRepository.InsertStaffToCage(
+            livestockStaff_id,
+            cage_ID,
+            lastModified,
+            true,
+            true,
+            true,
+            lastModified
+          );
         }
       }
 

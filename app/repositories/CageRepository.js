@@ -122,12 +122,14 @@ class CageRepository {
     employee_id,
     isLivestockStaff,
     isVeterinaryStaff,
+    status,
     lastModified
   ) {
-    const query = `UPDATE cage_employees SET isLivestockStaff = ?, isVeterinaryStaff = ?, lastModified = ? WHERE cage_id = ? AND employee_id = ?`;
+    const query = `UPDATE cage_employees SET isLivestockStaff = ?, isVeterinaryStaff = ?, status = ?, lastModified = ? WHERE cage_id = ? AND employee_id = ?`;
     const params = [
       isLivestockStaff,
       isVeterinaryStaff,
+      status,
       lastModified,
       cage_id,
       employee_id,
