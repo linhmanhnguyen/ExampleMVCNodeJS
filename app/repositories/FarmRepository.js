@@ -1,101 +1,156 @@
-const connection = require('../configs/MySQLConnect');
-const AnimalSummaryModel = require('../models/AnimalSummaryModel');
-const AnimalSummaryOfEachCageModel = require('../models/AnimalSummaryOfEachCageModel');
-const CageSummaryModel = require('../models/CageSummaryModel');
-const FarmModel = require('../models/FarmModel');
-const GetSubStandardAnimalsModel = require('../models/GetSubStandardAnimalsModel');
-const ReportEntryCageModel = require('../models/ReportEntryCageModel');
-const moment = require('moment');
+const connection = require("../configs/MySQLConnect");
+const AnimalSummaryModel = require("../models/AnimalSummaryModel");
+const AnimalSummaryOfEachCageModel = require("../models/AnimalSummaryOfEachCageModel");
+const CageSummaryModel = require("../models/CageSummaryModel");
+const FarmModel = require("../models/FarmModel");
+const GetSubStandardAnimalsModel = require("../models/GetSubStandardAnimalsModel");
+const ReportEntryCageModel = require("../models/ReportEntryCageModel");
+const moment = require("moment");
 
 class FarmRepository {
-    /**
-     * Function Model: Thêm 1 trang trại vào hệ thống
-     */
-    static async InsertFarm(FarmName, CreationDate, Status, AnimalType_ID, AnimalDensity, Ward_ID, AddressDetail, LastModified) {
-        const query = `
+  /**
+   * Function Model: Thêm 1 trang trại vào hệ thống
+   */
+  static async InsertFarm(
+    FarmName,
+    CreationDate,
+    Status,
+    AnimalType_ID,
+    AnimalDensity,
+    Ward_ID,
+    AddressDetail,
+    LastModified
+  ) {
+    const query = `
         INSERT INTO farms (farmName, creationDate, status, animalType_id, animalDensity, ward_id, addressDetail, lastModified) 
         VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
-        const params = [FarmName, CreationDate, Status, AnimalType_ID, AnimalDensity, Ward_ID, AddressDetail, LastModified];
+    const params = [
+      FarmName,
+      CreationDate,
+      Status,
+      AnimalType_ID,
+      AnimalDensity,
+      Ward_ID,
+      AddressDetail,
+      LastModified,
+    ];
 
-        const result = await connection.query(query, params);
-        return result;
-    }
+    const result = await connection.query(query, params);
+    return result;
+  }
 
-    /**
-     * Function Model: Lấy toàn bộ danh sách trang trại trong hệ thống
-     */
-    static async GetAllFarms(UserAccount_ID) {
-        const query = `
+  /**
+   * Function Model: Lấy toàn bộ danh sách trang trại trong hệ thống
+   */
+  static async GetAllFarms(UserAccount_ID) {
+    const query = `
                     Select farms.* 
                     From user_farms 
                     join farms on user_farms.farm_id = farms.id 
                     where user_farms.userAccount_id = ?
                     `;
-        const params = [UserAccount_ID];
-        const result = await connection.query(query, params);
+    const params = [UserAccount_ID];
+    const result = await connection.query(query, params);
 
-        if (result.length === 0) {
-            return null;
-        }
-
-        const farms = [];
-
-        for (const row of result) {
-            const farm = new FarmModel(row.id, row.farmName, row.creationDate, row.status, row.animalType_id, row.animalDensity, row.ward_id, row.addressDetail, row.lastModified);
-            farms.push(farm);
-        }
-        return farms;
+    if (result.length === 0) {
+      return null;
     }
 
-    /**
-     * Function Model: Lấy 1 thông tin của trang trại bằng ID
-     */
-    static async GetFarmByID(id) {
-        const query = `SELECT * FROM farms WHERE id = ?`;
-        const params = [id];
-        const result = await connection.query(query, params);
+    const farms = [];
 
-        if (result.length === 0) {
-            return null;
-        }
+    for (const row of result) {
+      const farm = new FarmModel(
+        row.id,
+        row.farmName,
+        row.creationDate,
+        row.status,
+        row.animalType_id,
+        row.animalDensity,
+        row.ward_id,
+        row.addressDetail,
+        row.lastModified
+      );
+      farms.push(farm);
+    }
+    return farms;
+  }
 
-        const farm = new FarmModel(result[0].id, result[0].farmName, result[0].creationDate, result[0].status, result[0].animalType_id, result[0].animalDensity, result[0].ward_id, result[0].addressDetail, result[0].lastModified);
-        return farm;
+  /**
+   * Function Model: Lấy 1 thông tin của trang trại bằng ID
+   */
+  static async GetFarmByID(id) {
+    const query = `SELECT * FROM farms WHERE id = ?`;
+    const params = [id];
+    const result = await connection.query(query, params);
 
+    if (result.length === 0) {
+      return null;
     }
 
-    /**
-     * Function Model: Cập nhật thông tin của trang trại
-     */
-    static async UpdateFarmByID(FarmName, Status, AnimalType_ID, AnimalDensity, Ward_ID, AddressDetail, LastModified, id) {
-        const query = `
+    const farm = new FarmModel(
+      result[0].id,
+      result[0].farmName,
+      result[0].creationDate,
+      result[0].status,
+      result[0].animalType_id,
+      result[0].animalDensity,
+      result[0].ward_id,
+      result[0].addressDetail,
+      result[0].lastModified
+    );
+    return farm;
+  }
+
+  /**
+   * Function Model: Cập nhật thông tin của trang trại
+   */
+  static async UpdateFarmByID(
+    FarmName,
+    Status,
+    AnimalType_ID,
+    AnimalDensity,
+    Ward_ID,
+    AddressDetail,
+    LastModified,
+    id
+  ) {
+    const query = `
                         UPDATE farms 
                         SET farmName = ?, status = ?, animalType_id = ?, animalDensity = ?, ward_id = ?, addressDetail = ?, lastModified = ?
                         WHERE id = ?`;
 
-        const params = [FarmName, Status, AnimalType_ID, AnimalDensity, Ward_ID, AddressDetail, LastModified, id];
-        const result = await connection.query(query, params);
-        return result;
-    }
+    const params = [
+      FarmName,
+      Status,
+      AnimalType_ID,
+      AnimalDensity,
+      Ward_ID,
+      AddressDetail,
+      LastModified,
+      id,
+    ];
+    const result = await connection.query(query, params);
+    return result;
+  }
 
-    /**
-     * Function Model: Xóa trang trại 
-     */
-    static async DeleteFarm(ID) {
-        const query = `
+  /**
+   * Function Model: Xóa trang trại
+   */
+  static async DeleteFarm(ID) {
+    const query = `
                         DELETE FROM farms 
                         WHERE id = ?`;
-        const params = [ID];
+    const params = [ID];
 
-        const result = await connection.query(query, params);
-        return result;
-    }
+    const result = await connection.query(query, params);
+    return result;
+  }
 
-    /**
-     * Function Repository: Lấy thông tin tổng quan về động vật trong trang trại (tổng số lượng con vật, tổng con vật đang khỏe, ốm và đã chết)
-     */
-    static async ReportAnimalSummary(farm_id) {
-        const query = `SELECT
+  /**
+   * Function Repository: Lấy thông tin tổng quan về động vật trong trang trại (tổng số lượng con vật, tổng con vật đang khỏe, ốm và đã chết)
+   */
+  static async ReportAnimalSummary(farm_id) {
+    const query = `SELECT
         COALESCE(SUM(CASE WHEN animals.status = 'normal' THEN 1 ELSE 0 END), 0) as healthy_animals,
         COALESCE(SUM(CASE WHEN animals.status = 'sick' THEN 1 ELSE 0 END), 0) as sick_animals,
         COALESCE(SUM(CASE WHEN animals.status = 'dead' THEN 1 ELSE 0 END), 0) as dead_animals,
@@ -109,22 +164,28 @@ class FarmRepository {
         WHERE
             farms.id = ?;
         `;
-        const params = [farm_id];
-        const result = await connection.query(query, params);
+    const params = [farm_id];
+    const result = await connection.query(query, params);
 
-        if (result.length === 0) {
-            return null;
-        }
-
-        const summary = new AnimalSummaryModel(result[0].healthy_animals, result[0].sick_animals, result[0].dead_animals, result[0].total_animals, result[0].typeAnimal);
-        return summary;
+    if (result.length === 0) {
+      return null;
     }
 
-    /**
-     * Function Repository: Lấy thông tin tổng quan về động vật của từng chuồng như tổng động vật trong từng chuồng, số lượng động vật đang ốm, bình thường và đã chết
-     */
-    static async ReportAnimalSummaryOfEachCage(farm_id) {
-        const query = `
+    const summary = new AnimalSummaryModel(
+      result[0].healthy_animals,
+      result[0].sick_animals,
+      result[0].dead_animals,
+      result[0].total_animals,
+      result[0].typeAnimal
+    );
+    return summary;
+  }
+
+  /**
+   * Function Repository: Lấy thông tin tổng quan về động vật của từng chuồng như tổng động vật trong từng chuồng, số lượng động vật đang ốm, bình thường và đã chết
+   */
+  static async ReportAnimalSummaryOfEachCage(farm_id) {
+    const query = `
         SELECT
             c.id AS cage_id,
             c.cageName AS cageName,
@@ -157,34 +218,48 @@ class FarmRepository {
         ORDER BY
             c.id;
         `;
-        const params = [farm_id];
-        const result = await connection.query(query, params);
+    const params = [farm_id];
+    const result = await connection.query(query, params);
 
-        if (result.length === 0) {
-            return null;
-        }
-
-        const cages = [];
-
-        for (const row of result) {
-            const startDate = row.startDate;
-            const originalFormat = "YYYY-MM-DDTHH:mm:ss.SSSZ";
-            const desiredFormat = "DD-MM-YYYY";
-            const formattedDate_startDate = moment(startDate, originalFormat).format(desiredFormat);
-            const endDate = row.endDate;
-            const formattedDate_endDate = moment(endDate, originalFormat).format(desiredFormat);
-
-            const cage = new AnimalSummaryOfEachCageModel(row.cage_id, row.cageName, row.manager_fullname, row.total_animals, row.healthy_count, row.sick_count, row.dead_count, formattedDate_startDate, formattedDate_endDate);
-            cages.push(cage);
-        }
-        return cages;
+    if (result.length === 0) {
+      return null;
     }
 
-    /**
-     * Function Repository: Lấy thông tin báo cáo nhập chuồng dựa trên 1 event
-     */
-    static async ReportEntryCage(farm_id, event_id) {
-        const query = `
+    const cages = [];
+
+    for (const row of result) {
+      const startDate = row.startDate;
+      const originalFormat = "YYYY-MM-DDTHH:mm:ss.SSSZ";
+      const desiredFormat = "DD-MM-YYYY";
+      const formattedDate_startDate = moment(startDate, originalFormat).format(
+        desiredFormat
+      );
+      const endDate = row.endDate;
+      const formattedDate_endDate = moment(endDate, originalFormat).format(
+        desiredFormat
+      );
+
+      const cage = new AnimalSummaryOfEachCageModel(
+        row.cage_id,
+        row.cageName,
+        row.manager_fullname,
+        row.total_animals,
+        row.healthy_count,
+        row.sick_count,
+        row.dead_count,
+        formattedDate_startDate,
+        formattedDate_endDate
+      );
+      cages.push(cage);
+    }
+    return cages;
+  }
+
+  /**
+   * Function Repository: Lấy thông tin báo cáo nhập chuồng dựa trên 1 event
+   */
+  static async ReportEntryCage(farm_id, event_id) {
+    const query = `
         SELECT 
         SUM(hce.animalQuantity) AS totalAnimals,
         ROUND(AVG(hce.weightOfAnimal), 2) AS averageWeightOfAnimal,
@@ -196,29 +271,29 @@ class FarmRepository {
         WHERE 
             hce.farm_id = ? AND hce.event_id = ?;
         `;
-        const params = [farm_id, event_id];
-        const result = await connection.query(query, params);
+    const params = [farm_id, event_id];
+    const result = await connection.query(query, params);
 
-        if (result.length === 0) {
-            return null;
-        }
-
-        const report = new ReportEntryCageModel(
-            result[0].totalAnimals,
-            result[0].averageWeightOfAnimal,
-            result[0].totalWeightOfAnimals,
-            result[0].averageUnitPrice,
-            result[0].totalPrice
-        );
-
-        return report;
+    if (result.length === 0) {
+      return null;
     }
 
-    /**
-     * Function Repository: Lấy thông tin số lượng động vật không đạt tiêu chuẩn trong 1 trang trại
-     */
-    static async GetSubStandardAnimals(weight, farm_id) {
-        const query = `
+    const report = new ReportEntryCageModel(
+      result[0].totalAnimals,
+      result[0].averageWeightOfAnimal,
+      result[0].totalWeightOfAnimals,
+      result[0].averageUnitPrice,
+      result[0].totalPrice
+    );
+
+    return report;
+  }
+
+  /**
+   * Function Repository: Lấy thông tin số lượng động vật không đạt tiêu chuẩn trong 1 trang trại
+   */
+  static async GetSubStandardAnimals(weight, farm_id) {
+    const query = `
             SELECT
             COUNT(a.id) AS totalAnimals,
             ROUND(SUM(a.weight), 2) AS totalWeightAnimals,
@@ -235,23 +310,23 @@ class FarmRepository {
             AND f.id = ?;
         `;
 
-        const params = [weight, farm_id];
-        const result = await connection.query(query, params);
+    const params = [weight, farm_id];
+    const result = await connection.query(query, params);
 
-        const info = new GetSubStandardAnimalsModel(
-            result[0].totalAnimals,
-            result[0].totalWeightAnimals,
-            result[0].averageWeightAnimals
-        );
+    const info = new GetSubStandardAnimalsModel(
+      result[0].totalAnimals,
+      result[0].totalWeightAnimals,
+      result[0].averageWeightAnimals
+    );
 
-        return info;
-    }
+    return info;
+  }
 
-    /**
-     * Function Repository: Lấy thông tin số lượng động vật đạt tiêu chuẩn trong 1 trang trại
-     */
-    static async GetStandardAnimals(weight, farm_id) {
-        const query = `
+  /**
+   * Function Repository: Lấy thông tin số lượng động vật đạt tiêu chuẩn trong 1 trang trại
+   */
+  static async GetStandardAnimals(weight, farm_id) {
+    const query = `
                 SELECT
                 COUNT(a.id) AS totalAnimals,
                 ROUND(SUM(a.weight), 2) AS totalWeightAnimals,
@@ -268,27 +343,27 @@ class FarmRepository {
                 AND f.id = ?;
             `;
 
-        const params = [weight, farm_id];
-        const result = await connection.query(query, params);
+    const params = [weight, farm_id];
+    const result = await connection.query(query, params);
 
-        if (result.length === 0) {
-            return null;
-        }
-
-        const info = new GetSubStandardAnimalsModel(
-            result[0].totalAnimals,
-            result[0].totalWeightAnimals,
-            result[0].averageWeightAnimals
-        );
-
-        return info;
+    if (result.length === 0) {
+      return null;
     }
 
-    /**
-     * Function Repository: Lấy thông tin tổng quan về chuồng như có bao nhiêu chuồng đang trống và có bao nhiêu chuồng đang được sử dụng
-     */
-    static async GetCageSummary(farm_id) {
-        const query = `
+    const info = new GetSubStandardAnimalsModel(
+      result[0].totalAnimals,
+      result[0].totalWeightAnimals,
+      result[0].averageWeightAnimals
+    );
+
+    return info;
+  }
+
+  /**
+   * Function Repository: Lấy thông tin tổng quan về chuồng như có bao nhiêu chuồng đang trống và có bao nhiêu chuồng đang được sử dụng
+   */
+  static async GetCageSummary(farm_id) {
+    const query = `
         SELECT
             SUM(CASE WHEN animal_count > 0 THEN 1 ELSE 0 END) AS cagesWithAnimals,
             SUM(CASE WHEN animal_count = 0 THEN 1 ELSE 0 END) AS emptyCages,
@@ -307,17 +382,20 @@ class FarmRepository {
                 c.id
         ) AS cage_animal_counts;
         `;
-        const params = [farm_id];
-        const result = await connection.query(query, params);
+    const params = [farm_id];
+    const result = await connection.query(query, params);
 
-        if (result.length === 0) {
-            return null;
-        }
-
-        const summray = new CageSummaryModel(result[0].totalCages, result[0].cagesWithAnimals, result[0].emptyCages);
-        return summray;
+    if (result.length === 0) {
+      return null;
     }
 
+    const summray = new CageSummaryModel(
+      result[0].totalCages,
+      result[0].cagesWithAnimals,
+      result[0].emptyCages
+    );
+    return summray;
+  }
 }
 
 module.exports = FarmRepository;
